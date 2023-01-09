@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, Fragment } from "react";
 import { CharacterGearApi } from "../utils/api.service";
 import {
   View,
@@ -35,13 +35,13 @@ export const MyGear = ({ route }) => {
       backgroundColor: "rgba(16,36,69,0.95)",
       borderRadius: 15,
     },
-    money:{
-        backgroundColor: "rgba(16,36,69,0.95)",
-        borderRadius: 15,
-        textAlign: "center",
-        alignItems: "center",
-        justifyContent: "space-evenly",
-    }
+    money: {
+      backgroundColor: "rgba(16,36,69,0.95)",
+      borderRadius: 15,
+      textAlign: "center",
+      alignItems: "center",
+      justifyContent: "space-evenly",
+    },
   });
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -51,19 +51,15 @@ export const MyGear = ({ route }) => {
   const fetchGear = async () => {
     const getGear = await CharacterGearApi.Get(heroId);
     setGear(getGear);
-    const heroMoney = getGear.filter(g => g.name === 'GOLD' || g.name === 'SILVER' || g.name === 'COPPER').map(g => {
-        if(g.name === 'GOLD'){
-            return {id: g.id, gold: g.quantity}
-        }
-        else if(g.name === 'SILVER'){
-            return {id: g.id, silver: g.quantity}
-        }
-        else if(g.name === 'COPPER'){
-            return {id: g.id, copper: g.quantity}
-        }
+    getGear.forEach((g) => {
+      if (g.name === "GOLD") {
+        setMoney((mon) => ({ ...mon, gold: g.quantity }));
+      } else if (g.name === "SILVER") {
+        setMoney((mon) => ({ ...mon, silver: g.quantity }));
+      } else if (g.name === "COPPER") {
+        setMoney((mon) => ({ ...mon, copper: g.quantity }));
+      }
     });
-    setMoney(heroMoney)
-    
   };
   return (
     <ScrollView
@@ -76,22 +72,14 @@ export const MyGear = ({ route }) => {
         <Text style={{ ...styles.welcomeStyle, ...globalStyles.textStyle }}>
           Your Gear
         </Text>
-        {gear && money.length > 0 && gear.length > 0 && (
+        {gear && money && gear.length > 0 && (
           <View>
             <View style={styles.money}>
-            <Text style={{ ...globalStyles.textStyle, fontSize: 30 }}>
-                 Money:{money.map(m => {
-                    if(m.gold){
-                        return (<>{m.gold} <FontAwesome5 name="coins" color="gold" /></>)
-                    }
-                    else if(m.silver){
-                        return (<>{m.silver} <FontAwesome5 name="coins" color="silver" /></>)
-                    }
-                    else if(m.copper){
-                        return (<>{m.copper} <FontAwesome5 name="coins" color="copper" /></>)
-                    }
-                 })}
-               
+              <Text style={{ ...globalStyles.textStyle, fontSize: 30 }}>
+                Money:
+                {money.gold} <FontAwesome5 name="coins" color="gold" />{" "}
+                {money.silver} <FontAwesome5 name="coins" color="silver" />{" "}
+                {money.copper} <FontAwesome5 name="coins" color="#b87333" />
               </Text>
             </View>
           </View>
