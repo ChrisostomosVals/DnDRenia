@@ -1,4 +1,5 @@
-import { View, StyleSheet } from "react-native"
+import { View, StyleSheet } from "react-native";
+
 export const Map = () =>{
 
     const styles = StyleSheet.create({

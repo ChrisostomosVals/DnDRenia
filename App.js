@@ -28,10 +28,10 @@ export default function App() {
     BlackCastle: require("./assets/fonts/Blackcastle.ttf"),
   });
   const netInfo = useNetInfo();
-  const [reload, setReload] = useState(false);
   const [heroId, setHeroId] = useState(0);
   const [sound, setSound] = useState();
   useEffect( () => {
+    console.log('here')
     fetchId();
     (async () => {
       const mode = await getSoundMode();
@@ -72,7 +72,6 @@ export default function App() {
     console.log("Playing Sound");
     await sound.playAsync();
   };
-  // playbackObject.setOnPlaybackStatusUpdate(_onPlaybackStatusUpdate);
   const fetchId = async () => {
     const id = await AsyncStorage.getItem("heroId");
     setHeroId(id);

@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import { globalStyles } from "../utils/styles";
 import { equipment } from "../utils/constants";
-import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { CharacterGearApi } from "../utils/api.service";
 import { CartAndMoney } from "../components/cartAndMoney";
 import { Cart } from "../components/cart";
