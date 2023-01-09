@@ -31,7 +31,6 @@ export default function App() {
   const [heroId, setHeroId] = useState(0);
   const [sound, setSound] = useState();
   useEffect( () => {
-    console.log('here')
     fetchId();
     (async () => {
       const mode = await getSoundMode();
@@ -44,7 +43,6 @@ export default function App() {
   useEffect(() => {
     return sound
       ? () => {
-          console.log("Unloading Sound");
           sound.unloadAsync();
         }
       : undefined;
@@ -69,7 +67,6 @@ export default function App() {
     );
     setSound(sound);
     await AsyncStorage.setItem("sound", "play");
-    console.log("Playing Sound");
     await sound.playAsync();
   };
   const fetchId = async () => {
@@ -82,7 +79,6 @@ export default function App() {
       await sound.unloadAsync();
       await AsyncStorage.setItem("sound", "stop");
       setSound();
-      console.log("Unloading Sound");
     } else {
       await playSound();
     }

@@ -27,16 +27,7 @@ export const CartAndMoney = (props) =>{
     })
     return(
         <View style={styles.cartMoney}>
-            <TouchableOpacity
-              style={styles.cartButton}
-              onPress={() =>props.setModalVisible(true)}
-            >
-              <Text
-                style={styles.buttonText}
-              >
-                Cart
-              </Text>
-            </TouchableOpacity>
+            
             {props.money && (
               <Text style={{ ...globalStyles.textStyle, fontSize: 30 }}>
                 Money: {props.money.gold.quantity}{" "}
@@ -47,6 +38,16 @@ export const CartAndMoney = (props) =>{
                 <FontAwesome5 name={"coins"} color="#b87333" />
               </Text>
             )}
+            <TouchableOpacity
+              style={styles.cartButton}
+              onPress={() =>props.setModalVisible(true)}
+            >
+              <Text
+                style={styles.buttonText}
+              >
+                Cart
+              </Text>
+            </TouchableOpacity>
           </View>
     )
 }

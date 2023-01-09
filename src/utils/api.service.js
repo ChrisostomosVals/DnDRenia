@@ -111,7 +111,7 @@ export class CharacterGearApi {
 
   static async Get(characterId) {
     try {
-      return await http.GetAsync(`${this.baseUrl}${characterId}/all`);
+      return await http.GetAsync(`${this.baseUrl}/${characterId}/all`);
     } catch (ex) {
       console.error("[System.CharacterMainStatsApi.Get()] Error:", ex.message);
     }

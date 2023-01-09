@@ -4,7 +4,8 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  LogBox
+  LogBox,
+  Dimensions
 } from "react-native";
 import { useState, useEffect } from "react";
 import { globalStyles } from "../utils/styles";
@@ -19,7 +20,7 @@ export const GoodCategory = ({ category, heroId, equipment, cart, setShopVisible
 
   useEffect(() => {
     setPage(0)
-  }, [ category, heroId, equipment, cart, setShopVisible]);
+  }, [ category, heroId, equipment, setShopVisible]);
 
 
 
@@ -34,7 +35,6 @@ export const GoodCategory = ({ category, heroId, equipment, cart, setShopVisible
   
   const styles = StyleSheet.create({
     container: {
-      marginTop: "20%",
     },
     welcomeStyle: {
       fontSize: 30,
@@ -99,14 +99,17 @@ export const GoodCategory = ({ category, heroId, equipment, cart, setShopVisible
       justifyContent: "center",
       alignItems: "center",
     },
+    title:{
+      marginTop: '10%'
+    }
   });
   if(!equipment){
     return (<Text style={styles.textStyle}>Loading...</Text>)
   }
   return (
-    <ScrollView >
-      <View style={styles.container}>
-        <Text style={{...styles.welcomeStyle, marginBottom: 20}}>{category}</Text>
+    <>
+    <View style={styles.title}><Text style={{...styles.welcomeStyle, marginBottom: 20}}>{category}</Text></View>
+    <ScrollView contentContainerStyle={{flexGrow: 1}}>
         <View style={styles.table}>
           <Grid style={styles.grid}>
             <Row style={styles.row}>
@@ -215,7 +218,6 @@ export const GoodCategory = ({ category, heroId, equipment, cart, setShopVisible
               }
             })}
         </View>
-      </View>
 
       <PageUpAndDown page={page} setPage={setPage} equipment={equipment} pageLength={parseInt(equipment.length/8)}/>
       <TouchableOpacity
@@ -229,5 +231,6 @@ export const GoodCategory = ({ category, heroId, equipment, cart, setShopVisible
                             </Text>
                           </TouchableOpacity>
     </ScrollView>
+    </>
   );
 };

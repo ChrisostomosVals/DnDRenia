@@ -13,8 +13,10 @@ import { CharacterGearApi } from "../utils/api.service";
 import { CartAndMoney } from "../components/cartAndMoney";
 import { Cart } from "../components/cart";
 import { GoodCategory } from "./goodCategory";
+import { useIsFocused } from "@react-navigation/native";
 
 export const BuyGear = ({ route, navigation }) => {
+  const isFocused = useIsFocused();
   const [heroId, setHeroId] = useState(route.params.heroId);
   const [money, setMoney] = useState();
   const [cart, setCart] = useState([]);
@@ -27,8 +29,8 @@ export const BuyGear = ({ route, navigation }) => {
   useEffect(() => {
     setHeroId(route.params.heroId);
     getMoney();
-    
-  }, [route, navigation]);
+    setShopVisible(true)
+  }, [route, navigation, isFocused]);
  
  
   const getMoney = async () => {
