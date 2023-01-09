@@ -10,10 +10,9 @@ import { Col, Row, Grid } from "react-native-easy-grid";
 import { useEffect, useState } from "react";
 import { PageUpAndDown } from "./pageUpAndDown";
 
-export const Cart = ({ cart, modalVisible, setModalVisible, addItemToCart, removeItemFromCart }) => {
+export const Cart = ({ cart, modalVisible, setModalVisible, addItemToCart, removeItemFromCart, deleteItemFromCart }) => {
   const [page, setPage] = useState(0);
   useEffect(() => {
-    console.log(cart)
   }, [cart, modalVisible, setModalVisible]);
   const styles = StyleSheet.create({
     centeredView: {
@@ -203,7 +202,7 @@ export const Cart = ({ cart, modalVisible, setModalVisible, addItemToCart, remov
                                   backgroundColor:
                                     index % 2 ? "white" : "#DAA520",
                                 }}
-                                onPress={() => removeItemFromCart(e.name)}
+                                onPress={() => deleteItemFromCart(e.name)}
                               >
                                 <Text
                                   style={{
@@ -228,7 +227,7 @@ export const Cart = ({ cart, modalVisible, setModalVisible, addItemToCart, remov
                   }
                 })}
               {cart.length > 0 && (
-                <PageUpAndDown page={page} setPage={setPage} equipment={cart} parent='cart' />
+                <PageUpAndDown page={page} setPage={setPage} equipment={cart} parent='cart' itemsLength={cart.length}/>
               )}
             </View>}
             <TouchableOpacity

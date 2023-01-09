@@ -4,87 +4,34 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
+  LogBox
 } from "react-native";
 import { useState, useEffect } from "react";
 import { globalStyles } from "../utils/styles";
 import { Col, Row, Grid } from "react-native-easy-grid";
-import { LogBox } from "react-native";
+import { PageUpAndDown } from "../components/pageUpAndDown";
 LogBox.ignoreLogs([
   "Non-serializable values were found in the navigation state",
 ]);
-export const GoodCategory = ({ route }) => {
-  const [category, setCategory] = useState();
-  const [heroId, setHeroId] = useState();
-  const [equipment, setEquipment] = useState();
-  const [cart, setCart] = useState();
+export const GoodCategory = ({ category, heroId, equipment, cart, setShopVisible, removeItem, addItem }) => {
+ 
   const [page, setPage] = useState(0);
 
   useEffect(() => {
-    setHeroId(route.params.heroId);
-    setEquipment(route.params.equipment);
-    setCart(route.params.cart);
-    setCategory(route.params.category);
-  }, [route]);
+    setPage(0)
+  }, [ category, heroId, equipment, cart, setShopVisible]);
+
+
 
   const removeItemFromCart = (name) => {
-    route.params.removeItemFromCart(name);
-    const doesItemExist = cart.find((item) => item.name === name);
-    if (doesItemExist) {
-      if (doesItemExist.quantity < 2) {
-        return setCart((cartItems) =>
-          cartItems.filter((item) => item.name !== name)
-        );
-      }
-      return setCart((itemCart) => {
-        const newCart = itemCart.map((item) => {
-          if (item.name === name) {
-            return {
-              ...item,
-              quantity: item.quantity - 1,
-            };
-          }
-          return item;
-        });
-        return newCart;
-      });
-    }
+    removeItem(name);
+   
   };
   const addItemToCart = (name, cost, weight) => {
-    route.params.addItemToCart(name, cost, weight);
-    if (cart.length === 0) {
-      return setCart((prevCart) => [
-        ...prevCart,
-        { name: name, cost: cost, weight: weight, quantity: 1 },
-      ]);
-    }
-    const doesItemExist = cart.find((item) => item.name === name);
-    if (doesItemExist) {
-      return setCart((itemCart) => {
-        const newCart = itemCart.map((item) => {
-          if (item.name === name) {
-            return {
-              ...item,
-              quantity: item.quantity + 1,
-            };
-          }
-          return item;
-        });
-        return newCart;
-      });
-    } else {
-      return setCart((prevCart) => [
-        ...prevCart,
-        { name: name, cost: cost, weight: weight, quantity: 1 },
-      ]);
-    }
+    addItem(name, cost, weight);
+    
   };
-  const handlePage = (action) => {
-    if (action === "up" && (page + 1) * 8 < equipment.length) {
-      setPage((page) => ++page);
-    } else if (action === "down" && page > 0) {
-      setPage((page) => --page);
-    }
-  };
+  
   const styles = StyleSheet.create({
     container: {
       marginTop: "20%",
@@ -153,12 +100,13 @@ export const GoodCategory = ({ route }) => {
       alignItems: "center",
     },
   });
-
+  if(!equipment){
+    return (<Text style={styles.textStyle}>Loading...</Text>)
+  }
   return (
     <ScrollView >
       <View style={styles.container}>
-        <Text style={styles.welcomeStyle}>{category}</Text>
-        {route.params.cartAndMoney}
+        <Text style={{...styles.welcomeStyle, marginBottom: 20}}>{category}</Text>
         <View style={styles.table}>
           <Grid style={styles.grid}>
             <Row style={styles.row}>
@@ -269,30 +217,17 @@ export const GoodCategory = ({ route }) => {
         </View>
       </View>
 
-      <Grid>
-        <Row style={styles.row}>
-          <Col>
-            <TouchableOpacity
-              style={styles.pageButton}
-              onPress={() => handlePage("down")}
-            >
-              <Text style={styles.textStyle}>{"<"}</Text>
-            </TouchableOpacity>
-          </Col>
-          <Col>
-            <Text style={styles.welcomeStyle}>Page {page + 1}</Text>
-          </Col>
-          <Col>
-            <TouchableOpacity
-              style={styles.pageButton}
-              onPress={() => handlePage("up")}
-            >
-              <Text style={styles.textStyle}>{">"}</Text>
-            </TouchableOpacity>
-          </Col>
-          <Col></Col>
-        </Row>
-      </Grid>
+      <PageUpAndDown page={page} setPage={setPage} equipment={equipment} pageLength={parseInt(equipment.length/8)}/>
+      <TouchableOpacity
+                            style={styles.button}
+                            onPress={() => setShopVisible(true)}
+                          >
+                            <Text
+                              style={styles.buttonText}
+                            >
+                              Back
+                            </Text>
+                          </TouchableOpacity>
     </ScrollView>
   );
 };

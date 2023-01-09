@@ -1,6 +1,6 @@
 import "react-native-gesture-handler";
 import { useEffect, useState } from "react";
-import { StyleSheet, ImageBackground, Text, Alert, Image } from "react-native";
+import { StyleSheet, ImageBackground, Text, Alert, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FirstLogin } from "./src/screens/firstLogin";
 import { NavigationContainer } from "@react-navigation/native";
@@ -15,11 +15,11 @@ import { Provider as PaperProvider } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { ChooseHero } from "./src/screens/chooseHero";
 import { useFonts } from "expo-font";
-import {useNetInfo} from "@react-native-community/netinfo";
+import { useNetInfo } from "@react-native-community/netinfo";
 import { MyGear } from "./src/screens/myGear";
 import { BuyGear } from "./src/screens/buyGear";
-import { GoodCategory } from "./src/screens/goodCategory";
-
+import { Audio } from "expo-av";
+import { Map } from "./src/screens/map";
 
 const Drawer = createDrawerNavigator();
 
@@ -30,13 +30,63 @@ export default function App() {
   const netInfo = useNetInfo();
   const [reload, setReload] = useState(false);
   const [heroId, setHeroId] = useState(0);
-  useEffect(() => {
+  const [sound, setSound] = useState();
+  useEffect( () => {
     fetchId();
+    (async () => {
+      const mode = await getSoundMode();
+      if (mode === "play") {
+        playSound();
+      }})();
+    
   }, []);
+
+  useEffect(() => {
+    return sound
+      ? () => {
+          console.log("Unloading Sound");
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
+
   
+  const getSoundMode = async () => {
+    try {
+      const mode = await AsyncStorage.getItem("sound");
+      return mode;
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
+  const playSound = async () => {
+    const { sound } = await Audio.Sound.createAsync(
+      require("./src/assets/sounds/backgroundSound.mp3"),
+      {
+        shouldPlay: true,
+        isLooping: true,
+      }
+    );
+    setSound(sound);
+    await AsyncStorage.setItem("sound", "play");
+    console.log("Playing Sound");
+    await sound.playAsync();
+  };
+  // playbackObject.setOnPlaybackStatusUpdate(_onPlaybackStatusUpdate);
   const fetchId = async () => {
     const id = await AsyncStorage.getItem("heroId");
     setHeroId(id);
+  };
+  const handleMusic = async () => {
+    if (sound) {
+      setSound();
+      await sound.unloadAsync();
+      await AsyncStorage.setItem("sound", "stop");
+      setSound();
+      console.log("Unloading Sound");
+    } else {
+      await playSound();
+    }
   };
   const styles = StyleSheet.create({
     backgroundImage: {
@@ -48,26 +98,29 @@ export default function App() {
     drawerTextStyle: {
       fontFamily: "BlackCastle",
       fontSize: 22,
-      color: 'white'
+      color: "white",
+    },
+    sound: {
+      bottom: 10,
+      right: 10,
+      alignItems: "flex-end",
+      position: "absolute",
     },
   });
 
   if (!loaded) return <Text>Loading...</Text>;
-  if(!netInfo.isConnected){
-    return <ImageBackground
-    style={styles.backgroundImage}
-    source={require("./src/assets/images/renia.png")}
-    resizeMode="cover"
-  >{ Alert.alert(
-      
-      "Check your connection",
-      "Renia seems unreachable"
-    )}
-    </ImageBackground>
+  if (!netInfo.isConnected) {
+    return (
+      <ImageBackground
+        style={styles.backgroundImage}
+        source={require("./src/assets/images/renia.png")}
+        resizeMode="cover"
+      >
+        {Alert.alert("Check your connection", "Renia seems unreachable")}
+      </ImageBackground>
+    );
   }
-  const ChangeHero = props  => {
-    return <ChooseHero reload={() => setReload(!reload)} {...props}/>
-  }
+ 
 
   return (
     <ImageBackground
@@ -78,7 +131,7 @@ export default function App() {
       <PaperProvider>
         <NavigationContainer
           ref={navigationRef}
-          theme={{ colors: { background: "transparent" }}}
+          theme={{ colors: { background: "transparent" } }}
         >
           {heroId == "" ? (
             <FirstLogin fetchHero={fetchId}></FirstLogin>
@@ -90,6 +143,7 @@ export default function App() {
                     backgroundColor: "black",
                   },
                   drawerLabelStyle: styles.drawerTextStyle,
+                  drawerActiveTintColor: "#7cc",
                 }}
               >
                 <Drawer.Screen
@@ -130,45 +184,60 @@ export default function App() {
                     headerShown: false,
                     drawerIcon: ({ focused, size }) => (
                       <MaterialCommunityIcons
-                      name="sword"
-                      size={20}
-                      color={focused ? "#7cc" : "#ccc"}
+                        name="sword"
+                        size={20}
+                        color={focused ? "#7cc" : "#ccc"}
                       />
-                      ),
-                    }}
-                  component={ChangeHero}
+                    ),
+                  }}
+                  component={ChooseHero}
                 />
-                 <Drawer.Screen
-                      name="BuyGear"
-                      options={{
-                        title: "Shop",
-                        headerShown: false,
-                        drawerIcon: ({ focused, size }) => (
-                          <MaterialCommunityIcons
-                          name="gold"
-                          size={20}
-                          color={focused ? "#7cc" : "#ccc"}
-                          />
-                        ),
-                      }}
-                      component={BuyGear}
-                      initialParams={{heroId: heroId}}
-                  />
-                    <Drawer.Screen
-                      name="Settings"
-                      options={{
-                        title: "Settings",
-                        headerShown: false,
-                        drawerIcon: ({ focused, size }) => (
-                          <Icon
-                            name="setting"
-                            size={20}
-                            color={focused ? "#7cc" : "#ccc"}
-                          />
-                        ),
-                      }}
-                      component={SettingsScreen}
-                    />
+                <Drawer.Screen
+                  name="BuyGear"
+                  options={{
+                    title: "Shop",
+                    headerShown: false,
+                    drawerIcon: ({ focused, size }) => (
+                      <MaterialCommunityIcons
+                        name="gold"
+                        size={20}
+                        color={focused ? "#7cc" : "#ccc"}
+                      />
+                    ),
+                  }}
+                  component={BuyGear}
+                  initialParams={{ heroId: heroId }}
+                />
+                <Drawer.Screen
+                  name="Map"
+                  options={{
+                    title: "World Map",
+                    headerShown: false,
+                    drawerIcon: ({ focused, size }) => (
+                      <MaterialCommunityIcons
+                        name="map"
+                        size={20}
+                        color={focused ? "#7cc" : "#ccc"}
+                      />
+                    ),
+                  }}
+                  component={Map}
+                />
+                <Drawer.Screen
+                  name="Settings"
+                  options={{
+                    title: "Settings",
+                    headerShown: false,
+                    drawerIcon: ({ focused, size }) => (
+                      <Icon
+                        name="setting"
+                        size={20}
+                        color={focused ? "#7cc" : "#ccc"}
+                      />
+                    ),
+                  }}
+                  component={SettingsScreen}
+                />
                 <Drawer.Screen
                   name="CharacterInfo"
                   component={CharacterInfo}
@@ -186,22 +255,28 @@ export default function App() {
                     headerShown: false,
                     drawerItemStyle: { height: 0 },
                   }}
-                  initialParams={{heroId: heroId}}
-                />
-                <Drawer.Screen
-                  name="GoodCategory"
-                  component={GoodCategory}
-                  options={{
-                    title: "",
-                    headerShown: false,
-                    drawerItemStyle: { height: 0 },
-                  }}
+                  initialParams={{ heroId: heroId }}
                 />
               </Drawer.Navigator>
             </>
           )}
         </NavigationContainer>
       </PaperProvider>
+      <View style={styles.sound}>
+        {!sound ? (
+          <MaterialCommunityIcons
+            name="music-note-off"
+            size={20}
+            onPress={handleMusic}
+          />
+        ) : (
+          <MaterialCommunityIcons
+            name="music-note"
+            onPress={handleMusic}
+            size={20}
+          />
+        )}
+      </View>
     </ImageBackground>
   );
 }

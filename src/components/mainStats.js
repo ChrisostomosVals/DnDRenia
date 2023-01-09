@@ -129,7 +129,7 @@ export const MainStats = ({ stats }) => {
           >
             <Image source={require("../assets/images/muscle_20px.png")} />
           </ControlledTooltip>
-          <Text>{heroStats.strength}</Text>
+          <Text style={globalStyles.textStyle}>{heroStats.strength}</Text>
           <Slider
             animateTransitions
             maximumValue={50}
@@ -158,7 +158,7 @@ export const MainStats = ({ stats }) => {
           >
             <MaterialCommunityIcons name="heart" size={20} color="red" />
           </ControlledTooltip>
-          <Text>{heroStats.healthPoints}</Text>
+          <Text style={globalStyles.textStyle}>{heroStats.healthPoints}</Text>
           <Slider
             animateTransitions
             maximumValue={50}
@@ -187,7 +187,7 @@ export const MainStats = ({ stats }) => {
           >
             <Image source={require("../assets/images/Acrobatics_20px.png")} />
           </ControlledTooltip>
-          <Text>{heroStats.dexterity}</Text>
+          <Text style={globalStyles.textStyle}>{heroStats.dexterity}</Text>
           <Slider
             animateTransitions
             maximumValue={50}
@@ -216,7 +216,7 @@ export const MainStats = ({ stats }) => {
           >
             <Image source={require("../assets/images/heart_plus_20px.png")} />
           </ControlledTooltip>
-          <Text>{heroStats.constitution}</Text>
+          <Text style={globalStyles.textStyle}>{heroStats.constitution}</Text>
           <Slider
             animateTransitions
             maximumValue={50}
@@ -245,7 +245,7 @@ export const MainStats = ({ stats }) => {
           >
             <Image source={require("../assets/images/owl_20px.png")} />
           </ControlledTooltip>
-          <Text>{heroStats.wisdom}</Text>
+          <Text style={globalStyles.textStyle}>{heroStats.wisdom}</Text>
           <Slider
             animateTransitions
             maximumValue={50}
@@ -274,7 +274,7 @@ export const MainStats = ({ stats }) => {
           >
             <Image source={require("../assets/images/theatre_mask_20px.png")} />
           </ControlledTooltip>
-          <Text>{heroStats.charisma}</Text>
+          <Text style={globalStyles.textStyle}>{heroStats.charisma}</Text>
           <Slider
             animateTransitions
             maximumValue={50}
@@ -303,7 +303,7 @@ export const MainStats = ({ stats }) => {
           >
             <Image source={require("../assets/images/intelligence_20px.png")} />
           </ControlledTooltip>
-          <Text>{heroStats.intelligence}</Text>
+          <Text style={globalStyles.textStyle}>{heroStats.intelligence}</Text>
           <Slider
             animateTransitions
             maximumValue={50}
