@@ -12,7 +12,7 @@ import { equipment } from "../utils/constants";
 import { CharacterGearApi } from "../utils/api.service";
 import { CartAndMoney } from "../components/cartAndMoney";
 import { Cart } from "../components/cart";
-import { GoodCategory } from "./goodCategory";
+import { GoodCategory } from "../components/goodCategory";
 import { useIsFocused } from "@react-navigation/native";
 
 export const BuyGear = ({ route, navigation }) => {
@@ -35,37 +35,12 @@ export const BuyGear = ({ route, navigation }) => {
  
   const getMoney = async () => {
     const fetchMoney = await CharacterGearApi.GetMoney(route.params.heroId);
-    let gold = {
-      quantity: 0,
-      id: 0,
-    };
-    let silver = gold;
-    let copper = gold;
-    for (let item of fetchMoney) {
-      switch (item.name) {
-        case "GOLD":
-          gold = {
-            quantity: item.quantity,
-            id: item.id,
-          };
-          break;
-        case "SILVER":
-          silver = {
-            quantity: item.quantity,
-            id: item.id,
-          };
-          break;
-        case "COPPER":
-          copper = {
-            quantity: item.quantity,
-            id: item.id,
-          };
-          break;
-        default:
-          break;
-      }
-    }
+    let moneyArr = fetchMoney.quantity.toFixed(2)
+    const gold = moneyArr.split('.')[0];
+    const silver = moneyArr.split('.')[1][0]
+    const copper = moneyArr.split('.')[1][1]
     const money = {
+      id: fetchMoney.id,
       gold: gold,
       silver: silver,
       copper: copper,

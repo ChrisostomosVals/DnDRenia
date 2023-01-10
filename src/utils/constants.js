@@ -335,52 +335,52 @@ export const equipment = {
   ],
   specialSubstancesAndItems: [
     {
-      name: 'Acid (flask)',
+      name: "Acid (flask)",
       cost: "10 gp",
       weight: "1 lb.",
     },
     {
-      name: 'Alchemist’s fire (flask)',
+      name: "Alchemist’s fire (flask)",
       cost: "20 gp",
       weight: "1 lb.",
     },
     {
-      name: 'Antitoxin (vial)',
+      name: "Antitoxin (vial)",
       cost: "50 gp",
       weight: "—",
     },
     {
-      name: 'Everburning torch',
+      name: "Everburning torch",
       cost: "110 gp",
       weight: "1 lb.",
     },
     {
-      name: 'Holy water (flask)',
+      name: "Holy water (flask)",
       cost: "25 gp",
       weight: "1 lb.",
     },
     {
-      name: 'Smokestick',
+      name: "Smokestick",
       cost: "20 gp",
       weight: "½ lb.",
     },
     {
-      name: 'Sunrod',
+      name: "Sunrod",
       cost: "2 gp",
       weight: "1 lb.",
     },
     {
-      name: 'Tanglefoot bag',
+      name: "Tanglefoot bag",
       cost: "50 gp",
       weight: "4 lb.",
     },
     {
-      name: 'Thunderstone',
+      name: "Thunderstone",
       cost: "30 gp",
       weight: "1 lb.",
     },
     {
-      name: 'Tindertwig',
+      name: "Tindertwig",
       cost: "1 gp",
       weight: "—",
     },
@@ -578,6 +578,8 @@ export const equipment = {
           weight: "½ lb.",
         },
       ],
+    },
+    {
       innStay: [
         {
           name: "Good",
@@ -595,6 +597,8 @@ export const equipment = {
           weight: "—",
         },
       ],
+    },
+    {
       meals: [
         {
           name: "Good",
@@ -617,6 +621,8 @@ export const equipment = {
           weight: "½ lb.",
         },
       ],
+    },
+    {
       wine: [
         {
           name: "Common (pitcher)",

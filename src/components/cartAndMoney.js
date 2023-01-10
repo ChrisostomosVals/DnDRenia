@@ -22,7 +22,10 @@ export const CartAndMoney = (props) =>{
           }, 
           buttonText: {
             ...globalStyles.textStyle,
-            fontSize: 35,
+            fontSize: 25,
+            elevation: 2,
+            shadowRadius: 15,
+            shadowOffset: { height: 1, width: 1 }
           },
     })
     return(
@@ -30,11 +33,11 @@ export const CartAndMoney = (props) =>{
             
             {props.money && (
               <Text style={{ ...globalStyles.textStyle, fontSize: 30 }}>
-                Money: {props.money.gold.quantity}{" "}
+                Money: {props.money.gold}{" "}
                 <FontAwesome5 name={"coins"} color="gold" />{" "}
-                {props.money.silver.quantity}{" "}
+                {props.money.silver}{" "}
                 <FontAwesome5 name={"coins"} color="silver" />{" "}
-                {props.money.copper.quantity}{" "}
+                {props.money.copper}{" "}
                 <FontAwesome5 name={"coins"} color="#b87333" />
               </Text>
             )}

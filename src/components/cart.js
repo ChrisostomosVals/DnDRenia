@@ -204,7 +204,7 @@ export const Cart = ({
 
                             <Col style={styles.buttons}>
                               <Icon
-                                onPress={() => addItemToCart(e.name)}
+                                onPress={() => addItemToCart(e.name, e.weight)}
                                 size={20}
                                 color={index % 2 ? "#DAA520" : "white"}
                                 name="plus"
