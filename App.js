@@ -20,6 +20,7 @@ import { MyGear } from "./src/screens/myGear";
 import { BuyGear } from "./src/screens/buyGear";
 import { Audio } from "expo-av";
 import { Map } from "./src/screens/map";
+import { getSoundEffectsMode } from "./src/utils/constants";
 
 const Drawer = createDrawerNavigator();
 
@@ -30,10 +31,18 @@ export default function App() {
   const netInfo = useNetInfo();
   const [heroId, setHeroId] = useState(0);
   const [sound, setSound] = useState();
+  const [soundEffects, setSoundEffects] = useState(false)
   useEffect( () => {
     fetchId();
     (async () => {
       const mode = await getSoundMode();
+      const soundEffectsMode = await getSoundEffectsMode();
+      if(soundEffectsMode === 'on'){
+        setSoundEffects(true)
+      }
+      else{
+        setSoundEffects(false)
+      }
       if (mode === "play") {
         playSound();
       }})();
@@ -57,6 +66,7 @@ export default function App() {
       console.log(ex);
     }
   };
+  
   const playSound = async () => {
     const { sound } = await Audio.Sound.createAsync(
       require("./src/assets/sounds/backgroundSound.mp3"),
@@ -83,6 +93,16 @@ export default function App() {
       await playSound();
     }
   };
+  const handleSoundEffects = async () =>{
+    if(await getSoundEffectsMode() === 'on'){
+      await AsyncStorage.setItem("sound-effects", 'off');
+      setSoundEffects(false)
+    }
+    else {
+      await AsyncStorage.setItem("sound-effects", 'on');
+      setSoundEffects(true)
+    }
+  }
   const styles = StyleSheet.create({
     backgroundImage: {
       flex: 1,
@@ -97,9 +117,18 @@ export default function App() {
     },
     sound: {
       bottom: 10,
-      right: 10,
-      alignItems: "flex-end",
+      paddingRight: 10,
+      paddingLeft: 10,
       position: "absolute",
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      width: '100%'
+    },
+    soundEffect: {
+      bottom: 10,
+      left: 10,
+      position: "absolute",
+
     },
   });
 
@@ -258,19 +287,17 @@ export default function App() {
         </NavigationContainer>
       </PaperProvider>
       <View style={styles.sound}>
-        {!sound ? (
           <MaterialCommunityIcons
-            name="music-note-off"
+            name={!sound ? "music-note-off" : "music-note"}
             size={20}
             onPress={handleMusic}
           />
-        ) : (
           <MaterialCommunityIcons
-            name="music-note"
-            onPress={handleMusic}
+            name= { soundEffects ? "volume-high" : "volume-off"}
             size={20}
+            onPress={handleSoundEffects}
           />
-        )}
+        
       </View>
     </ImageBackground>
   );

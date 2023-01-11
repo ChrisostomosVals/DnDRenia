@@ -7,20 +7,23 @@ import {
   ScrollView,
   RefreshControl,
   TouchableOpacity,
-  FlatList
+  FlatList,
 } from "react-native";
 import { globalStyles } from "../utils/styles";
 import { wait } from "../utils/constants";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { Col, Row, Grid } from "react-native-easy-grid";
+import { ModalQuestion } from "../components/modalQuestion";
 
 export const MyGear = ({ route }) => {
   const { heroId } = route.params;
   const [gear, setGear] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const [money, setMoney] = useState({});
   const [weight, setWeight] = useState(0);
-  const [selectedId, setSelectedId] = useState(null);
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [modalTitle, setModalTitle] = useState('');
   useEffect(() => {
     fetchGear();
   }, [heroId]);
@@ -50,29 +53,39 @@ export const MyGear = ({ route }) => {
     grid: {
       justifyContent: "center",
     },
-    gear:{
+    gear: {
       flex: 1,
-      alignContent: 'center',
-      justifyContent: 'space-around'
+      alignContent: "center",
+      justifyContent: "space-around",
     },
     item: {
       padding: 20,
       marginVertical: 8,
       marginHorizontal: 16,
-      flexDirection: 'row',
-      justifyContent: 'space-between'
+      flexDirection: "row",
+      justifyContent: "space-between",
+    },
+    button: {
+      elevation: 2,
+      ...globalStyles.card,
+      alignItems: "center",
+      padding: "2%",
+    },
+    buttons: {
+      flexDirection: "row",
+      justifyContent: "space-around",
     },
   });
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     fetchGear();
-    setSelectedId(null)
+    setSelectedItems([]);
     wait(2000).then(() => setRefreshing(false));
   }, []);
   const fetchGear = async () => {
     const getGear = await CharacterGearApi.Get(heroId);
     setWeight(0);
-    const gear = getGear.filter(g => g.name !== 'MONEY')
+    const gear = getGear.filter((g) => g.name !== "MONEY");
     setGear(gear);
     getGear.forEach((g) => {
       setWeight((w) => w + g.weight * g.quantity);
@@ -90,22 +103,44 @@ export const MyGear = ({ route }) => {
       }
     });
   };
+  const toggleItem = (item) => {
+    if (selectedItems.includes(item)) {
+      setSelectedItems((i) => i.filter((it) => it !== item));
+    } else {
+      setSelectedItems((i) => [...i, item]);
+    }
+  };
   const Item = ({ item, onPress, backgroundColor }) => (
     <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
-      <Text style={{...globalStyles.textStyle, textAlign:'center'}}>{item.name}{item.weight > 0 && <> {item.weight} lb</>} </Text>
-      <Text style={{...globalStyles.textStyle, textAlign:'center'}}> x {item.quantity}</Text>
+      <Text style={{ ...globalStyles.textStyle, textAlign: "center" }}>
+        {item.name}
+        {item.weight > 0 && <> {item.weight} lb</>}{" "}
+      </Text>
+      <Text style={{ ...globalStyles.textStyle, textAlign: "center" }}>
+        {" "}
+        x {item.quantity}
+      </Text>
     </TouchableOpacity>
   );
 
+    const handleModal = (action) =>{
+      if(action === 'equip'){
+        setModalTitle(`Are you sure you want to equip ${selectedItems[0].name} to your Arsenal?`)
+        setModalVisible(true);
+      }
+    }
+
   const renderItem = (item) => {
-    const backgroundColor = item.id === selectedId ? "#DAA520" : "rgb(16,36,69)";
+    const backgroundColor = selectedItems.includes(item)
+      ? "#DAA520"
+      : "rgb(16,36,69)";
 
     return (
       <Item
         item={item}
-        onPress={() => setSelectedId(item.id)}
+        onPress={() => toggleItem(item)}
         backgroundColor={{ backgroundColor }}
-        textColor='white'
+        textColor="white"
         key={item.id}
       />
     );
@@ -158,16 +193,55 @@ export const MyGear = ({ route }) => {
               </Col>
             </Row>
           </Grid>
-          <View style={{flex: 0.6,...styles.welcomeStyle}}>
-            <Text style={{ ...globalStyles.textStyle, textAlign:'center', fontSize: 30 }}>Items in your Inventory</Text>
+          <View style={{ flex: 0.6, ...styles.welcomeStyle }}>
+            <Text
+              style={{
+                ...globalStyles.textStyle,
+                textAlign: "center",
+                fontSize: 30,
+              }}
+            >
+              Items in your Inventory
+            </Text>
             <ScrollView persistentScrollbar={true}>
-            {gear.length > 0 &&
-              gear.map(g => renderItem(g))
-            }
+              {gear.length > 0 && gear.map((g) => renderItem(g))}
             </ScrollView>
+          </View>
+
+          <View style={styles.buttons}>
+            <TouchableOpacity
+              disabled={selectedItems.length !== 1}
+              style={{
+                opacity: selectedItems.length === 1 ? 1 : 0.3,
+                ...globalStyles.button,
+              }}
+              onPress={() => handleModal('equip')}
+            >
+              <Text style={{ ...globalStyles.textStyle, fontSize: 30 }}>
+                Equip
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              disabled={selectedItems.length > 0}
+              style={{
+                opacity: selectedItems.length > 0 ? 1 : 0.3,
+                ...globalStyles.button,
+              }}
+            >
+              <Text style={{ ...globalStyles.textStyle, fontSize: 30 }}>
+                Sell
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
       )}
+      
+      <ModalQuestion 
+      modalVisible={modalVisible}
+      setModalVisible={setModalVisible}
+      title={modalTitle}
+      selectedItems={selectedItems}
+      action={'Equip Gear!'}/>
     </ScrollView>
   );
 };

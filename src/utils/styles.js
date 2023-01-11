@@ -22,5 +22,12 @@ export const globalStyles = StyleSheet.create({
   textStyle:{
     fontFamily: "BlackCastle",
     color: 'white'
-  }
+  },
+  button: {
+    elevation: 2,
+    borderRadius: 15,
+    backgroundColor: 'rgba(16,36,69,0.95)',
+    alignItems: "center",
+    padding: "2%",
+  },
 });

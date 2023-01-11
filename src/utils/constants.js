@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 export const apiKey = "4ae25ed28196396194f9fd9b3af0a1ae";
 
 export const equipment = {
@@ -888,3 +889,12 @@ export const equipment = {
 export const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
+
+export const getSoundEffectsMode = async () =>{
+  try {
+    const mode = await AsyncStorage.getItem("sound-effects");
+    return mode;
+  } catch (ex) {
+    console.log(ex);
+  }
+}
