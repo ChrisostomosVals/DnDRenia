@@ -10,7 +10,7 @@ import { useState, useEffect } from "react";
 import { globalStyles } from "../utils/styles";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { PageUpAndDown } from "./pageUpAndDown";
-import { GoodItem } from "./goodCategoryItem";
+import { GoodItem } from "./goodItem";
 import IonIcon from "react-native-vector-icons/Ionicons";
 
 LogBox.ignoreLogs([

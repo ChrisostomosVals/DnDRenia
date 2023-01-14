@@ -113,7 +113,7 @@ export class CharacterGearApi {
     try {
       return await http.GetAsync(`${this.baseUrl}/${characterId}/all`);
     } catch (ex) {
-      console.error("[System.CharacterMainStatsApi.Get()] Error:", ex.message);
+      console.error("[System.CharacterGearApi.Get()] Error:", ex.message);
     }
   }
 
@@ -121,7 +121,7 @@ export class CharacterGearApi {
     try {
       return await http.GetAsync(`${this.baseUrl}/${id}`);
     } catch (ex) {
-      console.error("[System.CharacterMainStatsApi.Get()] Error:", ex.message);
+      console.error("[System.CharacterGearApi.Get()] Error:", ex.message);
     }
   }
 
@@ -129,7 +129,7 @@ export class CharacterGearApi {
     try {
       return await http.GetAsync(`${this.baseUrl}/${characterId}/money`);
     } catch (ex) {
-      console.error("[System.CharacterMainStatsApi.Get()] Error:", ex.message);
+      console.error("[System.CharacterGearApi.Get()] Error:", ex.message);
     }
   }
 
@@ -145,7 +145,7 @@ export class CharacterGearApi {
       return await http.PostAsync(this.baseUrl, gearItem);
     } catch (ex) {
       console.error(
-        "[System.CharacterMainStatsApi.Create()] Error:",
+        "[System.CharacterGearApi.Create()] Error:",
         ex.message
       );
       return ex.message;
@@ -162,7 +162,7 @@ export class CharacterGearApi {
     try {
       return await http.PutAsync(this.baseUrl, gearItem);
     } catch (ex) {
-      console.error("[System.CharacterApi.Create()] Error:", ex.message);
+      console.error("[System.CharacterGearApi.Create()] Error:", ex.message);
       return ex.message;
     }
   }
@@ -171,12 +171,82 @@ export class CharacterGearApi {
     try {
       return await http.DeleteAsync(`${this.baseUrl}/${id}/delete`);
     } catch (ex) {
-      console.error("[System.CharacterApi.Create()] Error:", ex.message);
+      console.error("[System.CharacterGearApi.Create()] Error:", ex.message);
       return ex.message;
     }
   }
 }
+export class CharacterArsenalApi {
+  constructor() {}
+  static baseUrl = "api/CharacterArsenal";
 
+  static async Get(characterId) {
+    try {
+      return await http.GetAsync(`${this.baseUrl}/${characterId}/all`);
+    } catch (ex) {
+      console.error("[System.CharacterArsenal.Get()] Error:", ex.message);
+    }
+  }
+
+  static async GetById(id) {
+    try {
+      return await http.GetAsync(`${this.baseUrl}/${id}`);
+    } catch (ex) {
+      console.error("[System.CharacterArsenal.GetById()] Error:", ex.message);
+    }
+  }
+
+
+  static async Insert(
+    arsenalItem = {
+      characterId: "",
+      gearId: '',
+      type: '',
+      range: 0,
+      attackBonus: 0,
+      damage: '',
+      critical: ''
+    }
+  ) {
+    try {
+      return await http.PostAsync(this.baseUrl, arsenalItem);
+    } catch (ex) {
+      console.error(
+        "[System.CharacterArsenal.Insert()] Error:",
+        ex.message
+      );
+      return ex.message;
+    }
+  }
+  
+  static async Update(
+    arsenalItem = {
+      id: 0,
+      gearId: '',
+      type: '',
+      range: 0,
+      attackBonus: 0,
+      damage: '',
+      critical: ''
+    }
+  ) {
+    try {
+      return await http.PutAsync(this.baseUrl, arsenalItem);
+    } catch (ex) {
+      console.error("[System.CharacterArsenal.Update()] Error:", ex.message);
+      return ex.message;
+    }
+  }
+  
+  static async Delete(id) {
+    try {
+      return await http.DeleteAsync(`${this.baseUrl}/${id}/delete`);
+    } catch (ex) {
+      console.error("[System.CharacterApi.Delete()] Error:", ex.message);
+      return ex.message;
+    }
+  }
+}
 export class ClassCategoryApi {
   static baseUrl = "api/ClassCategory";
   static async Get() {

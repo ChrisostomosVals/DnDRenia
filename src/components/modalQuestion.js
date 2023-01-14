@@ -1,19 +1,21 @@
 import { View, Modal, StyleSheet, Text, TouchableOpacity } from "react-native";
-import { getSoundEffectsMode } from "../utils/constants";
+import { exoticWeapons, getSoundEffectsMode, martialWeapons, simpleWeapons } from "../utils/constants";
 import { globalStyles } from "../utils/styles";
 import { Audio } from "expo-av";
 import { useState, useEffect } from "react";
+import { CharacterArsenalApi } from "../utils/api.service";
 
 export const ModalQuestion = ({
   modalVisible,
   setModalVisible,
   title,
   action,
-  selectedItems
+  selectedItems,
+  setBannerVisible,
+  setBannerText,
+  heroId
 }) => {
   const [soundEffect, setSoundEffect] = useState();
-
-
   useEffect(() => {
     return soundEffect
       ? () => {
@@ -21,6 +23,7 @@ export const ModalQuestion = ({
         }
       : undefined;
   }, [soundEffect]);
+
 
   const styles = StyleSheet.create({
     centeredView: {
@@ -55,6 +58,57 @@ export const ModalQuestion = ({
     },
   });
   const equipGear = async () =>{
+    if(action === 'Equip Gear!'){
+      let findItem = simpleWeapons.unarmedAttacks.find(item => item.name === selectedItems[0].name)
+      if(!findItem) findItem = simpleWeapons.lightMeleeWeapons.find(item => item.name === selectedItems[0].name)
+      if(!findItem) findItem = simpleWeapons.oneHandedMeleeWeapons.find(item => item.name === selectedItems[0].name)
+      if(!findItem) findItem = simpleWeapons.twoHandedMeleeWeapons.find(item => item.name === selectedItems[0].name)
+      if(!findItem) findItem = simpleWeapons.rangedWeapons.find(item => item.name === selectedItems[0].name)
+      if(!findItem) findItem = martialWeapons.lightMeleeWeapons.find(item => item.name === selectedItems[0].name)
+      if(!findItem) findItem = martialWeapons.oneHandedMeleeWeapons.find(item => item.name === selectedItems[0].name)
+      if(!findItem) findItem = martialWeapons.twoHandedMeleeWeapons.find(item => item.name === selectedItems[0].name)
+      if(!findItem) findItem = martialWeapons.rangedWeapons.find(item => item.name === selectedItems[0].name)
+      if(!findItem) findItem = exoticWeapons.lightMeleeWeapons.find(item => item.name === selectedItems[0].name)
+      if(!findItem) findItem = exoticWeapons.oneHandedMeleeWeapons.find(item => item.name === selectedItems[0].name)
+      if(!findItem) findItem = exoticWeapons.twoHandedMeleeWeapons.find(item => item.name === selectedItems[0].name)
+      if(!findItem) findItem = exoticWeapons.rangedWeapons.find(item => item.name === selectedItems[0].name)
+      if(!findItem){
+        setBannerText({
+          title: "Equipping item Failed",
+          paragraph: `${selectedItems[0].name} cannot be equipped!`
+        })
+        setModalVisible(false)
+        setBannerVisible(true)
+        return;
+      }
+      else{
+        const arsenalItem = {
+          characterId: heroId,
+          gearId: selectedItems[0].id,
+          type: findItem.type,
+          range: findItem.rangeIncrement,
+          attackBonus: 5,
+          damage: findItem.dmgM,
+          critical: findItem.critical
+        }
+        const insertArsenalItem = await CharacterArsenalApi.Insert(arsenalItem)
+        if(insertArsenalItem){
+          setBannerText({
+            title: "Equipping item Failed",
+            paragraph: `${selectedItems[0].name} has not been equipped!`
+          })
+          setModalVisible(false)
+          setBannerVisible(true)
+          return;
+        }
+        setBannerText({
+          title: "Equipped item Successfully!",
+          paragraph: `${selectedItems[0].name} equipped!`
+        })
+        setModalVisible(false)
+        setBannerVisible(true)
+      }
+    }
     const soundEffectsMode = await getSoundEffectsMode();
     if(soundEffectsMode === 'on'){
       const { sound } = await Audio.Sound.createAsync(
@@ -68,6 +122,9 @@ export const ModalQuestion = ({
       await sound.playAsync()
     }
   }
+
+  
+
   return (
     <Modal
       animationType="fade"
@@ -103,6 +160,7 @@ export const ModalQuestion = ({
             </View>
         </View>
       </View>
+
     </Modal>
   );
 };

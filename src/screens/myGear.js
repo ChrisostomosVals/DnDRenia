@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, Fragment } from "react";
-import { CharacterGearApi } from "../utils/api.service";
+import { CharacterArsenalApi, CharacterGearApi } from "../utils/api.service";
 import {
   View,
   StyleSheet,
@@ -14,6 +14,8 @@ import { wait } from "../utils/constants";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { ModalQuestion } from "../components/modalQuestion";
+import { Banner } from "../components/banner";
+
 
 export const MyGear = ({ route }) => {
   const { heroId } = route.params;
@@ -24,8 +26,14 @@ export const MyGear = ({ route }) => {
   const [weight, setWeight] = useState(0);
   const [selectedItems, setSelectedItems] = useState([]);
   const [modalTitle, setModalTitle] = useState('');
+  const [bannerVisible, setBannerVisible] = useState(false)
+  const [bannerText, setBannerText] = useState({title: '', paragraph:''})
+  const [arsenal, setArsenal] = useState([])
+  
+ 
   useEffect(() => {
     fetchGear();
+    fetchArsenal();
   }, [heroId]);
   const styles = StyleSheet.create({
     container: {
@@ -76,12 +84,11 @@ export const MyGear = ({ route }) => {
       justifyContent: "space-around",
     },
   });
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    fetchGear();
-    setSelectedItems([]);
-    wait(2000).then(() => setRefreshing(false));
-  }, []);
+  const fetchArsenal = async()=>{
+    const items = await CharacterArsenalApi.Get(heroId);
+    setArsenal(items)
+  }
+  
   const fetchGear = async () => {
     const getGear = await CharacterGearApi.Get(heroId);
     setWeight(0);
@@ -133,8 +140,8 @@ export const MyGear = ({ route }) => {
   const renderItem = (item) => {
     const backgroundColor = selectedItems.includes(item)
       ? "#DAA520"
-      : "rgb(16,36,69)";
-
+      : (arsenal.find(ars =>  ars.gearId === item.id) ?
+      '#004e00' : "rgb(16,36,69)")
     return (
       <Item
         item={item}
@@ -145,13 +152,12 @@ export const MyGear = ({ route }) => {
       />
     );
   };
+
+  const hideDialog = () => {
+    setBannerVisible(false)
+  };
   return (
-    <ScrollView
-      contentContainerStyle={styles.container}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
-    >
+    <View style={styles.container}>
       <View style={styles.header}>
         <Text style={{ ...styles.welcomeStyle, ...globalStyles.textStyle }}>
           Your Gear
@@ -241,7 +247,12 @@ export const MyGear = ({ route }) => {
       setModalVisible={setModalVisible}
       title={modalTitle}
       selectedItems={selectedItems}
-      action={'Equip Gear!'}/>
-    </ScrollView>
+      action={'Equip Gear!'}
+      setBannerVisible={setBannerVisible}
+      setBannerText={setBannerText}
+      heroId={heroId}/>
+      <Banner hideDialog={hideDialog} visible={bannerVisible} text={bannerText}/>
+
+      </View>
   );
 };
