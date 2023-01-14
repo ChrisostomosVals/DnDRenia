@@ -137,7 +137,7 @@ export default function App() {
     return (
       <ImageBackground
         style={styles.backgroundImage}
-        source={require("./src/assets/images/renia.png")}
+        source={require("./src/assets/images/background2.jpg")}
         resizeMode="cover"
       >
         {Alert.alert("Check your connection", "Renia seems unreachable")}
@@ -149,7 +149,7 @@ export default function App() {
   return (
     <ImageBackground
       style={styles.backgroundImage}
-      source={require("./src/assets/images/renia.png")}
+      source={require("./src/assets/images/background2.jpg")}
       resizeMode="cover"
     >
       <PaperProvider>

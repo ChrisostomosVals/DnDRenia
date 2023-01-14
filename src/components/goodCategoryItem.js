@@ -57,8 +57,8 @@ export const GoodItem = ({
         </Row>
         
 
-        {Object.values(e)[0].map((g) => (
-          <Grid key={g.name} style={styles.grid}>
+        {Object.values(e)[0].map((g, index) => (
+          <Grid key={g.name + index} style={styles.grid}>
             <Row style={styles.row}>
               <Col>
                 <Text
@@ -140,7 +140,7 @@ export const GoodItem = ({
   } else {
     if (index >= page * 8 && index < 8 * (page + 1)) {
       return (
-        <Grid key={e.name} style={styles.grid}>
+        <Grid style={styles.grid}>
           <Row style={styles.row}>
             <Col>
               <Text

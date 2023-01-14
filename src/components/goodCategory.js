@@ -10,36 +10,39 @@ import { useState, useEffect } from "react";
 import { globalStyles } from "../utils/styles";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { PageUpAndDown } from "./pageUpAndDown";
-import {GoodItem} from "./goodCategoryItem"
+import { GoodItem } from "./goodCategoryItem";
+import IonIcon from "react-native-vector-icons/Ionicons";
 
 LogBox.ignoreLogs([
   "Non-serializable values were found in the navigation state",
 ]);
-export const GoodCategory = ({ cart, category, heroId, equipment, setShopVisible, removeItem, addItem }) => {
- 
+export const GoodCategory = ({
+  cart,
+  category,
+  equipment,
+  setShopVisible,
+  removeItem,
+  addItem,
+}) => {
   const [page, setPage] = useState(0);
 
   useEffect(() => {
-    setPage(0)
-  }, [category, heroId, equipment, setShopVisible]);
+    setPage(0);
+  }, [category, equipment, setShopVisible]);
 
-
-
-  const removeItemFromCart = (name) => {
-    removeItem(name);
-  };
-  const addItemToCart = (name, cost, weight) => {
-    addItem(name, cost, weight);
-  };
-  
   const styles = StyleSheet.create({
-    container: {
+    categoryTitle: {
+      backgroundColor: "rgba(16,36,69,0.95)",
+      borderRadius: 15,
+      flexDirection: "row",
+      margin: 20,
+      alignItems: "center",
+      justifyContent: "center",
     },
     welcomeStyle: {
       fontSize: 30,
       textAlign: "center",
-      backgroundColor: "rgba(16,36,69,0.95)",
-      borderRadius: 15,
+      alignSelf: "center",
       ...globalStyles.textStyle,
     },
     textStyle: {
@@ -60,6 +63,9 @@ export const GoodCategory = ({ cart, category, heroId, equipment, setShopVisible
     },
     table: {
       backgroundColor: "rgba(16,36,69,0.95)",
+    },
+    title: {
+      marginTop: "10%",
     },
     row: {
       alignItems: "center",
@@ -91,26 +97,38 @@ export const GoodCategory = ({ cart, category, heroId, equipment, setShopVisible
     },
     pageSelection: {
       position: "absolute",
-      backgroundColor: 'red',
+      backgroundColor: "red",
       left: 0,
       right: 0,
       bottom: -20,
       justifyContent: "center",
       alignItems: "center",
     },
-    title:{
-      marginTop: '10%'
-    }
+    backButton: {
+      position: "absolute",
+      left: 5,
+    },
   });
-  if(!equipment){
-    return (<Text style={styles.textStyle}>Loading...</Text>)
+  if (!equipment) {
+    return <Text style={styles.textStyle}>Loading...</Text>;
   }
   return (
     <>
-    <View style={styles.title}><Text style={{...styles.welcomeStyle, marginBottom: 20}}>{category}</Text></View>
-    <ScrollView contentContainerStyle={{flexGrow: 1}}>
+      <View style={styles.title}>
+        <View style={styles.categoryTitle}>
+          <IonIcon
+            style={styles.backButton}
+            name="arrow-back-circle"
+            color="#DAA520"
+            size={30}
+            onPress={() => setShopVisible(true)}
+          />
+          <Text style={styles.welcomeStyle}>{category}</Text>
+        </View>
+      </View>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.table}>
-          <Grid style={styles.grid}>
+          <Grid style={{...styles.grid, backgroundColor: '#DAA520'}}>
             <Row style={styles.row}>
               <Col>
                 <Text style={styles.textStyle}>Goods</Text>
@@ -133,23 +151,28 @@ export const GoodCategory = ({ cart, category, heroId, equipment, setShopVisible
           {equipment &&
             equipment.length > 0 &&
             equipment.map((e, index) => (
-                <GoodItem cart={cart} removeItemFromCart={removeItem} page={page} addItemToCart={addItem} e={e} index={index} category={category} />
-            )
-            )}
+              <GoodItem
+                key={e.name}
+                cart={cart}
+                removeItemFromCart={removeItem}
+                page={page}
+                addItemToCart={addItem}
+                e={e}
+                index={index}
+                category={category}
+              />
+            ))}
         </View>
 
-     {category !== "Food Drink And Lodging" && <PageUpAndDown page={page} setPage={setPage} equipment={equipment} pageLength={parseInt(equipment.length/8)}/>} 
-      <TouchableOpacity
-                            style={styles.button}
-                            onPress={() => setShopVisible(true)}
-                          >
-                            <Text
-                              style={styles.buttonText}
-                            >
-                              Back
-                            </Text>
-                          </TouchableOpacity>
-    </ScrollView>
+        {category !== "Food Drink And Lodging" && (
+          <PageUpAndDown
+            page={page}
+            setPage={setPage}
+            equipment={equipment}
+            pageLength={parseInt(equipment.length / 8)}
+          />
+        )}
+      </ScrollView>
     </>
   );
 };

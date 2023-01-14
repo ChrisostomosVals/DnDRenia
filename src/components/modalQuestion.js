@@ -55,7 +55,6 @@ export const ModalQuestion = ({
     },
   });
   const equipGear = async () =>{
-    console.log(selectedItems[0])
     const soundEffectsMode = await getSoundEffectsMode();
     if(soundEffectsMode === 'on'){
       const { sound } = await Audio.Sound.createAsync(
