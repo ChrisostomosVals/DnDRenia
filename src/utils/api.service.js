@@ -4,7 +4,7 @@ import HttpService from "./http.service";
 const http = new HttpService();
 export class CharacterApi {
   constructor() {}
-  static baseUrl = "api/Character";
+  static baseUrl = "gateway/api/Character";
 
   static async Get() {
     try {
@@ -16,6 +16,27 @@ export class CharacterApi {
   static async GetHeroes() {
     try {
       return await http.GetAsync(`${this.baseUrl}?type=hero`);
+    } catch (ex) {
+      console.error("[System.CharacterApi.Get()] Error:", ex.message);
+    }
+  }
+  static async GetNpcs() {
+    try {
+      return await http.GetAsync(`${this.baseUrl}?type=npc`);
+    } catch (ex) {
+      console.error("[System.CharacterApi.Get()] Error:", ex.message);
+    }
+  }
+  static async GetMonsters() {
+    try {
+      return await http.GetAsync(`${this.baseUrl}?type=hostile`);
+    } catch (ex) {
+      console.error("[System.CharacterApi.Get()] Error:", ex.message);
+    }
+  }
+  static async GetBosses() {
+    try {
+      return await http.GetAsync(`${this.baseUrl}?type=boss`);
     } catch (ex) {
       console.error("[System.CharacterApi.Get()] Error:", ex.message);
     }
@@ -32,6 +53,40 @@ export class CharacterApi {
       name: "",
       type: "",
       classId: 0,
+      gender: "",
+      raceId: 0,
+      level: 0,
+      strength: 0,
+      dexterity: 0,
+      intelligence: 0,
+      constitution: 0,
+      wisdom: 0,
+      charisma: 0,
+      armorClass: 0,
+      fortitude: 0,
+      reflex: 0,
+      will: 0,
+      baseAttackBonus: 0,
+      spellResistance: 0,
+      size: "",
+      maxHp: 0,
+      currentHp: 0,
+      speed: 0,
+      hair: "",
+      eyes: "",
+      fly: 0,
+      swim: 0,
+      climb: 0,
+      burrow: 0,
+      touch: 0,
+      flatFooted: 0,
+      homeland: "",
+      deity: "",
+      height: 0,
+      weight: 0,
+      experience: 0,
+      age: "",
+      scheme: null,
     }
   ) {
     try {
@@ -41,10 +96,59 @@ export class CharacterApi {
       return ex.message;
     }
   }
+  static async Update(
+    character = {
+      id: "",
+      name: "",
+      type: "",
+      classId: 0,
+      gender: "",
+      raceId: 0,
+      level: 0,
+      strength: 0,
+      dexterity: 0,
+      intelligence: 0,
+      constitution: 0,
+      wisdom: 0,
+      charisma: 0,
+      armorClass: 0,
+      fortitude: 0,
+      reflex: 0,
+      will: 0,
+      baseAttackBonus: 0,
+      spellResistance: 0,
+      size: "",
+      maxHp: 0,
+      currentHp: 0,
+      speed: 0,
+      hair: "",
+      eyes: "",
+      fly: 0,
+      swim: 0,
+      climb: 0,
+      burrow: 0,
+      touch: 0,
+      flatFooted: 0,
+      homeland: "",
+      deity: "",
+      height: 0,
+      weight: 0,
+      experience: 0,
+      age: "",
+      scheme: null,
+    }
+  ) {
+    try {
+      return await http.PutAsync(this.baseUrl, character);
+    } catch (ex) {
+      console.error("[System.CharacterApi.Update()] Error:", ex.message);
+      return ex.message;
+    }
+  }
 }
 export class CharacterMainStatsApi {
   constructor() {}
-  static baseUrl = "api/CharacterMainStats";
+  static baseUrl = "gateway/api/CharacterMainStats";
 
   static async Get() {
     try {
@@ -71,7 +175,7 @@ export class CharacterMainStatsApi {
       charisma: 0,
       intelligence: 0,
       level: 0,
-      healthPoints: 0
+      healthPoints: 0,
     }
   ) {
     try {
@@ -94,7 +198,7 @@ export class CharacterMainStatsApi {
       charisma: 0,
       intelligence: 0,
       level: 0,
-      healthPoints: 0
+      healthPoints: 0,
     }
   ) {
     try {
@@ -107,7 +211,7 @@ export class CharacterMainStatsApi {
 }
 export class CharacterGearApi {
   constructor() {}
-  static baseUrl = "api/CharacterGear";
+  static baseUrl = "gateway/api/CharacterGear";
 
   static async Get(characterId) {
     try {
@@ -133,30 +237,26 @@ export class CharacterGearApi {
     }
   }
 
-
   static async Insert(
     gearItem = {
       characterId: "",
-      name: '',
-      quantity: 0
+      name: "",
+      quantity: 0,
     }
   ) {
     try {
       return await http.PostAsync(this.baseUrl, gearItem);
     } catch (ex) {
-      console.error(
-        "[System.CharacterGearApi.Create()] Error:",
-        ex.message
-      );
+      console.error("[System.CharacterGearApi.Create()] Error:", ex.message);
       return ex.message;
     }
   }
-  
+
   static async Update(
     gearItem = {
       id: 0,
-      name: '',
-      quantity: 0
+      name: "",
+      quantity: 0,
     }
   ) {
     try {
@@ -166,7 +266,7 @@ export class CharacterGearApi {
       return ex.message;
     }
   }
-  
+
   static async Delete(id) {
     try {
       return await http.DeleteAsync(`${this.baseUrl}/${id}/delete`);
@@ -178,7 +278,7 @@ export class CharacterGearApi {
 }
 export class CharacterArsenalApi {
   constructor() {}
-  static baseUrl = "api/CharacterArsenal";
+  static baseUrl = "gateway/api/CharacterArsenal";
 
   static async Get(characterId) {
     try {
@@ -196,38 +296,34 @@ export class CharacterArsenalApi {
     }
   }
 
-
   static async Insert(
     arsenalItem = {
       characterId: "",
-      gearId: '',
-      type: '',
+      gearId: "",
+      type: "",
       range: 0,
       attackBonus: 0,
-      damage: '',
-      critical: ''
+      damage: "",
+      critical: "",
     }
   ) {
     try {
       return await http.PostAsync(this.baseUrl, arsenalItem);
     } catch (ex) {
-      console.error(
-        "[System.CharacterArsenal.Insert()] Error:",
-        ex.message
-      );
+      console.error("[System.CharacterArsenal.Insert()] Error:", ex.message);
       return ex.message;
     }
   }
-  
+
   static async Update(
     arsenalItem = {
       id: 0,
-      gearId: '',
-      type: '',
+      gearId: "",
+      type: "",
       range: 0,
       attackBonus: 0,
-      damage: '',
-      critical: ''
+      damage: "",
+      critical: "",
     }
   ) {
     try {
@@ -237,7 +333,7 @@ export class CharacterArsenalApi {
       return ex.message;
     }
   }
-  
+
   static async Delete(id) {
     try {
       return await http.DeleteAsync(`${this.baseUrl}/${id}/delete`);
@@ -248,7 +344,7 @@ export class CharacterArsenalApi {
   }
 }
 export class ClassCategoryApi {
-  static baseUrl = "api/ClassCategory";
+  static baseUrl = "gateway/api/ClassCategory";
   static async Get() {
     try {
       return await http.GetAsync(this.baseUrl);
@@ -265,7 +361,7 @@ export class ClassCategoryApi {
   }
 }
 export class ClassApi {
-  static baseUrl = "api/Class";
+  static baseUrl = "gateway/api/Class";
   static async Get() {
     try {
       return await http.GetAsync(this.baseUrl);
@@ -289,7 +385,7 @@ export class ClassApi {
   }
 }
 export class RaceCategoryApi {
-  static baseUrl = "api/RaceCategory";
+  static baseUrl = "gateway/api/RaceCategory";
   static async Get() {
     try {
       return await http.GetAsync(this.baseUrl);
@@ -306,7 +402,7 @@ export class RaceCategoryApi {
   }
 }
 export class RaceApi {
-  static baseUrl = "api/Race";
+  static baseUrl = "gateway/api/Race";
   static async Get() {
     try {
       return await http.GetAsync(this.baseUrl);
@@ -326,6 +422,87 @@ export class RaceApi {
       return await http.GetAsync(`${this.baseUrl}/${categoryId}/category`);
     } catch (ex) {
       console.error("[System.RaceApi.GetByCategoryId()] Error:", ex.message);
+    }
+  }
+}
+export class UserApi {
+  static baseUrl = "gateway/api/User";
+  static async Get() {
+    try {
+      return await http.GetAsync(this.baseUrl);
+    } catch (ex) {
+      console.error("[System.UserApi.Get()] Error:", ex.message);
+    }
+  }
+  static async GetById(id) {
+    try {
+      return await http.GetAsync(`${this.baseUrl}/${id}`);
+    } catch (ex) {
+      console.error("[System.UserApi.GetById()] Error:", ex.message);
+    }
+  }
+  static async GetProfile() {
+    try {
+      return await http.GetAsync(`${this.baseUrl}/profile`);
+    } catch (ex) {
+      console.error("[System.UserApi.GetProfile()] Error:", ex.message);
+    }
+  }
+  static async Create(
+    user = {
+      characterid: "",
+      name: "",
+      email: "",
+      password: "",
+    }
+  ) {
+    try {
+      return await http.Post(`${this.baseUrl}`, user);
+    } catch (ex) {
+      console.error("[System.UserApi.Post()] Error:", ex.message);
+      return ex.message;
+    }
+  }
+  static async Update(
+    user = {
+      Id: "",
+      characterId: "",
+      name: "",
+      email: "",
+    }
+  ) {
+    try {
+      return await http.Put(`${this.baseUrl}`, user);
+    } catch (ex) {
+      console.error("[System.UserApi.Update()] Error:", ex.message);
+      return ex.message;
+    }
+  }
+  static async ChangePassword(
+    id,
+    changepasswordModel = {
+      oldPassword: "",
+      newPassword: "",
+    }
+  ) {
+    try {
+      return await http.GetAsync(
+        `${this.baseUrl}${id}/changepassword`,
+        changepasswordModel
+      );
+    } catch (ex) {
+      console.error("[System.UserApi.ChangePassword()] Error:", ex.message);
+      return ex.message;
+    }
+  }
+}
+export class ConnectApi {
+  static baseUrl = "gateway/connect";
+  static async Login(email, password) {
+    try {
+      return await http.PostAsync(this.baseUrl);
+    } catch (ex) {
+      console.error("[System.RaceCategoryApi.Get()] Error:", ex.message);
     }
   }
 }

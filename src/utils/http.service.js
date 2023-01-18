@@ -11,7 +11,8 @@ export default class HttpService {
       headers: {
         "Content-Type": "application/json",
         Accepts: "application/json",
-        ApiKey: apiKey,
+        Authorization: "Bearer " + await AsyncStorage.getItem("token"),
+
       },
     };
     this.BaseUrl = await AsyncStorage.getItem("ip");
@@ -30,7 +31,7 @@ export default class HttpService {
       headers: {
         "Content-Type": "application/json",
         Accepts: "application/json",
-        ApiKey: apiKey,
+        Authorization: "Bearer " + await AsyncStorage.getItem("token"),
       },
     };
 
@@ -50,7 +51,7 @@ export default class HttpService {
       headers: {
         "Content-Type": "application/json",
         Accepts: "application/json",
-        ApiKey: apiKey,
+        Authorization: "Bearer " + await AsyncStorage.getItem("token"),
       },
     };
 
@@ -70,7 +71,8 @@ export default class HttpService {
       headers: {
         "Content-Type": "application/json",
         Accepts: "application/json",
-        ApiKey: apiKey,
+        Authorization: "Bearer " + await AsyncStorage.getItem("token"),
+
       },
     };
 

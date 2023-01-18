@@ -144,6 +144,7 @@ export const WeaponsCategory = ({
     }
   });
   const handleWeaponCategory = (e) => {
+    console.log(e)
     const findCategory = categories.find((c) => c.value === e);
     setSelectedWeapons(weapons[`${findCategory.category}`]);
   };

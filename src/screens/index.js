@@ -7,6 +7,8 @@ import { globalStyles } from "../utils/styles";
 import { useIsFocused } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { wait } from "../utils/constants";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+
 
 export const Index = (props) => {
   const isFocused = useIsFocused();
@@ -19,7 +21,7 @@ export const Index = (props) => {
     setRefreshing(true);
     fetchHero();
     wait(2000).then(() => setRefreshing(false));
-  }, []);
+  }, [props]);
   const styles = StyleSheet.create({
     body: {
       flex: 1,
@@ -68,23 +70,9 @@ export const Index = (props) => {
   const fetchHero = async () => {
     const id = await AsyncStorage.getItem("heroId");
     const fetchHero = await CharacterApi.GetById(id);
-    let mainStatsInit = {
-      characterId: id,
-      strength: 0,
-      dexterity: 0,
-      constitution: 0,
-      wisdom: 0,
-      charisma: 0,
-      intelligence: 0,
-      level: 0,
-      healthPoints: 0
-    } 
-    const mainStats = await CharacterMainStatsApi.GetById(id);
-    if(mainStats){
-      mainStatsInit = mainStats;
-    }
+    
     if (fetchHero) {
-      setHero({hero: fetchHero, mainStatsInit});
+      setHero(fetchHero);
     }
   };
   const navigateToPage = (page, id) =>{
@@ -102,10 +90,10 @@ export const Index = (props) => {
         <>
           <View style={styles.hidden}></View>
           <View style={styles.header}>
-            <Text style={{...styles.welcomeStyle, ...globalStyles.textStyle}}>{hero.hero.name}</Text>
+            <Text style={{...styles.welcomeStyle, ...globalStyles.textStyle}}>{hero.name}</Text>
             <View style={styles.equipment}>
             <View style={globalStyles.card}>
-              <TouchableOpacity onPress={() => navigateToPage('MyGear', hero.hero.id)}>
+              <TouchableOpacity onPress={() => navigateToPage('MyGear', hero.id)}>
             <Image source={require('../assets/images/Rucksack_80px.png')} />
             </TouchableOpacity>
              </View>
@@ -116,8 +104,14 @@ export const Index = (props) => {
             </View>
           </View>
           <View style={styles.stats}>
-            <MainStats stats={hero.mainStatsInit} />
+            <MainStats hero={hero} />
           </View>
+          <MaterialCommunityIcons
+            name="logout"
+            size={30}
+            style={{ position: "absolute", right: 20, top: 40 }}
+            onPress={() => props.route.params.setLogoutModalVisible(true)}
+          />
         </>
       )}
       </ScrollView>

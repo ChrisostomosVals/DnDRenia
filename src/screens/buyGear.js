@@ -11,9 +11,11 @@ import IonIcon from "react-native-vector-icons/Ionicons";
 import { WeaponsShop } from "../components/weaponsShop";
 import { WeaponsCategory } from "../components/weaponsCategory";
 import { globalStyles } from "../utils/styles";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 export const BuyGear = ({ route, navigation }) => {
   const isFocused = useIsFocused();
-  const [heroId, setHeroId] = useState(route.params.heroId);
+  const [heroId, setHeroId] = useState();
   const [money, setMoney] = useState();
   const [cart, setCart] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -38,25 +40,35 @@ export const BuyGear = ({ route, navigation }) => {
     "Exotic Weapons",
   ];
   useEffect(() => {
-    setHeroId(route.params.heroId);
+    fetchId();
     getMoney();
     setShopVisible(true);
     setRender("shop");
   }, [route, navigation, isFocused]);
 
+  const fetchId = async () => {
+    if (!route.params.heroId) {
+      const id = await AsyncStorage.getItem("heroId");
+      setHeroId(id);
+      return;
+    }
+    setHeroId(route.params.heroId);
+  };
+
   const getMoney = async () => {
-    const fetchMoney = await CharacterGearApi.GetMoney(route.params.heroId);
-    let moneyArr = fetchMoney.quantity.toFixed(2);
-    const gold = moneyArr.split(".")[0];
-    const silver = moneyArr.split(".")[1][0];
-    const copper = moneyArr.split(".")[1][1];
-    const money = {
-      id: fetchMoney.id,
-      gold: gold,
-      silver: silver,
-      copper: copper,
-    };
-    setMoney(money);
+      const id = await AsyncStorage.getItem("heroId");
+      const fetchMoney = await CharacterGearApi.GetMoney(id);
+      let moneyArr = fetchMoney.quantity.toFixed(2);
+      const gold = moneyArr.split(".")[0];
+      const silver = moneyArr.split(".")[1][0];
+      const copper = moneyArr.split(".")[1][1];
+      const money = {
+        id: fetchMoney.id,
+        gold: gold,
+        silver: silver,
+        copper: copper,
+      };
+      setMoney(money);
   };
   const deleteItemFromCart = (name) => {
     const doesItemExist = cart.find((item) => item.name === name);
@@ -163,12 +175,12 @@ export const BuyGear = ({ route, navigation }) => {
     categoryTitle: {
       backgroundColor: "rgba(16,36,69,0.95)",
       borderRadius: 15,
-      flexDirection: 'row',
+      flexDirection: "row",
       margin: 20,
-      alignItems:'center',
-      justifyContent: 'center',
+      alignItems: "center",
+      justifyContent: "center",
       marginTop: "15%",
-  },
+    },
   });
   const navigateToPage = (category, equipment) => {
     setCategory(category);
@@ -218,14 +230,14 @@ export const BuyGear = ({ route, navigation }) => {
     );
     switch (render) {
       case "shop":
-        item =( <>
-        <View style={styles.categoryTitle}>
-        <Text style={styles.titleStyle}>
-          What are you looking for?
-        </Text>
-      </View>
-      <Shop setRender={setRender} />
-      </>);
+        item = (
+          <>
+            <View style={styles.categoryTitle}>
+              <Text style={styles.titleStyle}>What are you looking for?</Text>
+            </View>
+            <Shop setRender={setRender} />
+          </>
+        );
         break;
       case "goodAndServices":
         item = (
