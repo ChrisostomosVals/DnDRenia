@@ -12,7 +12,6 @@ import { navigationRef } from "./src/navigations/RootNavigation";
 import { CharacterInfo } from "./src/screens/characterInfo";
 import { Provider as PaperProvider } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { ChooseHero } from "./src/screens/chooseHero";
 import { useFonts } from "expo-font";
 import { useNetInfo } from "@react-native-community/netinfo";
 import { MyGear } from "./src/screens/myGear";
@@ -22,7 +21,7 @@ import { Map } from "./src/screens/map";
 import { getSoundEffectsMode } from "./src/utils/constants";
 import { Login } from "./src/screens/login";
 import { LogOut } from "./src/components/logout";
-import { UserApi } from "./src/utils/api.service";
+import UserApi from "./src/dist/api/UserApi";
 
 const Drawer = createDrawerNavigator();
 
@@ -90,9 +89,13 @@ export default function App() {
   };
 
   const fetchId = async () => {
-    const user = await UserApi.GetProfile();
-    if (user) {
-      setUserRole(user.role);
+    const token = await AsyncStorage.getItem('token')
+    const ip = await AsyncStorage.getItem('ip')
+    const user = await UserApi.GetProfileAsync(token, ip);
+    if (user.isError) {
+    }
+    else{
+      setUserRole(user.data.role);
     }
     const id = await AsyncStorage.getItem("heroId");
     setHeroId(id);

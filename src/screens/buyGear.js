@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { View, StyleSheet, Text } from "react-native";
-import { CharacterGearApi } from "../utils/api.service";
+import CharacterGearApi from "../dist/api/CharacterGearApi";
 import { CartAndMoney } from "../components/cartAndMoney";
 import { Cart } from "../components/cart";
 import { GoodCategory } from "../components/goodCategory";
@@ -23,7 +23,8 @@ export const BuyGear = ({ route, navigation }) => {
   const [category, setCategory] = useState("");
   const [selectedEquipment, setSelectedEquipment] = useState([]);
   const [render, setRender] = useState("shop");
-
+  const [ip, setIp] = useState();
+  const [token, setToken] = useState();
   const goodCategories = [
     "Adventure Gear",
     "Special Substances",
@@ -39,13 +40,20 @@ export const BuyGear = ({ route, navigation }) => {
     "Martial Weapons",
     "Exotic Weapons",
   ];
+  
   useEffect(() => {
+    fetchConstants();
     fetchId();
     getMoney();
     setShopVisible(true);
     setRender("shop");
   }, [route, navigation, isFocused]);
-
+  const fetchConstants = async () =>{
+    const token = await AsyncStorage.getItem("token");
+    const ip = await AsyncStorage.getItem("ip");
+    setIp(ip);
+    setToken(token);
+  }
   const fetchId = async () => {
     if (!route.params.heroId) {
       const id = await AsyncStorage.getItem("heroId");
@@ -57,8 +65,17 @@ export const BuyGear = ({ route, navigation }) => {
 
   const getMoney = async () => {
       const id = await AsyncStorage.getItem("heroId");
-      const fetchMoney = await CharacterGearApi.GetMoney(id);
-      let moneyArr = fetchMoney.quantity.toFixed(2);
+      const fetchMoney = await CharacterGearApi.GetMoneyAsync(token, ip, id);
+      if(fetchMoney.isError){
+        console.log(fetchMoney.error)
+        setMoney({
+          gold: 0,
+          silver: 0,
+          copper: 0
+        })
+        return;
+      }
+      let moneyArr = fetchMoney.data.quantity.toFixed(2);
       const gold = moneyArr.split(".")[0];
       const silver = moneyArr.split(".")[1][0];
       const copper = moneyArr.split(".")[1][1];

@@ -12,8 +12,8 @@ import { globalStyles } from "../utils/styles";
 import { Banner } from "../components/banner";
 import IonIcon from "react-native-vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { UserApi } from "../utils/api.service";
-
+import ConnectApi from "../dist/api/ConnectApi"
+import UserApi from "../dist/api/UserApi";
 export const Login = ({render, setRender}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -51,45 +51,49 @@ export const Login = ({render, setRender}) => {
   });
 
   const login = async () => {
-    const details = {
-      username: email,
-      password: password,
-      grant_type: "password",
-      client_id: "renia:4ae25ed28196396194f9fd9b3af0a1ae",
-      client_secret: "!R3n!@S3cr3t",
-    };
-    let formBody = [];
-    for (let property in details) {
-      let encodedKey = encodeURIComponent(property);
-      let encodedValue = encodeURIComponent(details[property]);
-      formBody.push(encodedKey + "=" + encodedValue);
-    }
-    formBody = formBody.join("&");
-    let url = await AsyncStorage.getItem("ip");
-    let token = await fetch(`${url}gateway/connect`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
-      },
-      body: formBody,
-    });
-    let response = await token.json();
-    if (response.error) {
+    // const details = {
+    //   username: email,
+    //   password: password,
+    //   grant_type: "password",
+    //   client_id: "renia:4ae25ed28196396194f9fd9b3af0a1ae",
+    //   client_secret: "!R3n!@S3cr3t",
+    // };
+    // let formBody = [];
+    // for (let property in details) {
+    //   let encodedKey = encodeURIComponent(property);
+    //   let encodedValue = encodeURIComponent(details[property]);
+    //   formBody.push(encodedKey + "=" + encodedValue);
+    // }
+    // formBody = formBody.join("&");
+    // let url = await AsyncStorage.getItem("ip");
+    // let token = await fetch(`${url}gateway/connect`, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+    //   },
+    //   body: formBody,
+    // });
+    // let response = await token.json();
+    const url = await AsyncStorage.getItem('ip')
+    const response = await ConnectApi.LoginAsync(email, password, url)
+    console.log(response)
+    if (response.isError) {
       setMessage({
         title: "Login Failed",
-        paragraph: response.error_description,
+        paragraph: response.error.message.error_description,
       });
       setVisible(true);
     } else {
-      await AsyncStorage.setItem("token", response.access_token);
-      await AsyncStorage.setItem("refreshToken", response.refresh_token);
-      await AsyncStorage.setItem("scope", response.scope);
-      await AsyncStorage.setItem("tokenType", response.token_type);
+      const data = response.data
+      await AsyncStorage.setItem("token", data.access_token);
+      await AsyncStorage.setItem("refreshToken", data.refresh_token);
+      await AsyncStorage.setItem("scope", data.scope);
+      await AsyncStorage.setItem("tokenType", data.token_type);
       await AsyncStorage.setItem(
         "tokenExpiration",
-        response.expires_in.toString()
+        data.expires_in.toString()
       );
-      let user = await UserApi.GetProfile();
+      let user = await UserApi.GetProfileAsync(data.access_token, url);
       if(user.characterId){
         await AsyncStorage.setItem('heroId', user.characterId);
       }
@@ -132,18 +136,17 @@ export const Login = ({render, setRender}) => {
             />
           </View>
         </View>
-        {email != "" && password != "" && (
           <View style={styles.form}>
             <TouchableOpacity
-              style={{ ...globalStyles.buttonStyle, width: "50%" }}
+              style={{ ...globalStyles.buttonStyle, width: "50%", opacity: email === "" || password === "" ? 0.4 : 1 }}
               onPress={login}
+              disabled={email === "" || password === ""}
             >
               <Text style={{ ...globalStyles.textStyle, fontSize: 30 }}>
                 Login
               </Text>
             </TouchableOpacity>
           </View>
-        )}
       </Card>
       <Banner hideDialog={hideDialog} visible={visible} text={message} />
     </View>

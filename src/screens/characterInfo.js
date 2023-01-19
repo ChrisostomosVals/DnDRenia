@@ -2,21 +2,41 @@ import { View, Text, StyleSheet } from "react-native";
 import { globalStyles } from "../utils/styles";
 import { Card } from "@rneui/base";
 import { useState, useEffect } from "react";
-import { CharacterApi, CharacterMainStatsApi, ClassApi, RaceApi } from "../utils/api.service";
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { ScrollView } from "react-native-gesture-handler";
-
+import CharacterApi from "../dist/api/CharacterApi";
+import ClassApi from "../dist/api/ClassApi";
+import RaceApi from "../dist/api/RaceApi";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 export const CharacterInfo = ({ route }) => {
   const { characterId } = route.params;
   const [character, setCharacter] = useState({});
+  const [ip, setIp] = useState();
+  const [token, setToken] = useState();
   useEffect(() => {
+    fetchConstants();
     fetchCharacter();
   }, [route]);
+  const fetchConstants = async () =>{
+    const token = await AsyncStorage.getItem("token");
+    const ip = await AsyncStorage.getItem("ip");
+    setIp(ip);
+    setToken(token);
+  }
   const fetchCharacter = async () => {
-    const getCharacter = await CharacterApi.GetById(characterId);
-    const characterClass = await ClassApi.GetById(getCharacter.classId);
-    const characterRace = await RaceApi.GetById(getCharacter.raceId);
-    setCharacter({...getCharacter, raceName: characterRace.name, className: characterClass.name});
+    const getCharacter = await CharacterApi.GetByIdAsync(token, ip, characterId);
+    if(getCharacter.isError){
+      console.log(getCharacter.error)
+    }
+    const characterClass = await ClassApi.GetByIdAsync(token, ip, getCharacter.data.classId);
+    if(characterClass.isError){
+      console.log(characterClass.error)
+    }
+    const characterRace = await RaceApi.GetByIdAsync(token, ip, getCharacter.data.raceId);
+    if(characterRace.isError){
+      console.log(characterRace.error)
+    }
+    setCharacter({...getCharacter.data, raceName: characterRace.data.name, className: characterClass.data.name});
     
   };
   const styles = StyleSheet.create({

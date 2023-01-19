@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Card } from "@rneui/base";
 import { useEffect, useState } from "react";
-import { TextInput, Text, StyleSheet, TouchableOpacity, View } from "react-native";
+import { TextInput, Text, StyleSheet, TouchableOpacity, View, Keyboard } from "react-native";
 import { Banner } from "../components/banner";
 import { globalStyles } from "../utils/styles";
 
@@ -26,6 +26,7 @@ export const SettingsScreen = ({navigation}) => {
     if(ip != ''){
       await AsyncStorage.setItem('ip', ip)
       setVisible(true);
+      Keyboard.dismiss();
     }
   }
   const hideDialog = () => {

@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState, useCallback } from "react";
 import { View, StyleSheet, Text, RefreshControl, Image, ScrollView } from "react-native";
 import { MainStats } from "../components/mainStats";
-import { CharacterApi, CharacterMainStatsApi } from "../utils/api.service";
+import CharacterApi from "../dist/api/CharacterApi";
 import { globalStyles } from "../utils/styles";
 import { useIsFocused } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -69,10 +69,16 @@ export const Index = (props) => {
 
   const fetchHero = async () => {
     const id = await AsyncStorage.getItem("heroId");
-    const fetchHero = await CharacterApi.GetById(id);
+    const token = await AsyncStorage.getItem("token");
+    const ip = await AsyncStorage.getItem("ip")
+    const fetchHero = await CharacterApi.GetByIdAsync(token, ip, id);
     
-    if (fetchHero) {
-      setHero(fetchHero);
+    if (fetchHero.isError) {
+      console.log(fetchHero.error)
+      setHero(null)
+    }
+    else{
+      setHero(fetchHero.data);
     }
   };
   const navigateToPage = (page, id) =>{
