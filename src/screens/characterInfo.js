@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, BackHandler } from "react-native";
 import { globalStyles } from "../utils/styles";
 import { Card } from "@rneui/base";
 import { useState, useEffect } from "react";
@@ -8,36 +8,99 @@ import CharacterApi from "../dist/api/CharacterApi";
 import ClassApi from "../dist/api/ClassApi";
 import RaceApi from "../dist/api/RaceApi";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import CharacterPropApi from "../dist/api/CharacterPropApi";
+import {MediaApi} from "../dist/api/MediaApi";
+import Carousel from 'react-native-reanimated-carousel';
+import IonIcon from "react-native-vector-icons/Ionicons";
+
+
 export const CharacterInfo = ({ route }) => {
   const { characterId } = route.params;
   const [character, setCharacter] = useState({});
   const [ip, setIp] = useState();
   const [token, setToken] = useState();
+  const [images, setImages] = useState([])
+  const [profileImage, setProfileImage] = useState()
+  const [enabled, setEnabled] = useState(false)
+  const [showImage, setShowImage] = useState({
+    uri: '',
+    show: false
+  })
+  const width = Dimensions.get('window').width;
+  const height = Dimensions.get('window').height;
   useEffect(() => {
-    fetchConstants();
     fetchCharacter();
+    setShowImage({
+      uri:'',
+      show: false
+    });
+    const backAction = () => {
+        setShowImage({
+          uri:'',
+          show: false
+        });
+        return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
   }, [route]);
-  const fetchConstants = async () =>{
+ 
+
+  const fetchCharacter = async () => {
+    setEnabled(false)
     const token = await AsyncStorage.getItem("token");
     const ip = await AsyncStorage.getItem("ip");
+    setImages([])
+    setProfileImage()
     setIp(ip);
     setToken(token);
-  }
-  const fetchCharacter = async () => {
     const getCharacter = await CharacterApi.GetByIdAsync(token, ip, characterId);
     if(getCharacter.isError){
       console.log(getCharacter.error)
+      return;
     }
     const characterClass = await ClassApi.GetByIdAsync(token, ip, getCharacter.data.classId);
     if(characterClass.isError){
       console.log(characterClass.error)
+      return;
     }
     const characterRace = await RaceApi.GetByIdAsync(token, ip, getCharacter.data.raceId);
     if(characterRace.isError){
       console.log(characterRace.error)
+      return;
     }
     setCharacter({...getCharacter.data, raceName: characterRace.data.name, className: characterClass.data.name});
-    
+    const characterProps = await CharacterPropApi.GetAsync(token, ip, getCharacter.data.id);
+    if(characterProps.isError){
+      console.error(characterProps.error)
+      return;
+    }
+    for(var prop of characterProps.data){
+      if(prop.type === "Profile Image"){
+        
+        const downloadFile = await MediaApi.DownloadAsync(token, ip, encodeURIComponent(prop.value))
+        const fileReaderInstance = new FileReader();
+        fileReaderInstance.readAsDataURL(downloadFile.data); 
+        fileReaderInstance.onload = () => {
+            base64data = fileReaderInstance.result;    
+            setProfileImage(base64data);
+            setImages(img => [...img, base64data]);
+        }
+      }
+      else if(prop.type === "Image"){
+        const downloadFile = await MediaApi.DownloadAsync(token, ip, encodeURIComponent(prop.value))
+        const fileReaderInstance = new FileReader();
+        fileReaderInstance.readAsDataURL(downloadFile.data); 
+        fileReaderInstance.onload = () => {
+            base64data = fileReaderInstance.result;    
+            setImages(img => [...img, base64data]);
+        }
+      }
+    }
   };
   const styles = StyleSheet.create({
     container: {
@@ -73,13 +136,51 @@ export const CharacterInfo = ({ route }) => {
         {
           alignItems: 'flex-end',
           fontSize: 20,
-          color: color}
+          color: color
+        }
       )
     },
     
   });
   return (
+   !showImage.show ?
     <View style={styles.container}>
+      {enabled ?
+      <>
+     <IonIcon
+            name="arrow-back-circle"
+            color="#DAA520"
+            size={30}
+            style={{left: 30, top:50, position: 'absolute'}}
+            onPress={() => setEnabled(false)}
+          />
+      <Carousel
+        loop={false}
+          width={width}
+          height={width}
+          data={images}
+          scrollAnimationDuration={100}
+          renderItem={({ index }) => (
+              <View
+                  style={{
+                      flex: 1,
+                  }}
+              >
+                <TouchableOpacity onPress={() => setShowImage({show: true, uri: images[index]})} activeOpacity={1}>
+                  <Image source={{uri: images[index]}}  style={{width: width, height: height / 2}} />
+                  </TouchableOpacity>
+              </View>
+          )}
+      />
+      </>
+         :
+        
+         <>
+        {profileImage ?
+        <TouchableOpacity onPress={() => setEnabled(!enabled)}>
+          <Image source={{uri: profileImage}}  style={{width: 80, height: 80, borderRadius: 80/ 2}} />
+        </TouchableOpacity>
+       : <View  style={{width: 80, height: 80, borderRadius: 80/ 2, backgroundColor: 'black'}}></View>}
       <Card containerStyle={{ width: "80%",height: '50%', ...globalStyles.card }}>
         {character.raceName && (
           <>
@@ -292,7 +393,10 @@ export const CharacterInfo = ({ route }) => {
           </>
            )}
       </Card>
+      </>}
     </View>
+    :
+    <Image source={{uri: showImage.uri}} resizeMode='cover' style={{width: '100%', height: '100%'}}/>
   );
 };
 

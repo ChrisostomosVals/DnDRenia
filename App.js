@@ -93,6 +93,7 @@ export default function App() {
     const ip = await AsyncStorage.getItem('ip')
     const user = await UserApi.GetProfileAsync(token, ip);
     if (user.isError) {
+      console.error(user.error)
     }
     else{
       setUserRole(user.data.role);
@@ -154,7 +155,6 @@ export default function App() {
           ref={navigationRef}
           theme={{ colors: { background: "transparent" } }}
         >
-           
           <Drawer.Navigator
             screenOptions={{
               drawerStyle: {
@@ -241,6 +241,7 @@ export default function App() {
                 ),
               }}
               component={SettingsScreen}
+              initialParams={{render: render, setRender: setRender}}
             />
             <Drawer.Screen
               name="CharacterInfo"
@@ -297,25 +298,6 @@ export default function App() {
         }}
         initialParams={{setLogoutModalVisible: setLogoutModalVisible}}
       />
-      </Drawer.Navigator>
-      </NavigationContainer>
-      )
-    }
-    else{
-      return(
-        <NavigationContainer
-          ref={navigationRef}
-          theme={{ colors: { background: "transparent" } }}
-        >
-          <Drawer.Navigator
-            screenOptions={{
-              drawerStyle: {
-                backgroundColor: "black",
-              },
-              drawerLabelStyle: styles.drawerTextStyle,
-              drawerActiveTintColor: "#7cc",
-            }}
-          >
        <Drawer.Screen
               name="Settings"
               options={{
@@ -330,10 +312,44 @@ export default function App() {
                 ),
               }}
               component={SettingsScreen}
+              initialParams={{render: render, setRender: setRender}}
             />
       </Drawer.Navigator>
       </NavigationContainer>
       )
+    }
+    else{
+    return  <NavigationContainer
+      ref={navigationRef}
+      theme={{ colors: { background: "transparent" } }}
+    >
+      <Drawer.Navigator
+        screenOptions={{
+          drawerStyle: {
+            backgroundColor: "black",
+          },
+          drawerLabelStyle: styles.drawerTextStyle,
+          drawerActiveTintColor: "#7cc",
+        }}
+      >
+        <Drawer.Screen
+              name="Settings"
+              options={{
+                title: "Settings",
+                headerShown: false,
+                drawerIcon: ({ focused, size }) => (
+                  <Icon
+                    name="setting"
+                    size={20}
+                    color={focused ? "#7cc" : "#ccc"}
+                  />
+                ),
+              }}
+              component={SettingsScreen}
+              initialParams={{render: render, setRender: setRender}}
+            />
+         </Drawer.Navigator>
+      </NavigationContainer>
     }
   };
 
@@ -358,7 +374,55 @@ export default function App() {
     >
       <PaperProvider>
         {!isLoggedIn ? (
-          <Login render={render} setRender={setRender} />
+          
+           <NavigationContainer
+           ref={navigationRef}
+           theme={{ colors: { background: "transparent" } }}
+         >
+
+           <Drawer.Navigator
+             screenOptions={{
+               drawerStyle: {
+                 backgroundColor: "black",
+               },
+               drawerLabelStyle: styles.drawerTextStyle,
+               drawerActiveTintColor: "#7cc",
+             }}
+           >
+          <Drawer.Screen
+               name="Login"
+               options={{
+                 title: "Login",
+                 headerShown: false,
+                 drawerIcon: ({ focused, size }) => (
+                   <MaterialCommunityIcons
+                     name="login"
+                     size={20}
+                     color={focused ? "#7cc" : "#ccc"}
+                   />
+                 ),
+               }}
+               component={Login}
+               initialParams={{render: render, setRender: setRender}}
+             />
+        <Drawer.Screen
+               name="Settings"
+               options={{
+                 title: "Settings",
+                 headerShown: false,
+                 drawerIcon: ({ focused, size }) => (
+                   <Icon
+                     name="setting"
+                     size={20}
+                     color={focused ? "#7cc" : "#ccc"}
+                   />
+                 ),
+               }}
+               component={SettingsScreen}
+               initialParams={{render: render, setRender: setRender}}
+               />
+       </Drawer.Navigator>
+       </NavigationContainer>
         ) : (
           renderAppPerRole()
         )}

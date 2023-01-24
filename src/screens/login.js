@@ -14,7 +14,9 @@ import IonIcon from "react-native-vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ConnectApi from "../dist/api/ConnectApi"
 import UserApi from "../dist/api/UserApi";
-export const Login = ({render, setRender}) => {
+export const Login = ({route}) => {
+  const {render} = route.params
+  const {setRender} = route.params
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
@@ -51,32 +53,8 @@ export const Login = ({render, setRender}) => {
   });
 
   const login = async () => {
-    // const details = {
-    //   username: email,
-    //   password: password,
-    //   grant_type: "password",
-    //   client_id: "renia:4ae25ed28196396194f9fd9b3af0a1ae",
-    //   client_secret: "!R3n!@S3cr3t",
-    // };
-    // let formBody = [];
-    // for (let property in details) {
-    //   let encodedKey = encodeURIComponent(property);
-    //   let encodedValue = encodeURIComponent(details[property]);
-    //   formBody.push(encodedKey + "=" + encodedValue);
-    // }
-    // formBody = formBody.join("&");
-    // let url = await AsyncStorage.getItem("ip");
-    // let token = await fetch(`${url}gateway/connect`, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
-    //   },
-    //   body: formBody,
-    // });
-    // let response = await token.json();
     const url = await AsyncStorage.getItem('ip')
     const response = await ConnectApi.LoginAsync(email, password, url)
-    console.log(response)
     if (response.isError) {
       setMessage({
         title: "Login Failed",
@@ -94,10 +72,16 @@ export const Login = ({render, setRender}) => {
         data.expires_in.toString()
       );
       let user = await UserApi.GetProfileAsync(data.access_token, url);
-      if(user.characterId){
-        await AsyncStorage.setItem('heroId', user.characterId);
+      if(user.isError){
+        setMessage({
+          title: "Fetching Profile Failed",
+          paragraph: user.error,
+        });
       }
-      let name = user.name ? user.name : user.email;
+      if(user.data.characterId){
+        await AsyncStorage.setItem('heroId', user.data.characterId);
+      }
+      let name = user.data.name ? user.data.name : user.data.email;
       setMessage({
         title: "Login Successfull",
         paragraph: `Welcome ${name}`,

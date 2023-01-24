@@ -91,7 +91,12 @@ export const Index = (props) => {
             onRefresh={onRefresh}
           />
         }>
-     
+      <MaterialCommunityIcons
+            name="logout"
+            size={30}
+            style={{ position: "absolute", right: 20, top: 40 }}
+            onPress={() => props.route.params.setLogoutModalVisible(true)}
+          />
       {hero && (
         <>
           <View style={styles.hidden}></View>
@@ -112,12 +117,7 @@ export const Index = (props) => {
           <View style={styles.stats}>
             <MainStats hero={hero} />
           </View>
-          <MaterialCommunityIcons
-            name="logout"
-            size={30}
-            style={{ position: "absolute", right: 20, top: 40 }}
-            onPress={() => props.route.params.setLogoutModalVisible(true)}
-          />
+         
         </>
       )}
       </ScrollView>
