@@ -93,7 +93,7 @@ export default function App() {
     const ip = await AsyncStorage.getItem('ip')
     const user = await UserApi.GetProfileAsync(token, ip);
     if (user.isError) {
-      console.error(user.error)
+      console.log(user.error)
     }
     else{
       setUserRole(user.data.role);

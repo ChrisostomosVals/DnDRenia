@@ -3,7 +3,7 @@ import { exoticWeapons, getSoundEffectsMode, martialWeapons, simpleWeapons } fro
 import { globalStyles } from "../utils/styles";
 import { Audio } from "expo-av";
 import { useState, useEffect } from "react";
-import CharacterArsenalApi from "../dist/api/CharacterArsenalApi";
+import CharacterApi from "../dist/api/CharacterApi";
 
 export const ModalQuestion = ({
   modalVisible,
@@ -93,7 +93,7 @@ export const ModalQuestion = ({
         }
         const token = await AsyncStorage.getItem("token");
         const ip = await AsyncStorage.getItem("ip");
-        const insertArsenalItem = await CharacterArsenalApi.InsertItemAsync(token, ip, arsenalItem)
+        const insertArsenalItem = await CharacterApi.EquipItemAsync(token, ip, arsenalItem)
         if(insertArsenalItem){
           setBannerText({
             title: "Equipping item Failed",

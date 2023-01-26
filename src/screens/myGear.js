@@ -11,9 +11,8 @@ import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { ModalQuestion } from "../components/modalQuestion";
 import { Banner } from "../components/banner";
-import CharacterGearApi from "../dist/api/CharacterGearApi";
-import CharacterArsenalApi from "../dist/api/CharacterArsenalApi";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import CharacterApi from "../dist/api/CharacterApi";
 
 export const MyGear = ({ route }) => {
   const { heroId } = route.params;
@@ -85,7 +84,7 @@ export const MyGear = ({ route }) => {
   const fetchArsenal = async()=>{
     const token = await AsyncStorage.getItem("token");
     const ip = await AsyncStorage.getItem("ip");
-    const items = await CharacterArsenalApi.GetAsync(token, ip, heroId);
+    const items = await CharacterApi.GetArsenalAsync(token, ip, heroId);
     if(items.isError){
       console.log(items.error)
       setArsenal([])
@@ -97,7 +96,7 @@ export const MyGear = ({ route }) => {
   const fetchGear = async () => {
     const token = await AsyncStorage.getItem("token");
     const ip = await AsyncStorage.getItem("ip");
-    const getGear = await CharacterGearApi.GetAsync(token, ip, heroId);
+    const getGear = await CharacterApi.GetGearAsync(token, ip, heroId);
     if(getGear.isError){
       console.log(getGear.error)
       return;

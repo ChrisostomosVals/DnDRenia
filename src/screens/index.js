@@ -115,7 +115,7 @@ export const Index = (props) => {
             </View>
           </View>
           <View style={styles.stats}>
-            <MainStats hero={hero} />
+            <MainStats hero={{id: hero.id, stats: hero.stats}} />
           </View>
          
         </>

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { View, StyleSheet, Text } from "react-native";
-import CharacterGearApi from "../dist/api/CharacterGearApi";
 import { CartAndMoney } from "../components/cartAndMoney";
 import { Cart } from "../components/cart";
 import { GoodCategory } from "../components/goodCategory";
@@ -12,6 +11,7 @@ import { WeaponsShop } from "../components/weaponsShop";
 import { WeaponsCategory } from "../components/weaponsCategory";
 import { globalStyles } from "../utils/styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import CharacterApi from "../dist/api/CharacterApi";
 
 export const BuyGear = ({ route, navigation }) => {
   const isFocused = useIsFocused();
@@ -65,7 +65,7 @@ export const BuyGear = ({ route, navigation }) => {
 
   const getMoney = async () => {
       const id = await AsyncStorage.getItem("heroId");
-      const fetchMoney = await CharacterGearApi.GetMoneyAsync(token, ip, id);
+      const fetchMoney = await CharacterApi.GetMoneyAsync(token, ip, id);
       if(fetchMoney.isError){
         console.log(fetchMoney.error)
         setMoney({
