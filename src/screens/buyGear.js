@@ -13,7 +13,7 @@ import { globalStyles } from "../utils/styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CharacterApi from "../dist/api/CharacterApi";
 
-export const BuyGear = ({ route, navigation }) => {
+export const BuyGear = (props) => {
   const isFocused = useIsFocused();
   const [heroId, setHeroId] = useState();
   const [money, setMoney] = useState();
@@ -47,7 +47,9 @@ export const BuyGear = ({ route, navigation }) => {
     getMoney();
     setShopVisible(true);
     setRender("shop");
-  }, [route, navigation, isFocused]);
+  }, [isFocused]);
+
+
   const fetchConstants = async () =>{
     const token = await AsyncStorage.getItem("token");
     const ip = await AsyncStorage.getItem("ip");
@@ -55,19 +57,18 @@ export const BuyGear = ({ route, navigation }) => {
     setToken(token);
   }
   const fetchId = async () => {
-    if (!route.params.heroId) {
+    if (!props.heroId) {
       const id = await AsyncStorage.getItem("heroId");
       setHeroId(id);
       return;
     }
-    setHeroId(route.params.heroId);
+    setHeroId(props.heroId);
   };
 
   const getMoney = async () => {
-      const id = await AsyncStorage.getItem("heroId");
-      const fetchMoney = await CharacterApi.GetMoneyAsync(token, ip, id);
+      const fetchMoney = await CharacterApi.GetMoneyAsync(token, ip, props.heroId);
       if(fetchMoney.isError){
-        console.log(fetchMoney.error)
+        console.log(fetchMoney.error, 'BuyGear Screen')
         setMoney({
           gold: 0,
           silver: 0,

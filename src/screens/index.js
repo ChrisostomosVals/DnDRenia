@@ -21,7 +21,7 @@ export const Index = (props) => {
     setRefreshing(true);
     fetchHero();
     wait(2000).then(() => setRefreshing(false));
-  }, [props]);
+  }, []);
   const styles = StyleSheet.create({
     body: {
       flex: 1,

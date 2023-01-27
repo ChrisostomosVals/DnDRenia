@@ -14,9 +14,7 @@ import IonIcon from "react-native-vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ConnectApi from "../dist/api/ConnectApi"
 import UserApi from "../dist/api/UserApi";
-export const Login = ({route}) => {
-  const {render} = route.params
-  const {setRender} = route.params
+export const Login = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
@@ -25,7 +23,7 @@ export const Login = ({route}) => {
 
   const hideDialog = () => {
     setVisible(false);
-    setRender(!render);
+    props.handleRender();
   };
   const styles = StyleSheet.create({
     container: {
@@ -77,6 +75,7 @@ export const Login = ({route}) => {
           title: "Fetching Profile Failed",
           paragraph: user.error,
         });
+        return;
       }
       if(user.data.characterId){
         await AsyncStorage.setItem('heroId', user.data.characterId);

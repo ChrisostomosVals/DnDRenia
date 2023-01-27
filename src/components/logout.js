@@ -8,8 +8,7 @@ import { globalStyles } from "../utils/styles";
 export const LogOut = ({
     modalVisible,
     setModalVisible,
-    render,
-    setRender
+    handleRender
 }) =>{
 
     const styles = StyleSheet.create({
@@ -53,7 +52,7 @@ export const LogOut = ({
         await AsyncStorage.removeItem('tokenType')
         await AsyncStorage.removeItem('tokenExpiration')
         setModalVisible(false)
-        setRender(!render)
+        handleRender();
     }
 
     return (
@@ -66,7 +65,7 @@ export const LogOut = ({
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
                 <Text style={styles.welcomeStyle}>
-                  Logout?
+                  Log Out?
                 </Text>
                 <Text style={styles.welcomeStyle}>
                   Are you sure you want to log out?

@@ -204,7 +204,7 @@ export const CharacterInfo = ({ route }) => {
                         character.stats.map(c => (
                           <View key={c.name} style={styles.rowContainer}>
                             <Text style={{ ...globalStyles.textStyle, color: '#CD853F', fontSize: 20 }}>{c.name}:</Text>
-                            {c.name === "Gender" ? <MaterialCommunityIcons name={`gender-${c.value.toLowerCase()}`} size={20} color={styles.textStyle().color} />
+                            {c.name === "Gender" && c.value !== "-" ?  <MaterialCommunityIcons name={`gender-${c.value.toLowerCase()}`} size={20} color={styles.textStyle().color} />
                               :
                               <Text style={{ ...globalStyles.textStyle, ...styles.textStyle() }}>{c.value}</Text>
                             }

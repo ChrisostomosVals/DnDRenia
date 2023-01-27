@@ -88,12 +88,16 @@ export default function App() {
     await sound.playAsync();
   };
 
+  const handleRender = () =>{
+    setRender(!render)
+  }
   const fetchId = async () => {
     const token = await AsyncStorage.getItem('token')
     const ip = await AsyncStorage.getItem('ip')
     const user = await UserApi.GetProfileAsync(token, ip);
     if (user.isError) {
       console.log(user.error)
+      setUserRole()
     }
     else{
       setUserRole(user.data.role);
@@ -147,7 +151,10 @@ export default function App() {
       position: "absolute",
     },
   });
-
+  const Settings = (props) => <SettingsScreen {...props} handleRender={handleRender} />;
+  const LoginScreen = (props) => <Login {...props} handleRender={handleRender} />;
+  const BuyGearScreen = (props) => <BuyGear {...props} heroId = {heroId}  />;
+  const MyGearScreen = (props) => <MyGear {...props} heroId = {heroId}  />;
   const renderAppPerRole = () => {
     if (userRole === "PLAYER") {
       return (
@@ -209,8 +216,7 @@ export default function App() {
                   />
                 ),
               }}
-              component={BuyGear}
-              initialParams={{ heroId: heroId }}
+              component={BuyGearScreen}
             />
             <Drawer.Screen
               name="Map"
@@ -240,8 +246,7 @@ export default function App() {
                   />
                 ),
               }}
-              component={SettingsScreen}
-              initialParams={{render: render, setRender: setRender}}
+              component={Settings}
             />
             <Drawer.Screen
               name="CharacterInfo"
@@ -254,13 +259,12 @@ export default function App() {
             />
             <Drawer.Screen
               name="MyGear"
-              component={MyGear}
+              component={MyGearScreen}
               options={{
                 title: "",
                 headerShown: false,
                 drawerItemStyle: { height: 0 },
               }}
-              initialParams={{ heroId: heroId }}
             />
           </Drawer.Navigator>
          
@@ -311,8 +315,7 @@ export default function App() {
                   />
                 ),
               }}
-              component={SettingsScreen}
-              initialParams={{render: render, setRender: setRender}}
+              component={Settings}
             />
       </Drawer.Navigator>
       </NavigationContainer>
@@ -345,8 +348,7 @@ export default function App() {
                   />
                 ),
               }}
-              component={SettingsScreen}
-              initialParams={{render: render, setRender: setRender}}
+              component={Settings}
             />
          </Drawer.Navigator>
       </NavigationContainer>
@@ -402,8 +404,7 @@ export default function App() {
                    />
                  ),
                }}
-               component={Login}
-               initialParams={{render: render, setRender: setRender}}
+               component={LoginScreen}
              />
         <Drawer.Screen
                name="Settings"
@@ -418,8 +419,7 @@ export default function App() {
                    />
                  ),
                }}
-               component={SettingsScreen}
-               initialParams={{render: render, setRender: setRender}}
+               component={Settings}
                />
        </Drawer.Navigator>
        </NavigationContainer>
@@ -443,8 +443,7 @@ export default function App() {
       <LogOut
         setModalVisible={setLogoutModalVisible}
         modalVisible={logoutModalVisible}
-        render={render}
-        setRender={setRender}
+        handleRender={handleRender}
       />
     </ImageBackground>
   );

@@ -6,19 +6,14 @@ import { Banner } from "../components/banner";
 import { globalStyles } from "../utils/styles";
 import { useIsFocused } from "@react-navigation/native";
 
-export const SettingsScreen = ({navigation, route}) => {
-  const {render} = route.params
-  const {setRender} = route.params;
+export const SettingsScreen = (props) => {
   const isFocused = useIsFocused();
   const [ip, setIp] = useState('');
   const [saved, setSaved] = useState(false)
   const [visible, setVisible] = useState(false)
   useEffect(() =>{
     getItem();
-  },[])
-  useEffect(() =>{
-    getItem();
-  },[saved, isFocused])
+  },[saved, isFocused, props])
   const getItem = async () =>{
     setIp(await AsyncStorage.getItem('ip'))
   }
@@ -35,7 +30,7 @@ export const SettingsScreen = ({navigation, route}) => {
   }
   const hideDialog = () => {
     setVisible(false)
-    setRender(!render);
+    props.handleRender()
   };
   const styles = StyleSheet.create({
     container: {

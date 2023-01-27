@@ -102,11 +102,10 @@ export const MyGear = ({ route }) => {
       return;
     }
     setWeight(0);
-    const gear = getGear.data.filter((g) => g.name !== "MONEY");
+    const gear = getGear.data.filter((g) => g.name !== "Money");
     setGear(gear);
     getGear.data.forEach((g) => {
-      setWeight((w) => w + g.weight * g.quantity);
-      if (g.name === "MONEY") {
+      if (g.name === "Money") {
         let moneyArr = g.quantity.toFixed(2);
         const gold = moneyArr.split(".")[0];
         const silver = moneyArr.split(".")[1][0];
@@ -117,6 +116,12 @@ export const MyGear = ({ route }) => {
           silver: silver,
           copper: copper,
         });
+      }
+      else{
+        if(!g.weight || g.weight == '-'){
+          return;
+        }
+        setWeight((w) => w + g.weight.split(' ')[0] * g.quantity);
       }
     });
   };
