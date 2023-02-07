@@ -1,5 +1,5 @@
 import "react-native-gesture-handler";
-import { useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { StyleSheet, ImageBackground, Text, Alert, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NavigationContainer } from "@react-navigation/native";
@@ -22,12 +22,20 @@ import { getSoundEffectsMode } from "./src/utils/constants";
 import { Login } from "./src/screens/login";
 import { LogOut } from "./src/components/logout";
 import UserApi from "./src/dist/api/UserApi";
+import { ImageView } from "./src/screens/imageView";
+import { Chapters } from "./src/screens/chapters";
+import { globalStyles } from "./src/utils/styles";
+import { MyProperties } from "./src/screens/myProperties";
+import { ChooseProfileImage } from "./src/screens/chooseProfileImage";
+import { MyImages } from "./src/screens/myImages";
+import { AddImages } from "./src/screens/addImages";
 
 const Drawer = createDrawerNavigator();
 
 export default function App() {
   const [loaded, error] = useFonts({
     BlackCastle: require("./assets/fonts/Blackcastle.ttf"),
+    Luminari: require("./assets/fonts/Luminari-Regular.ttf"),
   });
   const netInfo = useNetInfo();
   const [heroId, setHeroId] = useState(0);
@@ -37,6 +45,10 @@ export default function App() {
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
   const [render, setRender] = useState(false);
   const [userRole, setUserRole] = useState();
+  const [userToken, setUserToken] = useState();
+  const [appIp, setAppIp] = useState();
+
+
   useEffect(() => {
     userLoggedIn();
     fetchId();
@@ -93,11 +105,19 @@ export default function App() {
   }
   const fetchId = async () => {
     const token = await AsyncStorage.getItem('token')
+    setUserToken(token)
     const ip = await AsyncStorage.getItem('ip')
+    setAppIp(ip)
     const user = await UserApi.GetProfileAsync(token, ip);
     if (user.isError) {
       console.log(user.error)
       setUserRole()
+        await AsyncStorage.removeItem('token')
+        await AsyncStorage.removeItem('heroId')
+        await AsyncStorage.removeItem('refreshToken')
+        await AsyncStorage.removeItem('scope')
+        await AsyncStorage.removeItem('tokenType')
+        await AsyncStorage.removeItem('tokenExpiration')
     }
     else{
       setUserRole(user.data.role);
@@ -115,7 +135,7 @@ export default function App() {
       await playSound();
     }
   };
-  const handleSoundEffects = async () => {
+  const handleSoundEffects = useCallback( async () => {
     if ((await getSoundEffectsMode()) === "on") {
       await AsyncStorage.setItem("sound-effects", "off");
       setSoundEffects(false);
@@ -123,7 +143,7 @@ export default function App() {
       await AsyncStorage.setItem("sound-effects", "on");
       setSoundEffects(true);
     }
-  };
+  }, []);
   const styles = StyleSheet.create({
     backgroundImage: {
       flex: 1,
@@ -151,10 +171,7 @@ export default function App() {
       position: "absolute",
     },
   });
-  const Settings = (props) => <SettingsScreen {...props} handleRender={handleRender} />;
-  const LoginScreen = (props) => <Login {...props} handleRender={handleRender} />;
-  const BuyGearScreen = (props) => <BuyGear {...props} heroId = {heroId}  />;
-  const MyGearScreen = (props) => <MyGear {...props} heroId = {heroId}  />;
+
   const renderAppPerRole = () => {
     if (userRole === "PLAYER") {
       return (
@@ -216,7 +233,7 @@ export default function App() {
                   />
                 ),
               }}
-              component={BuyGearScreen}
+              children={(e) => BuyGearScreen({navigation: e.navigation, heroId: heroId, userToken: userToken, appIp: appIp})}
             />
             <Drawer.Screen
               name="Map"
@@ -234,6 +251,22 @@ export default function App() {
               component={Map}
             />
             <Drawer.Screen
+              name="Chapters"
+              component={Chapters}
+              options={{
+                title: "Chapters",
+                headerShown: false,
+                drawerIcon: ({ focused, size }) => (
+                  <MaterialCommunityIcons
+                    name={focused ? "book-open-page-variant-outline" : "book-outline"}
+                    size={20}
+                    color={focused ? "#7cc" : "#ccc"}
+                  />
+                ),
+              }}
+              initialParams={{setLogoutModalVisible: setLogoutModalVisible}}
+            />
+            <Drawer.Screen
               name="Settings"
               options={{
                 title: "Settings",
@@ -246,7 +279,7 @@ export default function App() {
                   />
                 ),
               }}
-              component={Settings}
+              children={(e) => Settings({navigation: e.navigation, handleRender: handleRender})}
             />
             <Drawer.Screen
               name="CharacterInfo"
@@ -259,7 +292,52 @@ export default function App() {
             />
             <Drawer.Screen
               name="MyGear"
-              component={MyGearScreen}
+              children={(e) => MyGearScreen({navigation: e.navigation, heroId: heroId})}
+              options={{
+                title: "",
+                headerShown: false,
+                drawerItemStyle: { height: 0 },
+              }}
+            />
+              <Drawer.Screen
+              name="MyProperties"
+              children={(e) => MyPropertiesScreen({navigation: e.navigation, heroId: heroId})}
+              options={{
+                title: "",
+                headerShown: false,
+                drawerItemStyle: { height: 0 },
+              }}
+            />
+            <Drawer.Screen
+              name="ImageView"
+              component={ImageView}
+              options={{
+                title: "",
+                headerShown: false,
+                drawerItemStyle: { height: 0 },
+              }}
+            />
+            <Drawer.Screen
+              name="ChooseProfileImage"
+              component={ChooseProfileImage}
+              options={{
+                title: "",
+                headerShown: false,
+                drawerItemStyle: { height: 0 },
+              }}
+            />
+             <Drawer.Screen
+              name="MyImages"
+              component={MyImagesScreen}
+              options={{
+                title: "",
+                headerShown: false,
+                drawerItemStyle: { height: 0 },
+              }}
+            />
+            <Drawer.Screen
+              name="AddImages"
+              component={AddImagesScreen}
               options={{
                 title: "",
                 headerShown: false,
@@ -315,7 +393,7 @@ export default function App() {
                   />
                 ),
               }}
-              component={Settings}
+              children={() => Settings({handleRender: handleRender})}
             />
       </Drawer.Navigator>
       </NavigationContainer>
@@ -348,7 +426,7 @@ export default function App() {
                   />
                 ),
               }}
-              component={Settings}
+             children={(e) => Settings({navigation: e.navigation, handleRender: handleRender})}
             />
          </Drawer.Navigator>
       </NavigationContainer>
@@ -404,7 +482,7 @@ export default function App() {
                    />
                  ),
                }}
-               component={LoginScreen}
+               children={(e) => LoginScreen({navigation: e.navigation, handleRender: handleRender})}
              />
         <Drawer.Screen
                name="Settings"
@@ -419,7 +497,7 @@ export default function App() {
                    />
                  ),
                }}
-               component={Settings}
+               children={(e) => Settings({navigation: e.navigation, handleRender: handleRender})}
                />
        </Drawer.Navigator>
        </NavigationContainer>
@@ -448,3 +526,10 @@ export default function App() {
     </ImageBackground>
   );
 }
+const MyPropertiesScreen = (props) => <MyProperties {...props} heroId={props.heroId} />;
+const MyImagesScreen = (props) => <MyImages {...props} />;
+const AddImagesScreen = (props) => <AddImages {...props} />;
+const Settings = (props) => <SettingsScreen {...props} handleRender={props.handleRender} />;
+const LoginScreen = (props) => <Login {...props} handleRender={props.handleRender} />;
+const BuyGearScreen = (props) => <BuyGear {...props} heroId={props.heroId} token={props.userToken} ip={props.appIp} />;
+const MyGearScreen = (props) => <MyGear {...props} heroId={props.heroId} />;

@@ -108,6 +108,15 @@ export const Index = (props) => {
             <Image source={require('../assets/images/Rucksack_80px.png')} />
             </TouchableOpacity>
              </View>
+             <View style={globalStyles.card}>
+             <TouchableOpacity onPress={() => navigateToPage('MyProperties', hero.id)}>
+             <MaterialCommunityIcons
+                name="account"
+                size={80}
+                color='white'
+            />
+            </TouchableOpacity>
+             </View>
               <View style={globalStyles.card}>
               <Image source={require('../assets/images/arsenal.png')} />
 

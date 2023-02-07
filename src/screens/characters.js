@@ -80,7 +80,7 @@ export const Characters = ({ navigation }) => {
     setCharacters(fetchHeroes.data);
   };
   const navigateToInfo = (id) => {
-    navigation.navigate("CharacterInfo", { characterId: id });
+    navigation.navigate("CharacterInfo", { characterId: id, navigation: navigation });
   };
 
   return (

@@ -13,9 +13,11 @@ import { ModalQuestion } from "../components/modalQuestion";
 import { Banner } from "../components/banner";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CharacterApi from "../dist/api/CharacterApi";
+import { useIsFocused } from "@react-navigation/native";
 
-export const MyGear = ({ route }) => {
-  const { heroId } = route.params;
+
+export const MyGear = ({ heroId }) => {
+  const isFocused = useIsFocused();
   const [gear, setGear] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -26,12 +28,13 @@ export const MyGear = ({ route }) => {
   const [bannerVisible, setBannerVisible] = useState(false)
   const [bannerText, setBannerText] = useState({title: '', paragraph:''})
   const [arsenal, setArsenal] = useState([])
-  
+  const [render, setRender] = useState(false)
  
   useEffect(() => {
     fetchGear();
     fetchArsenal();
-  }, [heroId]);
+    setSelectedItems([])
+  }, [heroId, render, isFocused]);
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -92,7 +95,9 @@ export const MyGear = ({ route }) => {
     }
     setArsenal(items.data)
   }
-  
+  const handleRender = () =>{
+    setRender(!render)
+  }
   const fetchGear = async () => {
     const token = await AsyncStorage.getItem("token");
     const ip = await AsyncStorage.getItem("ip");
@@ -265,7 +270,8 @@ export const MyGear = ({ route }) => {
       action={'Equip Gear!'}
       setBannerVisible={setBannerVisible}
       setBannerText={setBannerText}
-      heroId={heroId}/>
+      heroId={heroId}
+      handleRender={handleRender}/>
       <Banner hideDialog={hideDialog} visible={bannerVisible} text={bannerText}/>
 
       </View>

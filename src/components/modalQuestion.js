@@ -4,6 +4,7 @@ import { globalStyles } from "../utils/styles";
 import { Audio } from "expo-av";
 import { useState, useEffect } from "react";
 import CharacterApi from "../dist/api/CharacterApi";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const ModalQuestion = ({
   modalVisible,
@@ -13,7 +14,8 @@ export const ModalQuestion = ({
   selectedItems,
   setBannerVisible,
   setBannerText,
-  heroId
+  heroId,
+  handleRender
 }) => {
   const [soundEffect, setSoundEffect] = useState();
   useEffect(() => {
@@ -23,7 +25,6 @@ export const ModalQuestion = ({
         }
       : undefined;
   }, [soundEffect]);
-
 
   const styles = StyleSheet.create({
     centeredView: {
@@ -62,15 +63,24 @@ export const ModalQuestion = ({
       let findItem = simpleWeapons.unarmedAttacks.find(item => item.name === selectedItems[0].name)
       if(!findItem) findItem = simpleWeapons.lightMeleeWeapons.find(item => item.name === selectedItems[0].name)
       if(!findItem) findItem = simpleWeapons.oneHandedMeleeWeapons.find(item => item.name === selectedItems[0].name)
-      if(!findItem) findItem = simpleWeapons.twoHandedMeleeWeapons.find(item => item.name === selectedItems[0].name)
+      if(!findItem) {
+        findItem = simpleWeapons.twoHandedMeleeWeapons.find(item => item.name === selectedItems[0].name)
+        if(findItem) findItem.doubleHanded = true
+      }
       if(!findItem) findItem = simpleWeapons.rangedWeapons.find(item => item.name === selectedItems[0].name)
       if(!findItem) findItem = martialWeapons.lightMeleeWeapons.find(item => item.name === selectedItems[0].name)
       if(!findItem) findItem = martialWeapons.oneHandedMeleeWeapons.find(item => item.name === selectedItems[0].name)
-      if(!findItem) findItem = martialWeapons.twoHandedMeleeWeapons.find(item => item.name === selectedItems[0].name)
+      if(!findItem) {
+        findItem = martialWeapons.twoHandedMeleeWeapons.find(item => item.name === selectedItems[0].name)
+        if(findItem) findItem.doubleHanded = true
+      }
       if(!findItem) findItem = martialWeapons.rangedWeapons.find(item => item.name === selectedItems[0].name)
       if(!findItem) findItem = exoticWeapons.lightMeleeWeapons.find(item => item.name === selectedItems[0].name)
       if(!findItem) findItem = exoticWeapons.oneHandedMeleeWeapons.find(item => item.name === selectedItems[0].name)
-      if(!findItem) findItem = exoticWeapons.twoHandedMeleeWeapons.find(item => item.name === selectedItems[0].name)
+      if(!findItem) {
+        findItem = exoticWeapons.twoHandedMeleeWeapons.find(item => item.name === selectedItems[0].name)
+        if(findItem) findItem.doubleHanded = true
+      }
       if(!findItem) findItem = exoticWeapons.rangedWeapons.find(item => item.name === selectedItems[0].name)
       if(!findItem){
         setBannerText({
@@ -82,22 +92,40 @@ export const ModalQuestion = ({
         return;
       }
       else{
+        const token = await AsyncStorage.getItem("token");
+        const ip = await AsyncStorage.getItem("ip");
+        const playerStats = await CharacterApi.GetStatsAsync(token, ip, heroId)
+        if(playerStats.isError){
+          console.log(playerStats.error)
+          return;
+        }
+        let attackBonus=0;
+        playerStats.data.forEach(s =>{
+          if(s.name === "Strength"){
+            attackBonus += parseInt((s.value - 10) / 2)
+          }
+          if(s.name === "Base Attack Bonus"){
+            attackBonus += parseInt(s.value)
+          }
+        })
+        if(findItem.doubleHanded === true){
+          attackBonus += 1
+        }
         const arsenalItem = {
-          characterId: heroId,
+          id: heroId,
           gearId: selectedItems[0].id,
           type: findItem.type,
           range: findItem.rangeIncrement,
-          attackBonus: 5,
+          attackBonus: attackBonus.toString(),
           damage: findItem.dmgM,
           critical: findItem.critical
         }
-        const token = await AsyncStorage.getItem("token");
-        const ip = await AsyncStorage.getItem("ip");
         const insertArsenalItem = await CharacterApi.EquipItemAsync(token, ip, arsenalItem)
-        if(insertArsenalItem){
+        if(insertArsenalItem.isError){
+          console.log(insertArsenalItem.error)
           setBannerText({
             title: "Equipping item Failed",
-            paragraph: `${selectedItems[0].name} has not been equipped!`
+            paragraph: `${selectedItems[0].name} has not been equipped! ${insertArsenalItem.error.message.message}`
           })
           setModalVisible(false)
           setBannerVisible(true)
@@ -109,6 +137,7 @@ export const ModalQuestion = ({
         })
         setModalVisible(false)
         setBannerVisible(true)
+        handleRender();
       }
     }
     const soundEffectsMode = await getSoundEffectsMode();

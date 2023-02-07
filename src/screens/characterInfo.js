@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, BackHandler } from "react-native";
 import { globalStyles } from "../utils/styles";
 import { Card } from "@rneui/base";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { ScrollView } from "react-native-gesture-handler";
 import CharacterApi from "../dist/api/CharacterApi";
@@ -11,9 +11,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MediaApi } from "../dist/api/MediaApi";
 import Carousel from 'react-native-reanimated-carousel';
 import IonIcon from "react-native-vector-icons/Ionicons";
+import { useFocusEffect } from "@react-navigation/native";
 
 
-export const CharacterInfo = ({ route }) => {
+export const CharacterInfo = ({ route, navigation }) => {
   const { characterId } = route.params;
   const [character, setCharacter] = useState({});
   const [ip, setIp] = useState();
@@ -29,26 +30,19 @@ export const CharacterInfo = ({ route }) => {
   const height = Dimensions.get('window').height;
   useEffect(() => {
     fetchCharacter();
-    setShowImage({
-      uri: '',
-      show: false
-    });
-    const backAction = () => {
-      setShowImage({
-        uri: '',
-        show: false
-      });
-      return true;
-    };
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      backAction,
-    );
-
-    return () => backHandler.remove();
   }, [route]);
 
-
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        navigation.navigate("Characters", {navigation: navigation});
+        return true
+      };
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress');
+    }, [])
+  );
   const fetchCharacter = async () => {
     setEnabled(false)
     const token = await AsyncStorage.getItem("token");
@@ -62,7 +56,6 @@ export const CharacterInfo = ({ route }) => {
       console.log(getCharacter.error)
       return;
     }
-    console.log(getCharacter.data.classId)
     const characterClass = await ClassApi.GetByIdAsync(token, ip, getCharacter.data.classId);
     if (characterClass.isError) {
       console.log(characterClass.error)
@@ -75,7 +68,7 @@ export const CharacterInfo = ({ route }) => {
     }
     setCharacter({ ...getCharacter.data, raceName: characterRace.data.name, className: characterClass.data.name });
 
-    for (var prop of getCharacter.data.properties) {
+    for (let prop of getCharacter.data.properties) {
       if (prop.type === "Profile Image") {
 
         const downloadFile = await MediaApi.DownloadAsync(token, ip, encodeURIComponent(prop.value))
@@ -86,9 +79,9 @@ export const CharacterInfo = ({ route }) => {
         const fileReaderInstance = new FileReader();
         fileReaderInstance.readAsDataURL(downloadFile.data);
         fileReaderInstance.onload = () => {
-          base64data = fileReaderInstance.result;
+          let base64data = fileReaderInstance.result;
           setProfileImage(base64data);
-          setImages(img => [...img, base64data]);
+          setImages(img => [...img, {image: base64data, description: prop.description}]);
         }
       }
       else if (prop.type === "Image") {
@@ -96,8 +89,8 @@ export const CharacterInfo = ({ route }) => {
         const fileReaderInstance = new FileReader();
         fileReaderInstance.readAsDataURL(downloadFile.data);
         fileReaderInstance.onload = () => {
-          base64data = fileReaderInstance.result;
-          setImages(img => [...img, base64data]);
+          let base64data = fileReaderInstance.result;
+          setImages(img => [...img, {image: base64data, description: prop.description}]);
         }
       }
     }
@@ -117,6 +110,13 @@ export const CharacterInfo = ({ route }) => {
       flexDirection: 'row',
       justifyContent: 'space-between',
       margin: 10
+    },
+    welcomeStyle: {
+      borderRadius: 5,
+      fontSize: 30,
+      color: 'white',
+      textAlign: "center",
+      backgroundColor: 'rgba(16,36,69,0.95)',
     },
     textStyle: () => {
       let color
@@ -142,8 +142,12 @@ export const CharacterInfo = ({ route }) => {
     },
 
   });
+
+  const ImageView = (uri) =>{
+    navigation.navigate("ImageView", {uri: uri, characterId: characterId})
+  }
+
   return (
-    !showImage.show ?
       <View style={styles.container}>
         {enabled ?
           <>
@@ -166,8 +170,9 @@ export const CharacterInfo = ({ route }) => {
                     flex: 1,
                   }}
                 >
-                  <TouchableOpacity onPress={() => setShowImage({ show: true, uri: images[index] })} activeOpacity={1}>
-                    <Image source={{ uri: images[index] }} style={{ width: width, height: height / 2 }} />
+                  <Text style={{...globalStyles.textStyle, ...styles.welcomeStyle}}>{images[index].description}</Text>
+                  <TouchableOpacity onPress={() => ImageView(images[index].image)} activeOpacity={1}>
+                    <Image source={{ uri: images[index].image }} style={{ width: width, height: height / 2 }} />
                   </TouchableOpacity>
                 </View>
               )}
@@ -221,8 +226,6 @@ export const CharacterInfo = ({ route }) => {
             </Card>
           </>}
       </View>
-      :
-      <Image source={{ uri: showImage.uri }} resizeMode='cover' style={{ width: '100%', height: '100%' }} />
   );
 };
 

@@ -42,6 +42,10 @@ export const MainStats = ({ hero }) => {
 
   const fetchStats = async () => {
     setHeroStats(hero);
+    for(let item of hero.stats){
+      if(item.name === "Gender" || item.name === "Age") continue;
+      if(isNaN(item.value) || item.value === "-") item.value = 0;
+    }
     setPropsShown({
       strength: hero.stats.find(s => s.name === "Strength").value,
       maxHp: hero.stats.find(s => s.name === "Max HP").value,
@@ -97,6 +101,10 @@ export const MainStats = ({ hero }) => {
     if(playerStats.isError){
       console.log(playerStats.error)
       return;
+    }
+    for(let item of playerStats.data){
+      if(item.name === "Gender" || item.name === "Age") continue;
+      if(isNaN(item.value) || item.value === "-") item.value = 0;
     }
     setHeroStats({id: heroStats.id, stats: playerStats.data});
     setPropsShown({
@@ -250,14 +258,14 @@ export const MainStats = ({ hero }) => {
           <Text style={globalStyles.textStyle}>{propsShown.currentHp}</Text>
           <Slider
             animateTransitions
-            maximumValue={50}
-            minimumTrackTintColor={`rgb(${propsShown.currentHp * 2 * 2.55},${
-              255 / propsShown.currentHp
+            maximumValue={propsShown.maxHp}
+            minimumTrackTintColor={`rgb(${propsShown.currentHp/propsShown.maxHp * 100 * 2.55},${
+              255 / propsShown.maxHp/propsShown.currentHp
             },0)`}
             containerStyle={{ width: "80%" }}
             thumbStyle={{
               ...styles.thumb,
-              backgroundColor: `rgb(${propsShown.currentHp * 2 * 2.55},${
+              backgroundColor: `rgb(${propsShown.currentHp/propsShown.maxHp * 100 * 2.55},${
                 255 / (propsShown.currentHp + 1)
               },0)`,
             }}

@@ -23,8 +23,6 @@ export const BuyGear = (props) => {
   const [category, setCategory] = useState("");
   const [selectedEquipment, setSelectedEquipment] = useState([]);
   const [render, setRender] = useState("shop");
-  const [ip, setIp] = useState();
-  const [token, setToken] = useState();
   const goodCategories = [
     "Adventure Gear",
     "Special Substances",
@@ -42,7 +40,6 @@ export const BuyGear = (props) => {
   ];
   
   useEffect(() => {
-    fetchConstants();
     fetchId();
     getMoney();
     setShopVisible(true);
@@ -50,23 +47,13 @@ export const BuyGear = (props) => {
   }, [isFocused]);
 
 
-  const fetchConstants = async () =>{
-    const token = await AsyncStorage.getItem("token");
-    const ip = await AsyncStorage.getItem("ip");
-    setIp(ip);
-    setToken(token);
-  }
+ 
   const fetchId = async () => {
-    if (!props.heroId) {
-      const id = await AsyncStorage.getItem("heroId");
-      setHeroId(id);
-      return;
-    }
     setHeroId(props.heroId);
   };
 
   const getMoney = async () => {
-      const fetchMoney = await CharacterApi.GetMoneyAsync(token, ip, props.heroId);
+      const fetchMoney = await CharacterApi.GetMoneyAsync(props.token, props.ip, props.heroId);
       if(fetchMoney.isError){
         console.log(fetchMoney.error, 'BuyGear Screen')
         setMoney({
