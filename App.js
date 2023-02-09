@@ -1,5 +1,5 @@
 import "react-native-gesture-handler";
-import { memo, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { StyleSheet, ImageBackground, Text, Alert, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NavigationContainer } from "@react-navigation/native";

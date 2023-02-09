@@ -52,7 +52,7 @@ export const ProfileSheet = ({  setModalVisible, images, navigation, heroId }) =
           />
           <Text style={styles.text}>Change Profile Image</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleNavigate('MyImages', {navigation: navigation, heroId: heroId, images: images})} style={styles.row}>
+        <TouchableOpacity onPress={() => handleNavigate('MyImages', {navigation: navigation, heroId: heroId})} style={styles.row}>
           <MaterialCommunityIcons
             name="image-multiple"
             size={25}

@@ -1,8 +1,11 @@
+import { useEffect } from "react";
 import { Text, StyleSheet, View, TouchableOpacity, Modal } from "react-native"
 import { globalStyles } from "../utils/styles";
 
-export const CustomModal = ({modalVisible, setModalVisible, action, title}) =>{
-    
+export const CustomModal = ({modalVisible, onConfrim, onClose, title, Children}) =>{
+    useEffect(()=>{
+
+    }, [modalVisible])
     const styles = StyleSheet.create({
         centeredView: {
             flex: 1,
@@ -32,21 +35,22 @@ export const CustomModal = ({modalVisible, setModalVisible, action, title}) =>{
         animationType="fade"
         visible={modalVisible}
         transparent={true}
-        onRequestClose={() => setModalVisible(false)}
+        onRequestClose={onClose}
     >   
          <View style={styles.centeredView}>
             <View style={styles.modalView}>
             <Text style={styles.input}>{title}</Text>
+            {Children}
             <View style={styles.buttons}>
         <TouchableOpacity
                   style={globalStyles.button}
-                  onPress={() => setModalVisible(false)}
+                  onPress={onClose}
                 >
             <Text style={{...globalStyles.textStyle, fontSize: 30}}>Cancel</Text>
         </TouchableOpacity>
         <TouchableOpacity
                   style={globalStyles.button}
-                  onPress={action}
+                  onPress={onConfrim}
                 >
             <Text style={{...globalStyles.textStyle, fontSize: 30}}>Confirm</Text>
         </TouchableOpacity>

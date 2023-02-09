@@ -218,10 +218,11 @@ export const AddImages = ({ route }) => {
         text={bannerText}
       />
       <CustomModal
-        action={upload}
+        onConfrim={upload}
         modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
+        onClose={() => setModalVisible(false)}
         title={`Are you sure you want to upload the selected  (${items.length}) items?`}
+        children={<></>}
       />
     </View>
   );

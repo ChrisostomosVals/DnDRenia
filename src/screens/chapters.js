@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity, TextInput } from "react-native";
 import ChapterApi from "../dist/api/ChapterApi";
 import { useIsFocused } from "@react-navigation/native";
 import { globalStyles } from "../utils/styles";
@@ -10,8 +10,8 @@ import { ChapterModal } from "../components/chapterModal";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Banner } from "../components/banner";
 import { CreateChapterModal } from "../components/createChapterModal";
-import { DeleteChapterModal } from "../components/deleteChapterModal";
 import { Skeleton } from '@rneui/themed';
+import { CustomModal } from "../components/CustomModal";
 
 export const Chapters = () => {
   const [chapters, setChapters] = useState([]);
@@ -119,7 +119,24 @@ export const Chapters = () => {
   const handleNewChapter = () => {
     setCreateChapterModalVisible(true);
   };
-  
+  const handleConfirm = async () =>{
+    const token = await AsyncStorage.getItem('token')
+    const ip = await AsyncStorage.getItem('ip')
+    const deleted = await ChapterApi.DeleteAsync(token, ip, deleteChapter.id)
+    if(deleted.isError){
+        console.log(deleted.error)
+        setDeleteChapterModalVisible(false)
+        setBannerText({title: 'Error', paragraph:`${deleteChapter.name} could not be Deleted`})
+        setBannerVisible(true)
+        return
+    }
+    setDeleteChapterModalVisible(false)
+    setBannerVisible(true)
+    setBannerText({title: 'Deleted', paragraph:`${deleteChapter.name} has been Deleted`})
+}
+const modalTitle = () =>{
+ return <>Are you sure you want to <Text style={{color: '#800909'}}>Delete</Text> {deleteChapter.name}</>
+}
   return (
     <>
       <View style={styles.container}>
@@ -161,15 +178,18 @@ export const Chapters = () => {
       setBannerText={setBannerText}
       setBannerVisible={setBannerVisible}
       />
-      <DeleteChapterModal
-        modalVisible={deleteChapterModalVisible}
-        setModalVisible={setDeleteChapterModalVisible}
-        chapter={deleteChapter}
-        setBannerText={setBannerText}
-        setBannerVisible={setBannerVisible}
+      <CustomModal
+      modalVisible={deleteChapterModalVisible}
+      onClose={() => setDeleteChapterModalVisible(false)}
+      onConfrim={handleConfirm}
+      Children={<></>}
+      title={modalTitle()}
       />
         <Banner hideDialog={hideDialog} visible={bannerVisible} text={bannerText}/>
 
     </>
   );
 };
+
+
+
