@@ -117,10 +117,13 @@ export const Index = (props) => {
             />
             </TouchableOpacity>
              </View>
+             <TouchableOpacity onPress={() => navigateToPage('MyArsenal', hero.id)}>
+
               <View style={globalStyles.card}>
               <Image source={require('../assets/images/arsenal.png')} />
 
               </View>
+            </TouchableOpacity>
             </View>
           </View>
           <View style={styles.stats}>

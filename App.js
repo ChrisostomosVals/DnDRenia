@@ -29,6 +29,7 @@ import { MyProperties } from "./src/screens/myProperties";
 import { ChooseProfileImage } from "./src/screens/chooseProfileImage";
 import { MyImages } from "./src/screens/myImages";
 import { AddImages } from "./src/screens/addImages";
+import { MyArsenal } from "./src/screens/myArsenal";
 
 const Drawer = createDrawerNavigator();
 
@@ -299,6 +300,15 @@ export default function App() {
                 drawerItemStyle: { height: 0 },
               }}
             />
+            <Drawer.Screen
+              name="MyArsenal"
+              children={(e) => MyArsenalScreen({navigation: e.navigation, heroId: heroId})}
+              options={{
+                title: "",
+                headerShown: false,
+                drawerItemStyle: { height: 0 },
+              }}
+            />
               <Drawer.Screen
               name="MyProperties"
               children={(e) => MyPropertiesScreen({navigation: e.navigation, heroId: heroId})}
@@ -533,3 +543,4 @@ const Settings = (props) => <SettingsScreen {...props} handleRender={props.handl
 const LoginScreen = (props) => <Login {...props} handleRender={props.handleRender} />;
 const BuyGearScreen = (props) => <BuyGear {...props} heroId={props.heroId} token={props.userToken} ip={props.appIp} />;
 const MyGearScreen = (props) => <MyGear {...props} heroId={props.heroId} />;
+const MyArsenalScreen = (props) => <MyArsenal {...props} heroId={props.heroId} />;

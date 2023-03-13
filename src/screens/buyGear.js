@@ -12,6 +12,7 @@ import { WeaponsCategory } from "../components/weaponsCategory";
 import { globalStyles } from "../utils/styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CharacterApi from "../dist/api/CharacterApi";
+import { Banner } from "../components/banner";
 
 export const BuyGear = (props) => {
   const isFocused = useIsFocused();
@@ -38,15 +39,22 @@ export const BuyGear = (props) => {
     "Martial Weapons",
     "Exotic Weapons",
   ];
-  
+  const [bannerVisible, setBannerVisible] = useState(false);
+  const [bannerText, setBannerText] = useState({
+    title: "",
+    paragraph: "",
+  });
+  const [reRender, setReRender] = useState(false)
   useEffect(() => {
     fetchId();
     getMoney();
     setShopVisible(true);
     setRender("shop");
-  }, [isFocused]);
+  }, [isFocused, reRender]);
 
-
+  const hideDialog = () => {
+    setBannerVisible(false);
+  };
  
   const fetchId = async () => {
     setHeroId(props.heroId);
@@ -68,10 +76,11 @@ export const BuyGear = (props) => {
       const silver = moneyArr.split(".")[1][0];
       const copper = moneyArr.split(".")[1][1];
       const money = {
-        id: fetchMoney.id,
+        id: fetchMoney.data.id,
         gold: gold,
         silver: silver,
         copper: copper,
+        quantity: fetchMoney.data.quantity
       };
       setMoney(money);
   };
@@ -192,6 +201,86 @@ export const BuyGear = (props) => {
     setSelectedEquipment(equipment);
     setShopVisible(false);
   };
+  const handleBuy = async () => {
+    let total = 0;
+    for (let item of cart) {
+      let cost = item.cost.split(" ")[0];
+      const curr = item.cost.split(" ")[1];
+      switch (curr) {
+        case "gp":
+          cost = cost * 1000;
+          break;
+        case "sp":
+          cost = cost * 100;
+          break;
+        case "cp":
+          cost = cost * 10;
+          break;
+        default:
+          break;
+      }
+      cost = (item.quantity * cost) / 1000;
+      total += cost;
+    }
+    if (total > money.quantity) {
+      setBannerText({
+        title: "Failed",
+        paragraph: "You do not have enough money to buy your stuff",
+      });
+      setModalVisible(false);
+      setBannerVisible(true);
+      return;
+    }
+    const gear = await CharacterApi.GetGearAsync(props.token, props.ip, props.heroId)
+    if(gear.isError){
+      console.log(gear.error, 'Buy Gear Screen', 'handleBuy')
+      setBannerText({
+        title: "Failed",
+        paragraph: "There was an error",
+      });
+      setModalVisible(false);
+      setBannerVisible(true);
+      return;
+    }
+    let findMoney = gear.data.find(item => item.id === money.id)
+    findMoney.quantity = (findMoney.quantity - total).toFixed(2);
+    for (let item of cart) {
+      let findItem = gear.data.find(g => g.name === item.name)
+      if(findItem){
+        findItem.quantity += item.quantity
+      }
+      else{
+        gear.data.push({
+          name: item.name,
+          quantity: item.quantity,
+          weight: item.weight
+        })
+      }
+    }
+    const update = {
+      id: props.heroId,
+      updateDefinition: gear.data
+    }
+    const updateGear = await CharacterApi.UpdateGearAsync(props.token, props.ip, update)
+    if(updateGear.isError){
+      console.log(updateGear.error, 'Buy Gear Screen', 'handleBuy')
+      setBannerText({
+        title: "Failed",
+        paragraph: "There was an error updating your gear",
+      });
+      setModalVisible(false);
+      setBannerVisible(true);
+      return;
+    }
+    setBannerText({
+      title: "Success",
+      paragraph: "Items have been added to your gear",
+    });
+    setCart([]);
+    setReRender(!reRender);
+    setModalVisible(false);
+    setBannerVisible(true);
+  };
   const renderCategory = () => {
     if (goodCategories.includes(category)) {
       return (
@@ -283,6 +372,12 @@ export const BuyGear = (props) => {
         addItemToCart={addItemToCart}
         removeItemFromCart={removeItemFromCart}
         cart={cart}
+        onBuy={handleBuy}
+      />
+      <Banner
+        hideDialog={hideDialog}
+        visible={bannerVisible}
+        text={bannerText}
       />
     </>
   );

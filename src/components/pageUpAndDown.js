@@ -47,10 +47,19 @@ export const PageUpAndDown = ({ page, setPage, equipment, parent, pageLength }) 
     },
   });
   const handlePage = (action) => {
-    if (action === "up" && (page + 1) * 8 < equipment.length) {
-      setPage((page) => ++page);
-    } else if (action === "down" && page > 0) {
-      setPage((page) => --page);
+    if(parent === 'cart'){
+      if (action === "up" && (page + 1) * 4 < equipment.length) {
+        setPage((page) => ++page);
+      } else if (action === "down" && page > 0) {
+        setPage((page) => --page);
+      }
+    }
+    else{
+      if (action === "up" && (page + 1) * 8 < equipment.length) {
+        setPage((page) => ++page);
+      } else if (action === "down" && page > 0) {
+        setPage((page) => --page);
+      }
     }
   };
   return (

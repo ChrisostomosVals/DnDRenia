@@ -178,15 +178,17 @@ const modalTitle = () =>{
       setBannerText={setBannerText}
       setBannerVisible={setBannerVisible}
       />
-      <CustomModal
-      modalVisible={deleteChapterModalVisible}
-      onClose={() => setDeleteChapterModalVisible(false)}
-      onConfrim={handleConfirm}
-      Children={<></>}
-      title={modalTitle()}
-      />
+      {deleteChapter &&
+       <CustomModal
+       modalVisible={deleteChapterModalVisible}
+       onClose={() => setDeleteChapterModalVisible(false)}
+       onConfrim={handleConfirm}
+       Children={<></>}
+       title={modalTitle()}
+       />
+      }
+     
         <Banner hideDialog={hideDialog} visible={bannerVisible} text={bannerText}/>
-
     </>
   );
 };

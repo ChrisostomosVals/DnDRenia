@@ -125,7 +125,7 @@ export const ModalQuestion = ({
           console.log(insertArsenalItem.error)
           setBannerText({
             title: "Equipping item Failed",
-            paragraph: `${selectedItems[0].name} has not been equipped! ${insertArsenalItem.error.message.message}`
+            paragraph: `${selectedItems[0].name} has not been equipped! ${insertArsenalItem.error.message}`
           })
           setModalVisible(false)
           setBannerVisible(true)

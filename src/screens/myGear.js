@@ -89,7 +89,7 @@ export const MyGear = ({ heroId }) => {
     const ip = await AsyncStorage.getItem("ip");
     const items = await CharacterApi.GetArsenalAsync(token, ip, heroId);
     if(items.isError){
-      console.log(items.error)
+      console.log(items.error, 'myGear.fetchArsenal()')
       setArsenal([])
       return
     }

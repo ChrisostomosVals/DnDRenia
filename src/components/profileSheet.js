@@ -1,12 +1,12 @@
-import { Dimensions } from "react-native";
-import React, { useCallback, useMemo, useEffect } from "react";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Modal from "react-native-modal";
 import { globalStyles } from "../utils/styles";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-export const ProfileSheet = ({  setModalVisible, images, navigation, heroId }) => {
+export const ProfileSheet = ({ images, navigation, heroId, refs }) => {
+ 
 
   const snapPoints = useMemo(() => ["25%", "50%"], []);
   const styles = StyleSheet.create({
@@ -32,16 +32,28 @@ export const ProfileSheet = ({  setModalVisible, images, navigation, heroId }) =
       borderRadius: 20,
       margin: 5,
     },
+    sheet:{
+      marginTop: 10,
+    shadowColor: "black",
+    shadowOffset: {
+      width: 0,
+      height: -12,
+    },
+    shadowOpacity: 0.58,
+    shadowRadius: 16.00,
+    elevation: 24,
+    }
   });
   const handleNavigate = (page, props) => navigation.navigate(page, props);
   const handleSheetChanges = useCallback((index) => {}, []);
   return (
     <BottomSheet
+      ref={refs}
       backgroundStyle={styles.modalView}
       snapPoints={snapPoints}
       onChange={handleSheetChanges}
-      onClose={() => setModalVisible(false)}
       enablePanDownToClose
+      style={styles.sheet}
     >
       <View style={styles.contentContainer}>
         <TouchableOpacity onPress={() => handleNavigate('ChooseProfileImage', {navigation: navigation, heroId: heroId, images: images})} style={styles.row}>

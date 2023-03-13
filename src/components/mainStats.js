@@ -1,5 +1,5 @@
 import { Card } from "@rneui/base";
-import { View, StyleSheet, Text, Image } from "react-native";
+import { View, StyleSheet, Text, Image, TextInput } from "react-native";
 import { globalStyles } from "../utils/styles";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Slider } from "@miblanchard/react-native-slider";
@@ -39,12 +39,25 @@ export const MainStats = ({ hero }) => {
     fetchStats();
     setEdit(false);
   }, [hero]);
-
+  const renderedStats = [
+    "Strength",
+    "Max HP",
+    "Current HP",
+    "Dexterity",
+    "Constitution",
+    "Wisdom",
+    "Charisma",
+    "Intelligence",
+    "Level",
+    "Armor Class",
+    "Speed",
+    "Base Attack Bonus",
+    "Experience"
+  ];
   const fetchStats = async () => {
     setHeroStats(hero);
     for(let item of hero.stats){
-      if(item.name === "Gender" || item.name === "Age") continue;
-      if(isNaN(item.value) || item.value === "-") item.value = 0;
+      if((isNaN(item.value) || item.value === "-") && renderedStats.includes(item.name)) item.value = 0;
     }
     setPropsShown({
       strength: hero.stats.find(s => s.name === "Strength").value,
@@ -73,7 +86,6 @@ export const MainStats = ({ hero }) => {
     },
     card: {
       alignItems: "center",
-      marginTop: 0,
       paddingBottom: 20,
       height: '95%'
     },
@@ -103,8 +115,7 @@ export const MainStats = ({ hero }) => {
       return;
     }
     for(let item of playerStats.data){
-      if(item.name === "Gender" || item.name === "Age") continue;
-      if(isNaN(item.value) || item.value === "-") item.value = 0;
+      if((isNaN(item.value) || item.value === "-") && renderedStats.includes(item.name)) item.value = 0;
     }
     setHeroStats({id: heroStats.id, stats: playerStats.data});
     setPropsShown({
@@ -144,7 +155,7 @@ export const MainStats = ({ hero }) => {
     }
     const updateStats = await CharacterApi.UpdateStatsAsync(token, ip, update);
     if (updateStats.isError) {
-      console.log(updateStats.error)
+      console.log(updateStats.error, "mainStats.updateStats")
       setTitle("Error Occurred");
       setParagraph("Your Stats could not been Saved!");
       setVisible(true);
@@ -259,6 +270,7 @@ export const MainStats = ({ hero }) => {
           <Slider
             animateTransitions
             maximumValue={propsShown.maxHp}
+            minimumValue={-propsShown.maxHp}
             minimumTrackTintColor={`rgb(${propsShown.currentHp/propsShown.maxHp * 100 * 2.55},${
               255 / propsShown.maxHp/propsShown.currentHp
             },0)`}
@@ -572,7 +584,9 @@ export const MainStats = ({ hero }) => {
 
         </View>
         <View style={styles.rowContainer}>
-          <Text style={globalStyles.textStyle}>{propsShown.experience}</Text>
+          <TextInput keyboardType="numeric" editable={edit} value={propsShown.experience} onChangeText={(e) =>
+              setPropsShown({ ...propsShown, experience: parseInt(e) })
+            } style={globalStyles.textStyle}></TextInput>
           </View>
         </ScrollView>
       </Card>
