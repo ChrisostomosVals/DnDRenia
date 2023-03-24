@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
-import { View, StyleSheet, Text, TouchableOpacity, TextInput } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import ChapterApi from "../dist/api/ChapterApi";
 import { useIsFocused } from "@react-navigation/native";
 import { globalStyles } from "../utils/styles";
@@ -12,6 +12,7 @@ import { Banner } from "../components/banner";
 import { CreateChapterModal } from "../components/createChapterModal";
 import { Skeleton } from '@rneui/themed';
 import { CustomModal } from "../components/CustomModal";
+import { ip } from "../utils/constants";
 
 export const Chapters = () => {
   const [chapters, setChapters] = useState([]);
@@ -36,7 +37,6 @@ export const Chapters = () => {
   const fetchChapters = async () => {
     setChapters([]);
     const token = await AsyncStorage.getItem("token");
-    const ip = await AsyncStorage.getItem("ip");
     const chaptersResponse = await ChapterApi.GetAsync(token, ip);
     if (chaptersResponse.isError) {
       console.log(chaptersResponse.error);
@@ -121,7 +121,6 @@ export const Chapters = () => {
   };
   const handleConfirm = async () =>{
     const token = await AsyncStorage.getItem('token')
-    const ip = await AsyncStorage.getItem('ip')
     const deleted = await ChapterApi.DeleteAsync(token, ip, deleteChapter.id)
     if(deleted.isError){
         console.log(deleted.error)

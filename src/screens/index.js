@@ -8,7 +8,7 @@ import { useIsFocused } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { wait } from "../utils/constants";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-
+import { ip } from "../utils/constants";
 
 export const Index = (props) => {
   const isFocused = useIsFocused();
@@ -70,7 +70,6 @@ export const Index = (props) => {
   const fetchHero = async () => {
     const id = await AsyncStorage.getItem("heroId");
     const token = await AsyncStorage.getItem("token");
-    const ip = await AsyncStorage.getItem("ip")
     const fetchHero = await CharacterApi.GetByIdAsync(token, ip, id);
     
     if (fetchHero.isError) {

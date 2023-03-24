@@ -14,6 +14,8 @@ import IonIcon from "react-native-vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ConnectApi from "../dist/api/ConnectApi"
 import UserApi from "../dist/api/UserApi";
+import { ip } from "../utils/constants";
+
 export const Login = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -51,8 +53,7 @@ export const Login = (props) => {
   });
 
   const login = async () => {
-    const url = await AsyncStorage.getItem('ip')
-    const response = await ConnectApi.LoginAsync(email, password, url)
+    const response = await ConnectApi.LoginAsync(email, password, ip)
     if (response.isError) {
       setMessage({
         title: "Login Failed",
@@ -69,7 +70,7 @@ export const Login = (props) => {
         "tokenExpiration",
         data.expires_in.toString()
       );
-      let user = await UserApi.GetProfileAsync(data.access_token, url);
+      let user = await UserApi.GetProfileAsync(data.access_token, ip);
       if(user.isError){
         setMessage({
           title: "Fetching Profile Failed",

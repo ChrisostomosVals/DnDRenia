@@ -20,6 +20,7 @@ import { CustomModal } from "../components/CustomModal";
 import CharacterApi from "../dist/api/CharacterApi";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MediaApi } from "../dist/api/MediaApi";
+import { ip } from "../utils/constants";
 
 export const ChooseProfileImage = ({ route, navigation }) => {
   const { images, heroId } = route.params;
@@ -193,7 +194,6 @@ export const ChooseProfileImage = ({ route, navigation }) => {
   };
   const handleSave = async () => {
     const token = await AsyncStorage.getItem("token");
-    const ip = await AsyncStorage.getItem("ip");
     if (item.type === "update") {
       if (item.item.type === "Profile Image") {
         setBannerText({

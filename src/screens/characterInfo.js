@@ -12,12 +12,11 @@ import { MediaApi } from "../dist/api/MediaApi";
 import Carousel from 'react-native-reanimated-carousel';
 import IonIcon from "react-native-vector-icons/Ionicons";
 import { useFocusEffect } from "@react-navigation/native";
-
+import { ip } from "../utils/constants";
 
 export const CharacterInfo = ({ route, navigation }) => {
   const { characterId } = route.params;
   const [character, setCharacter] = useState({});
-  const [ip, setIp] = useState();
   const [token, setToken] = useState();
   const [images, setImages] = useState([])
   const [profileImage, setProfileImage] = useState()
@@ -46,10 +45,8 @@ export const CharacterInfo = ({ route, navigation }) => {
   const fetchCharacter = async () => {
     setEnabled(false)
     const token = await AsyncStorage.getItem("token");
-    const ip = await AsyncStorage.getItem("ip");
     setImages([])
     setProfileImage()
-    setIp(ip);
     setToken(token);
     const getCharacter = await CharacterApi.GetByIdAsync(token, ip, characterId);
     if (getCharacter.isError) {

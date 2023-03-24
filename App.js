@@ -3,7 +3,6 @@ import { useCallback, useEffect, useState } from "react";
 import { StyleSheet, ImageBackground, Text, Alert, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NavigationContainer } from "@react-navigation/native";
-import { SettingsScreen } from "./src/screens/settingsScreen";
 import { Index } from "./src/screens";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import Icon from "react-native-vector-icons/AntDesign";
@@ -24,12 +23,13 @@ import { LogOut } from "./src/components/logout";
 import UserApi from "./src/dist/api/UserApi";
 import { ImageView } from "./src/screens/imageView";
 import { Chapters } from "./src/screens/chapters";
-import { globalStyles } from "./src/utils/styles";
 import { MyProperties } from "./src/screens/myProperties";
 import { ChooseProfileImage } from "./src/screens/chooseProfileImage";
 import { MyImages } from "./src/screens/myImages";
 import { AddImages } from "./src/screens/addImages";
 import { MyArsenal } from "./src/screens/myArsenal";
+import { ip } from "./src/utils/constants";
+
 
 const Drawer = createDrawerNavigator();
 
@@ -47,7 +47,6 @@ export default function App() {
   const [render, setRender] = useState(false);
   const [userRole, setUserRole] = useState();
   const [userToken, setUserToken] = useState();
-  const [appIp, setAppIp] = useState();
 
 
   useEffect(() => {
@@ -107,8 +106,6 @@ export default function App() {
   const fetchId = async () => {
     const token = await AsyncStorage.getItem('token')
     setUserToken(token)
-    const ip = await AsyncStorage.getItem('ip')
-    setAppIp(ip)
     const user = await UserApi.GetProfileAsync(token, ip);
     if (user.isError) {
       console.log(user.error)
@@ -234,7 +231,7 @@ export default function App() {
                   />
                 ),
               }}
-              children={(e) => BuyGearScreen({navigation: e.navigation, heroId: heroId, userToken: userToken, appIp: appIp})}
+              children={(e) => BuyGearScreen({navigation: e.navigation, heroId: heroId, userToken: userToken, appIp: ip})}
             />
             <Drawer.Screen
               name="Map"
@@ -267,21 +264,7 @@ export default function App() {
               }}
               initialParams={{setLogoutModalVisible: setLogoutModalVisible}}
             />
-            <Drawer.Screen
-              name="Settings"
-              options={{
-                title: "Settings",
-                headerShown: false,
-                drawerIcon: ({ focused, size }) => (
-                  <Icon
-                    name="setting"
-                    size={20}
-                    color={focused ? "#7cc" : "#ccc"}
-                  />
-                ),
-              }}
-              children={(e) => Settings({navigation: e.navigation, handleRender: handleRender})}
-            />
+          
             <Drawer.Screen
               name="CharacterInfo"
               component={CharacterInfo}
@@ -390,21 +373,7 @@ export default function App() {
         }}
         initialParams={{setLogoutModalVisible: setLogoutModalVisible}}
       />
-       <Drawer.Screen
-              name="Settings"
-              options={{
-                title: "Settings",
-                headerShown: false,
-                drawerIcon: ({ focused, size }) => (
-                  <Icon
-                    name="setting"
-                    size={20}
-                    color={focused ? "#7cc" : "#ccc"}
-                  />
-                ),
-              }}
-              children={() => Settings({handleRender: handleRender})}
-            />
+      
       </Drawer.Navigator>
       </NavigationContainer>
       )
@@ -423,21 +392,7 @@ export default function App() {
           drawerActiveTintColor: "#7cc",
         }}
       >
-        <Drawer.Screen
-              name="Settings"
-              options={{
-                title: "Settings",
-                headerShown: false,
-                drawerIcon: ({ focused, size }) => (
-                  <Icon
-                    name="setting"
-                    size={20}
-                    color={focused ? "#7cc" : "#ccc"}
-                  />
-                ),
-              }}
-             children={(e) => Settings({navigation: e.navigation, handleRender: handleRender})}
-            />
+      
          </Drawer.Navigator>
       </NavigationContainer>
     }
@@ -494,21 +449,7 @@ export default function App() {
                }}
                children={(e) => LoginScreen({navigation: e.navigation, handleRender: handleRender})}
              />
-        <Drawer.Screen
-               name="Settings"
-               options={{
-                 title: "Settings",
-                 headerShown: false,
-                 drawerIcon: ({ focused, size }) => (
-                   <Icon
-                     name="setting"
-                     size={20}
-                     color={focused ? "#7cc" : "#ccc"}
-                   />
-                 ),
-               }}
-               children={(e) => Settings({navigation: e.navigation, handleRender: handleRender})}
-               />
+        
        </Drawer.Navigator>
        </NavigationContainer>
         ) : (
@@ -539,7 +480,6 @@ export default function App() {
 const MyPropertiesScreen = (props) => <MyProperties {...props} heroId={props.heroId} />;
 const MyImagesScreen = (props) => <MyImages {...props} />;
 const AddImagesScreen = (props) => <AddImages {...props} />;
-const Settings = (props) => <SettingsScreen {...props} handleRender={props.handleRender} />;
 const LoginScreen = (props) => <Login {...props} handleRender={props.handleRender} />;
 const BuyGearScreen = (props) => <BuyGear {...props} heroId={props.heroId} token={props.userToken} ip={props.appIp} />;
 const MyGearScreen = (props) => <MyGear {...props} heroId={props.heroId} />;

@@ -10,7 +10,6 @@ import IonIcon from "react-native-vector-icons/Ionicons";
 import { WeaponsShop } from "../components/weaponsShop";
 import { WeaponsCategory } from "../components/weaponsCategory";
 import { globalStyles } from "../utils/styles";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import CharacterApi from "../dist/api/CharacterApi";
 import { Banner } from "../components/banner";
 

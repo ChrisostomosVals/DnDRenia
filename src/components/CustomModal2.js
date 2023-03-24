@@ -1,9 +1,8 @@
 import { useEffect } from "react";
 import { Text, StyleSheet, View, TouchableOpacity, Modal } from "react-native"
 import { globalStyles } from "../utils/styles";
-import { memo } from "react";
 
-export const CustomModal = ({modalVisible, onConfrim, onClose, title, Children}) =>{
+export const CustomModal2 = ({modalVisible, onConfrim, onClose, closeModal, title, Children, confirmTitle, closeTitle}) =>{
     useEffect(()=>{
 
     }, [modalVisible])
@@ -36,8 +35,8 @@ export const CustomModal = ({modalVisible, onConfrim, onClose, title, Children})
         animationType="fade"
         visible={modalVisible}
         transparent={true}
-        onRequestClose={onClose}
-    >   
+        onRequestClose={closeModal}
+        >   
          <View style={styles.centeredView}>
             <View style={styles.modalView}>
             <Text style={styles.input}>{title}</Text>
@@ -47,13 +46,13 @@ export const CustomModal = ({modalVisible, onConfrim, onClose, title, Children})
                   style={globalStyles.button}
                   onPress={onClose}
                 >
-            <Text style={{...globalStyles.textStyle, fontSize: 30}}>Cancel</Text>
+            <Text style={{...globalStyles.textStyle, fontSize: 30}}>{closeTitle}</Text>
         </TouchableOpacity>
         <TouchableOpacity
                   style={globalStyles.button}
                   onPress={onConfrim}
                 >
-            <Text style={{...globalStyles.textStyle, fontSize: 30}}>Confirm</Text>
+            <Text style={{...globalStyles.textStyle, fontSize: 30}}>{confirmTitle}</Text>
         </TouchableOpacity>
         </View>
             </View>

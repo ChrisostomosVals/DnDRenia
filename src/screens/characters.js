@@ -10,6 +10,7 @@ import { useIsFocused } from "@react-navigation/native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { ScrollView } from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ip } from "../utils/constants";
 
 export const Characters = ({ navigation }) => {
   const isFocused = useIsFocused();
@@ -58,7 +59,6 @@ export const Characters = ({ navigation }) => {
   });
   const fetchHeroes = async () => {
     const token = await AsyncStorage.getItem("token");
-    const ip = await AsyncStorage.getItem("ip");
     const heroes = await CharacterApi.GetAsync(token, ip, "hero");
     if (heroes.isError) {
       console.log(heroes.error);
@@ -69,7 +69,6 @@ export const Characters = ({ navigation }) => {
   };
   const fetchCharacters = async (e) => {
     const token = await AsyncStorage.getItem("token");
-    const ip = await AsyncStorage.getItem("ip");
     const fetchHeroes = await CharacterApi.GetAsync(token, ip, e.type);
     if(fetchHeroes.isError){
       console.log(fetchHeroes.error);

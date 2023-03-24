@@ -17,6 +17,7 @@ import { CustomModal } from "../components/CustomModal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CharacterApi from "../dist/api/CharacterApi";
 import { MediaApi } from "../dist/api/MediaApi";
+import { ip } from "../utils/constants";
 
 export const AddImages = ({ route }) => {
   const { heroId, navigation } = route.params;
@@ -84,7 +85,6 @@ export const AddImages = ({ route }) => {
   };
   const upload = async () => {
     const token = await AsyncStorage.getItem("token");
-    const ip = await AsyncStorage.getItem("ip");
     const files = [];
     for (let item of items) {
       const img = await MediaLibrary.getAssetInfoAsync(item.id);

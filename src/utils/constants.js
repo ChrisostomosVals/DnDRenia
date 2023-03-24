@@ -1763,3 +1763,7 @@ export const exoticWeapons = {
     },
   ],
 };
+
+
+
+export const ip = 'https://9aa4-2a02-214a-8329-3700-5c54-aa6d-177a-15c6.eu.ngrok.io/gateway'
