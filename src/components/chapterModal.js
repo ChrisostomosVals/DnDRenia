@@ -8,7 +8,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Modal from "react-native-modal";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Moment from "moment";
-
+import { ip } from "../utils/constants";
 
 export const ChapterModal = ({modalVisible, setModalVisible, chapter, setBannerText, setBannerVisible}) =>{
     const [storyValue, setStoryValue] = useState()
@@ -70,7 +70,6 @@ export const ChapterModal = ({modalVisible, setModalVisible, chapter, setBannerT
       }
     const handleSave = async() =>{
         const token = await AsyncStorage.getItem('token')
-        const ip = await AsyncStorage.getItem('ip')
         const updateChapter = {
             id: chapter.id,
             name: chapter.name,

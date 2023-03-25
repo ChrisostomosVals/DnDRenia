@@ -14,7 +14,7 @@ import { Banner } from "../components/banner";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CharacterApi from "../dist/api/CharacterApi";
 import { useIsFocused } from "@react-navigation/native";
-
+import { ip } from "../utils/constants";
 
 export const MyGear = ({ heroId }) => {
   const isFocused = useIsFocused();
@@ -86,7 +86,6 @@ export const MyGear = ({ heroId }) => {
   });
   const fetchArsenal = async()=>{
     const token = await AsyncStorage.getItem("token");
-    const ip = await AsyncStorage.getItem("ip");
     const items = await CharacterApi.GetArsenalAsync(token, ip, heroId);
     if(items.isError){
       console.log(items.error, 'myGear.fetchArsenal()')
@@ -100,7 +99,6 @@ export const MyGear = ({ heroId }) => {
   }
   const fetchGear = async () => {
     const token = await AsyncStorage.getItem("token");
-    const ip = await AsyncStorage.getItem("ip");
     const getGear = await CharacterApi.GetGearAsync(token, ip, heroId);
     if(getGear.isError){
       console.log(getGear.error)

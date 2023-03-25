@@ -5,6 +5,7 @@ import { Audio } from "expo-av";
 import { useState, useEffect } from "react";
 import CharacterApi from "../dist/api/CharacterApi";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ip } from "../utils/constants";
 
 export const ModalQuestion = ({
   modalVisible,
@@ -93,7 +94,6 @@ export const ModalQuestion = ({
       }
       else{
         const token = await AsyncStorage.getItem("token");
-        const ip = await AsyncStorage.getItem("ip");
         const playerStats = await CharacterApi.GetStatsAsync(token, ip, heroId)
         if(playerStats.isError){
           console.log(playerStats.error)

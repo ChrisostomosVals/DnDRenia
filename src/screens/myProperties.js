@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { View, Image, StyleSheet, Text, TouchableOpacity, ActivityIndicator } from "react-native";
+import { View, Image, StyleSheet, Text, TouchableOpacity, TextInput } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 import CharacterApi from "../dist/api/CharacterApi";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -8,6 +8,7 @@ import { globalStyles } from "../utils/styles";
 import { ProfileSheet } from "../components/profileSheet";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Animated, {EasingNode, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from "react-native-reanimated";
+import { ip } from "../utils/constants";
 
 export const MyProperties = ({ heroId, navigation }) => {
   const isFocused = useIsFocused();
@@ -50,7 +51,6 @@ useEffect(() => {
     setImages([]);
     if (!isFocused) return;
     const token = await AsyncStorage.getItem("token");
-    const ip = await AsyncStorage.getItem("ip");
     const props = await CharacterApi.GetPropertiesAsync(token, ip, heroId);
     if (props.isError) {
       console.log(props.error, "MyProperties.fetchProperties");
@@ -114,7 +114,6 @@ useEffect(() => {
 
     if (!isFocused) return;
     const token = await AsyncStorage.getItem("token");
-    const ip = await AsyncStorage.getItem("ip");
     const getStats = await CharacterApi.GetStatsAsync(token, ip, heroId);
     if (getStats.isError) {
       console.log(getStats.error, "MyProperties.fetchStats");
@@ -162,6 +161,12 @@ useEffect(() => {
       paddingTop: 5
     },
   });
+  const handleStat = (e, index) =>{
+    const newItems = [...stats]; // create a copy of the array
+    newItems[index].value = e; // update the copy of the array
+    setStats(newItems)
+    
+  }
   const startRotating = () =>{
     Animated.timing(
       spinValue,
@@ -235,15 +240,23 @@ useEffect(() => {
                     >
                       {s.name}:
                     </Text>
-                    <Text
+                    <TextInput
                       style={{
                         ...globalStyles.textStyle,
                         color: "#CD853F",
                         fontSize: 20,
+                        borderRadius: 3,
+                        borderColor: edit ? "white" : null,
+                        borderWidth: 1, 
+                        paddingRight: 5,
+                        paddingLeft: 5,
+                        opacity: edit ? 1: 0.6
                       }}
+                      editable={edit}
+                      value={s.value}
+                      onChangeText={(e) => handleStat(e, index)}
                     >
-                      {s.value}
-                    </Text>
+                    </TextInput>
                   </View>
                 );
               }

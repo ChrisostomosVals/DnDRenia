@@ -6,6 +6,7 @@ import Modal from "react-native-modal";
 import Moment from "moment";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ChapterApi from "../dist/api/ChapterApi";
+import { ip } from "../utils/constants";
 
 export const CreateChapterModal = ({modalVisible, setModalVisible, setBannerText, setBannerVisible}) =>{
 
@@ -65,7 +66,6 @@ export const CreateChapterModal = ({modalVisible, setModalVisible, setBannerText
     })
     const handleSave = async () =>{
       const token = await AsyncStorage.getItem('token')
-      const ip = await AsyncStorage.getItem('ip')
       const newChapter = {
           name: name,
           story: story,

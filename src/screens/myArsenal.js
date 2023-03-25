@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { View, Text } from "react-native";
 import { globalStyles } from "../utils/styles";
 import { StyleSheet } from "react-native";
+import { ip } from "../utils/constants";
 
 export const MyArsenal = ({ heroId, navigation }) => {
   const isFocused = useIsFocused();
@@ -15,7 +16,6 @@ export const MyArsenal = ({ heroId, navigation }) => {
   }, [heroId, isFocused]);
   const fetchArsenal = async () => {
     const token = await AsyncStorage.getItem("token");
-    const ip = await AsyncStorage.getItem("ip");
     const getArsenal = await CharacterApi.GetArsenalAsync(token, ip, heroId);
     if (getArsenal.isError) {
       console.log(getArsenal.error, "myGear.fetchArsenal()");

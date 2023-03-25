@@ -533,7 +533,7 @@ export const Map = () => {
         provider="google"
       >
         <UrlTile
-          urlTemplate="https://9aa4-2a02-214a-8329-3700-5c54-aa6d-177a-15c6.eu.ngrok.iogateway/map/{z}/{x}/{y}.png"
+          urlTemplate="https://a9f4-2a02-214a-8329-3700-fda5-e4a6-bccd-ea6b.eu.ngrok.io/gateway/map/{z}/{x}/{y}.png"
           zIndex={-1}
         />
         {markerLocation && !selectedMarker && (

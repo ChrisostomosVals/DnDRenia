@@ -392,7 +392,22 @@ export default function App() {
           drawerActiveTintColor: "#7cc",
         }}
       >
-      
+       <Drawer.Screen
+        name="Home"
+        component={Index}
+        options={{
+          title: "Home",
+          headerShown: false,
+          drawerIcon: ({ focused, size }) => (
+            <Icon
+              name="home"
+              size={20}
+              color={focused ? "#7cc" : "#ccc"}
+            />
+          ),
+        }}
+        initialParams={{setLogoutModalVisible: setLogoutModalVisible}}
+      />
          </Drawer.Navigator>
       </NavigationContainer>
     }

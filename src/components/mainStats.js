@@ -10,6 +10,7 @@ import CharacterApi from "../dist/api/CharacterApi";
 import { Banner } from "./banner";
 import IonIcon from "react-native-vector-icons/Ionicons";
 import { ScrollView } from "react-native-gesture-handler";
+import { ip } from "../utils/constants";
 
 export const MainStats = ({ hero }) => {
   const [heroStats, setHeroStats] = useState();
@@ -108,7 +109,6 @@ export const MainStats = ({ hero }) => {
   const handleEdit = async () => {
     setEdit(!edit);
     const token = await AsyncStorage.getItem("token");
-    const ip = await AsyncStorage.getItem("ip");
     const playerStats = await CharacterApi.GetStatsAsync(token, ip, heroStats.id);
     if(playerStats.isError){
       console.log(playerStats.error)
@@ -137,7 +137,6 @@ export const MainStats = ({ hero }) => {
   const hideDialog = () => setVisible(false);
   const handleSave = async () => {
     const token = await AsyncStorage.getItem("token");
-    const ip = await AsyncStorage.getItem("ip");
     setHeroStats(s => {
       s.stats.forEach(c => {
         Object.keys(propsShown).forEach(p => {

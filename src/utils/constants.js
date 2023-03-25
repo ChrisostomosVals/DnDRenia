@@ -1766,4 +1766,4 @@ export const exoticWeapons = {
 
 
 
-export const ip = 'https://9aa4-2a02-214a-8329-3700-5c54-aa6d-177a-15c6.eu.ngrok.io/gateway'
+export const ip = 'https://a9f4-2a02-214a-8329-3700-fda5-e4a6-bccd-ea6b.eu.ngrok.io/gateway'
