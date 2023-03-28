@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import CharacterApi from "../dist/api/CharacterApi";
 import { List } from "react-native-paper";
 import { Card } from "@rneui/base";
@@ -38,6 +38,10 @@ export const Characters = ({ navigation }) => {
     },
     dropDownStyle: {
       backgroundColor: "#102445",
+    },
+    emptyListText:{
+      textAlign: "center",
+      ...globalStyles.textStyle,
     },
     pageText: {
       fontSize: 30,
@@ -86,7 +90,7 @@ export const Characters = ({ navigation }) => {
     <View style={styles.body}>
       <View style={styles.dropDownContainer}>
         <DropDownPicker
-          placeholder="Select Class Category"
+          placeholder="Select Category"
           onSelectItem={fetchCharacters}
           open={open}
           textStyle={styles.pageText}
@@ -111,6 +115,7 @@ export const Characters = ({ navigation }) => {
           containerStyle={{
             width: "80%",
             maxHeight: "70%",
+            minHeight: '40%',
             ...globalStyles.card,
           }}
         >
@@ -129,7 +134,7 @@ export const Characters = ({ navigation }) => {
               contentContainerStyle={styles.scrollItems}
               centerContent={true}
             >
-              {characters.length > 0 &&
+              {characters.length > 0 ?
                 characters.map((h) => (
                   <List.Item
                     titleStyle={globalStyles.textStyle}
@@ -149,7 +154,8 @@ export const Characters = ({ navigation }) => {
                     )}
                     onPress={() => navigateToInfo(h.id)}
                   />
-                ))}
+                )):
+                (<Text style={styles.emptyListText}>There are no {title} yet!</Text>)}
             </ScrollView>
           </List.Section>
         </Card>

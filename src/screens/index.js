@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState, useCallback } from "react";
-import { View, StyleSheet, Text, RefreshControl, Image, ScrollView } from "react-native";
+import { View, StyleSheet, Text, RefreshControl, Image, Switch } from "react-native";
 import { MainStats } from "../components/mainStats";
 import CharacterApi from "../dist/api/CharacterApi";
 import { globalStyles } from "../utils/styles";
@@ -9,13 +9,17 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { wait } from "../utils/constants";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { ip } from "../utils/constants";
+import { Skills } from "../components/skills";
+import { ScrollView } from "react-native-gesture-handler";
 
 export const Index = (props) => {
   const isFocused = useIsFocused();
   const [hero, setHero] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
+  const [visibleData, setVisibleData] = useState('mainStats')
   useEffect(() => {
     fetchHero();
+    setVisibleData('mainStats')
   }, [isFocused]);
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -50,12 +54,6 @@ export const Index = (props) => {
       backgroundColor: 'rgba(16,36,69,0.95)',
       borderRadius: 15
     },
-    scrollView: {
-      flex: 1,
-      backgroundColor: 'pink',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
     equipment:{
       flex: 2,
       flexDirection: "row",
@@ -67,11 +65,11 @@ export const Index = (props) => {
     }
   });
 
+ 
   const fetchHero = async () => {
     const id = await AsyncStorage.getItem("heroId");
     const token = await AsyncStorage.getItem("token");
     const fetchHero = await CharacterApi.GetByIdAsync(token, ip, id);
-    
     if (fetchHero.isError) {
       console.log(fetchHero.error)
       setHero(null)
@@ -83,8 +81,13 @@ export const Index = (props) => {
   const navigateToPage = (page, id) =>{
     props.navigation.navigate(page, {heroId: id})
   }
+  const toggleSwitch = () => {
+    visibleData === 'mainStats' ?
+    setVisibleData('skills')
+    : setVisibleData('mainStats');
+  };
   return (
-    <ScrollView contentContainerStyle={styles.body} refreshControl={
+    <ScrollView scrollEnabled={true} contentContainerStyle={styles.body} refreshControl={
       <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
@@ -125,10 +128,22 @@ export const Index = (props) => {
             </TouchableOpacity>
             </View>
           </View>
+          <Switch
+            trackColor={{ false: "#767577", true: "#81b0ff" }}
+            thumbColor={visibleData === 'mainStats' ? "#f5dd4b" : "#f4f3f4"}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={toggleSwitch}
+            value={visibleData === 'mainStats'}
+            style={{ alignSelf: 'center' }}
+          />
           <View style={styles.stats}>
-            <MainStats hero={{id: hero.id, stats: hero.stats}} />
+            {visibleData === 'mainStats' &&
+              <MainStats hero={{id: hero.id, stats: hero.stats}} />
+            }
+            {visibleData === 'skills' &&
+              <Skills hero={{id: hero.id}} visibleData={visibleData}/>
+            }
           </View>
-         
         </>
       )}
       </ScrollView>

@@ -9,6 +9,7 @@ import { ProfileSheet } from "../components/profileSheet";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Animated, {EasingNode, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from "react-native-reanimated";
 import { ip } from "../utils/constants";
+import { Banner } from "../components/banner";
 
 export const MyProperties = ({ heroId, navigation }) => {
   const isFocused = useIsFocused();
@@ -30,6 +31,11 @@ export const MyProperties = ({ heroId, navigation }) => {
   ];
   const [edit, setEdit] = useState(false);
   const bottomSheetRef = useRef();
+  const [bannerText, setBannerText] = useState({
+    title: "",
+    paragraph: "",
+  });
+  const [bannerVisible, setBannerVisible] = useState(false);
   // const spinnerValue = useSharedValue(new Animated.Value(0))
  
   // spinnerValue.value = withRepeat(
@@ -43,6 +49,7 @@ export const MyProperties = ({ heroId, navigation }) => {
   // })
   // const style = useAnimatedStyle(() => ({ rotate: spin }), []);
 useEffect(() => {
+  setEdit(false);
   fetchProperties();
   fetchStats();
     setProfileModal(false);
@@ -162,10 +169,9 @@ useEffect(() => {
     },
   });
   const handleStat = (e, index) =>{
-    const newItems = [...stats]; // create a copy of the array
-    newItems[index].value = e; // update the copy of the array
+    const newItems = [...stats];
+    newItems[index].value = e;
     setStats(newItems)
-    
   }
   const startRotating = () =>{
     Animated.timing(
@@ -188,9 +194,30 @@ useEffect(() => {
     }
   };
   const handleSave = async() =>{
-
+    const token = await AsyncStorage.getItem('token');
+    const updateStats = {
+      id: heroId,
+      updateDefinition: stats
+    }
+    const update = await CharacterApi.UpdateStatsAsync(token, ip, updateStats);
+    if (update.isError) {
+      setBannerText({
+        title: "Error",
+        paragraph: "There was an error updating your stats",
+      });
+      setBannerVisible(true);
+      return;
+    }
+    setBannerText({
+      title: "Success",
+      paragraph: "Stats updated",
+    });
+    setBannerVisible(true);
+    
   }
-  
+  const hideDialog = () => {
+    setBannerVisible(false);
+  };
   return (
     <>
         {stats.length > 0 ?
@@ -273,6 +300,11 @@ useEffect(() => {
         images={images}
         navigation={navigation}
         heroId={heroId}
+      />
+      <Banner
+        hideDialog={hideDialog}
+        visible={bannerVisible}
+        text={bannerText}
       />
     </>
   );

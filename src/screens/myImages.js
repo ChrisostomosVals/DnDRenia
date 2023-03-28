@@ -19,6 +19,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Banner } from "../components/banner";
 import { MediaApi } from "../dist/api/MediaApi";
 import { CustomModal } from "../components/CustomModal";
+import { ip } from "../utils/constants";
 
 export const MyImages = memo(function MyImages({ route }) {
   const { heroId, navigation } = route.params;
@@ -45,7 +46,6 @@ export const MyImages = memo(function MyImages({ route }) {
     setInitDesc([]);
     setImages([]);
     const token = await AsyncStorage.getItem("token");
-    const ip = await AsyncStorage.getItem("ip");
     const props = await CharacterApi.GetPropertiesAsync(token, ip, heroId);
     if (props.isError) {
       console.log(props.error, "fetchImages");
@@ -107,7 +107,6 @@ export const MyImages = memo(function MyImages({ route }) {
   };
   const handleSave = async () => {
     const token = await AsyncStorage.getItem("token");
-    const ip = await AsyncStorage.getItem("ip");
     const props = await CharacterApi.GetPropertiesAsync(token, ip, heroId);
     if (props.isError) {
       console.log(props.error, "props");
@@ -182,7 +181,6 @@ export const MyImages = memo(function MyImages({ route }) {
   }
   const deleteImage = async() =>{
     const token = await AsyncStorage.getItem("token");
-    const ip = await AsyncStorage.getItem("ip");
     const props = await CharacterApi.GetPropertiesAsync(token, ip, heroId);
     if (props.isError) {
       console.log(props.error, "props");
