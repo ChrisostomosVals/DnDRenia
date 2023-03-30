@@ -11,13 +11,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import CharacterApi from "../dist/api/CharacterApi";
 import { ip } from "../utils/constants";
 import { Banner } from "./banner";
+import { skillsInit } from "../utils/constants";
 
-export const Skills = ({ hero, visibleData }) => {
+export const Skills = ({ hero }) => {
   const [edit, setEdit] = useState(false);
-  const [skills, setSkills] = useState([]);
+  const [skills, setSkills] = useState(skillsInit);
   useEffect(() => {
     fetchSkills();
-  }, [visibleData, hero]);
+  }, [hero]);
   const [bannerVisible, setBannerVisible] = useState(false);
   const [bannerText, setBannerText] = useState({
     title: "",
@@ -124,7 +125,7 @@ export const Skills = ({ hero, visibleData }) => {
           <View style={styles.rowContainer}>
             {skills.length > 0 &&
               skills.map((skill, index) => (
-                <Fragment key={index} >
+                <Fragment key={index}>
                   <View
                     style={{
                       flexDirection: "row",
@@ -225,7 +226,9 @@ export const Skills = ({ hero, visibleData }) => {
                         backgroundColor: null,
                         justifyContent: "center",
                       }}
-                      checked={skill.ranks + skill.miscMod + skill.abilityMod > 0}
+                      checked={
+                        skill.ranks + skill.miscMod + skill.abilityMod > 0
+                      }
                       onPress={() => toggleTrain(index)}
                       iconType="material-community"
                       checkedIcon="checkbox-marked-circle"
@@ -233,15 +236,14 @@ export const Skills = ({ hero, visibleData }) => {
                       checkedColor="#DAA520"
                       disabled={true}
                     />
-                    {
-                        skill.trained && 
-                        <MaterialCommunityIcons
+                    {skill.trained && (
+                      <MaterialCommunityIcons
                         name="multiplication"
                         color="#DAA520"
                         size={15}
                         style={styles.trained}
-                        />
-                    }
+                      />
+                    )}
                   </View>
                   <View
                     style={{
@@ -279,11 +281,10 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
   },
-  trained:{
-    position: 'absolute',
+  trained: {
+    position: "absolute",
     right: 10,
-    top: 10
-  }
+    top: 10,
+  },
 });

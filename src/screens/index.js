@@ -141,7 +141,7 @@ export const Index = (props) => {
               <MainStats hero={{id: hero.id, stats: hero.stats}} />
             }
             {visibleData === 'skills' &&
-              <Skills hero={{id: hero.id}} visibleData={visibleData}/>
+              <Skills hero={{id: hero.id}}/>
             }
           </View>
         </>

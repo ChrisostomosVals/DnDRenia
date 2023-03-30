@@ -44,6 +44,7 @@ export const AddImages = ({ route }) => {
     }, [])
   );
   useEffect(() => {
+    if(!isFocused) return;
     fetchPhonePhotos();
     setModalVisible(false);
   }, [isFocused]);
@@ -62,25 +63,21 @@ export const AddImages = ({ route }) => {
       await requestPermission();
       return;
     }
-    const albums = await MediaLibrary.getAlbumsAsync();
-    for (let album of albums) {
-      const getPhotos = await MediaLibrary.getAssetsAsync({
-        mediaType: "photo",
-        album: album,
-        sortBy: "modificationTime",
+
+    const getPhotos = await MediaLibrary.getAssetsAsync({
+      mediaType: "photo",
+      sortBy: "creationTime",
+      first: 500
+    });
+
+    for (let item of getPhotos.assets) {
+      const media = await MediaLibrary.getAssetInfoAsync(item.id);
+      const manipResult = await manipulateAsync(media.uri, [], {
+        compress: 0.1,
+        format: SaveFormat.JPEG
       });
-      getPhotos.assets.sort(function (a, b) {
-        return new Date(b.modificationTime) - new Date(a.modificationTime);
-      });
-      for (let item of getPhotos.assets) {
-        const media = await MediaLibrary.getAssetInfoAsync(item.id);
-        const manipResult = await manipulateAsync(media.uri, [], {
-          compress: 0.1,
-          format: SaveFormat.JPEG,
-        });
-        const photo = { ...media, uri: manipResult.uri, type: "system" };
-        setPhotos((ph) => [...ph, photo]);
-      }
+      const photo = { ...media, uri: manipResult.uri, type: "system" };
+      setPhotos((ph) => [...ph, photo]);
     }
   };
   const upload = async () => {
@@ -93,9 +90,13 @@ export const AddImages = ({ route }) => {
       const file = new File([img.filename], blob._data.name, {
         type: blob._data.type,
       });
+      let type = file.type
+      if(type === null || type === ""){
+        if(blob._data.name.endsWith(".png")) type = "image/png"
+      }
       files.push({
         name: file.name,
-        type: file.type,
+        type: type,
         uri: img.uri,
       });
     }
@@ -138,26 +139,30 @@ export const AddImages = ({ route }) => {
       setBannerVisible(true);
       return () => deleteImages(token, ip, upload.data);
     }
-    for(let path of upload.data){
+    for (let path of upload.data) {
       props.data.push({
         type: "Image",
-        value: path
-      })
+        value: path,
+      });
     }
     const update = {
       id: heroId,
-      updateDefinition: props.data
-    }
-    const updatedProps = await CharacterApi.UpdatePropertiesAsync(token, ip, update);
-    if(updatedProps.isError){
-      console.log(updatedProps.error, 'updatedProps')
+      updateDefinition: props.data,
+    };
+    const updatedProps = await CharacterApi.UpdatePropertiesAsync(
+      token,
+      ip,
+      update
+    );
+    if (updatedProps.isError) {
+      console.log(updatedProps.error, "updatedProps");
       setBannerText({
-          title: "Error",
-          paragraph: "There was an error uploading images",
-        });
-        setModalVisible(false);
-        setBannerVisible(true);
-        return await deleteImages(token, ip, upload.data);
+        title: "Error",
+        paragraph: "There was an error uploading images",
+      });
+      setModalVisible(false);
+      setBannerVisible(true);
+      return await deleteImages(token, ip, upload.data);
     }
     setBannerText({
       title: "Upload successfull",

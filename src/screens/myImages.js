@@ -149,7 +149,6 @@ export const MyImages = memo(function MyImages({ route }) {
   };
   const hideDialog = () => {
     setBannerVisible(false);
-    setRender(!render);
   };
   const styles = StyleSheet.create({
     inputStyle: {
@@ -222,6 +221,8 @@ export const MyImages = memo(function MyImages({ route }) {
           setBannerVisible(true);
           return;
     }
+    const newItems = images.filter(img => img.value !== deleteItem.value);
+    setImages(newItems)
     setBannerText({
       title: "Delete",
       paragraph: "Image deleted",

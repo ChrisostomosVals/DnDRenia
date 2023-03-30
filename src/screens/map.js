@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { View, StyleSheet, TextInput, Image } from "react-native";
-import MapView, { UrlTile, Marker } from "react-native-maps";
+import MapView, { UrlTile, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { useEffect, useState } from "react";
 import { globalStyles } from "../utils/styles";
 import { Button } from "../components/button";
@@ -533,7 +533,7 @@ export const Map = () => {
         provider="google"
       >
         <UrlTile
-          urlTemplate="https://a9f4-2a02-214a-8329-3700-fda5-e4a6-bccd-ea6b.eu.ngrok.io/gateway/map/{z}/{x}/{y}.png"
+          urlTemplate="https://d8f8-2a02-214a-8329-3700-8071-581f-ca02-e3ea.eu.ngrok.io/gateway/map/{z}/{x}/{y}.png"
           zIndex={-1}
         />
         {markerLocation && !selectedMarker && (
@@ -562,6 +562,7 @@ export const Map = () => {
               description={marker.description}
               onPress={() => selectMarker(marker)}
               onLongPress={handleEdit}
+              style={{width: 120, height:120}}
               image={image[`${marker.type.toLowerCase()}`]}
             >
               <CustomCallout
