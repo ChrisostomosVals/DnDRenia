@@ -30,7 +30,6 @@ import { AddImages } from "./src/screens/addImages";
 import { MyArsenal } from "./src/screens/myArsenal";
 import { ip } from "./src/utils/constants";
 
-
 const Drawer = createDrawerNavigator();
 
 export default function App() {
@@ -65,6 +64,7 @@ export default function App() {
       }
     })();
   }, [render]);
+
 
   useEffect(() => {
     return sound

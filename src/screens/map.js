@@ -562,7 +562,7 @@ export const Map = () => {
               description={marker.description}
               onPress={() => selectMarker(marker)}
               onLongPress={handleEdit}
-              style={{width: 120, height:120}}
+              style={{width: 120 , height:120}}
               image={image[`${marker.type.toLowerCase()}`]}
             >
               <CustomCallout

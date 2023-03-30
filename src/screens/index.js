@@ -12,6 +12,7 @@ import { ip } from "../utils/constants";
 import { Skills } from "../components/skills";
 import { ScrollView } from "react-native-gesture-handler";
 
+
 export const Index = (props) => {
   const isFocused = useIsFocused();
   const [hero, setHero] = useState(null);
@@ -87,18 +88,20 @@ export const Index = (props) => {
     : setVisibleData('mainStats');
   };
   return (
+    <>
+     <MaterialCommunityIcons
+            name="logout"
+            size={30}
+            style={{ position: "absolute", right: 20, top: 40, zIndex: 100 }}
+            onPress={() => props.navigation.dispatch(props.route.params.setLogoutModalVisible(true))}
+          />
     <ScrollView scrollEnabled={true} contentContainerStyle={styles.body} refreshControl={
       <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
           />
         }>
-      <MaterialCommunityIcons
-            name="logout"
-            size={30}
-            style={{ position: "absolute", right: 20, top: 40 }}
-            onPress={() => props.route.params.setLogoutModalVisible(true)}
-          />
+     
       {hero && (
         <>
           <View style={styles.hidden}></View>
@@ -147,5 +150,6 @@ export const Index = (props) => {
         </>
       )}
       </ScrollView>
+      </>
   );
 };

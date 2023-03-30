@@ -34,7 +34,7 @@ export const Characters = ({ navigation }) => {
     container: {
       alignItems: "center",
       justifyContent: "center",
-      height: "100%",
+      height: "80%",
     },
     dropDownStyle: {
       backgroundColor: "#102445",
@@ -95,7 +95,7 @@ export const Characters = ({ navigation }) => {
           open={open}
           textStyle={styles.pageText}
           arrowIconStyle={{ backgroundColor: "#DAA520", borderRadius: 25 }}
-          selectedItemContainerStyle={{ backgroundColor: "#DAA520" }}
+          selectedItemContainerStyle={{ backgroundColor: "#DAA520", zIndex: 100 }}
           value={category}
           setValue={(e) => setCategory(e)}
           setOpen={(thisOpen) => setOpen(thisOpen)}
@@ -107,6 +107,9 @@ export const Characters = ({ navigation }) => {
           listMode="SCROLLVIEW"
           scrollViewProps={{
             nestedScrollEnabled: true,
+            style:{
+              zIndex: 100 
+            } 
           }}
         />
       </View>
