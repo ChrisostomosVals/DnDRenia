@@ -10,7 +10,7 @@ import { ChapterModal } from "../components/chapterModal";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Banner } from "../components/banner";
 import { CreateChapterModal } from "../components/createChapterModal";
-import { Skeleton } from '@rneui/themed';
+import { Skeleton } from "@rneui/themed";
 import { CustomModal } from "../components/CustomModal";
 import { ip } from "../utils/constants";
 
@@ -18,20 +18,22 @@ export const Chapters = () => {
   const [chapters, setChapters] = useState([]);
   const isFocused = useIsFocused();
   const [modalVisible, setModalVisible] = useState(false);
-  const [createChapterModalVisible, setCreateChapterModalVisible] = useState(false);
-  const [deleteChapterModalVisible, setDeleteChapterModalVisible] = useState(false);
+  const [createChapterModalVisible, setCreateChapterModalVisible] =
+    useState(false);
+  const [deleteChapterModalVisible, setDeleteChapterModalVisible] =
+    useState(false);
   const [chapter, setChapter] = useState();
-  const [bannerVisible, setBannerVisible] = useState(false)
-  const [deleteChapter, setDeleteChapter] = useState()
+  const [bannerVisible, setBannerVisible] = useState(false);
+  const [deleteChapter, setDeleteChapter] = useState();
   const [bannerText, setBannerText] = useState({
-      title:'',
-      paragraph:''
-  })
-  const [loading, setLoading] = useState(false)
-  const skeleton = [0, 1, 2, 3, 4, 5]
+    title: "",
+    paragraph: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const skeleton = [0, 1, 2, 3, 4, 5];
   useEffect(() => {
     setModalVisible(false);
-    setLoading(true)
+    setLoading(true);
     fetchChapters();
   }, [isFocused, bannerText]);
   const fetchChapters = async () => {
@@ -40,13 +42,12 @@ export const Chapters = () => {
     const chaptersResponse = await ChapterApi.GetAsync(token, ip);
     if (chaptersResponse.isError) {
       console.log(chaptersResponse.error);
-    setLoading(false)
-    return;
+      setLoading(false);
+      return;
     }
     setChapters(chaptersResponse.data);
     setTimeout(() => {
-      
-      setLoading(false)
+      setLoading(false);
     }, 1000);
   };
   const styles = StyleSheet.create({
@@ -71,40 +72,41 @@ export const Chapters = () => {
       flexDirection: "row",
       justifyContent: "space-between",
     },
-    itemLine:{
+    itemLine: {
       flexDirection: "row",
-      alignItems: 'center'
+      alignItems: "center",
     },
     title: {
       ...globalStyles.textStyle,
       fontSize: 25,
     },
   });
+
   const Item = ({ chapter }) => {
-    return(
-    <View style={styles.itemLine}>
-      <View style={{ flex: 9 }}>
+    return (
+      <View style={styles.itemLine}>
+        <View style={{ flex: 9 }}>
+          <TouchableOpacity
+            onPress={() => handleChapter(chapter)}
+            style={styles.item}
+          >
+            <Text style={styles.title}>{chapter.name}</Text>
+            <Text style={styles.title}>
+              {Moment.utc(chapter.date).format("D MMM YYYY")}
+            </Text>
+          </TouchableOpacity>
+        </View>
 
-      <TouchableOpacity
-        onPress={() => handleChapter(chapter)}
-        style={styles.item}
-      >
-        <Text style={styles.title}>{chapter.name}</Text>
-        <Text style={styles.title}>
-          {Moment.utc(chapter.date).format("D MMM YYYY")}
-        </Text>
-      </TouchableOpacity>
+        <MaterialCommunityIcons
+          style={{ flex: 1 }}
+          color="#DAA520"
+          name="delete"
+          size={20}
+          onPress={() => handleDelete({ id: chapter.id, name: chapter.name })}
+        />
       </View>
-
-      <MaterialCommunityIcons
-        style={{flex: 1 }}
-        color="#DAA520"
-        name="delete"
-        size={20}
-        onPress={() => handleDelete({id: chapter.id, name: chapter.name})}
-      />
-    </View>
-  )};
+    );
+  };
   const handleChapter = (chapter) => {
     setChapter(chapter);
     setModalVisible(true);
@@ -114,45 +116,57 @@ export const Chapters = () => {
     setDeleteChapterModalVisible(true);
   };
   const hideDialog = () => {
-    setBannerVisible(false)
+    setBannerVisible(false);
   };
   const handleNewChapter = () => {
     setCreateChapterModalVisible(true);
   };
-  const handleConfirm = async () =>{
-    const token = await AsyncStorage.getItem('token')
-    const deleted = await ChapterApi.DeleteAsync(token, ip, deleteChapter.id)
-    if(deleted.isError){
-        console.log(deleted.error)
-        setDeleteChapterModalVisible(false)
-        setBannerText({title: 'Error', paragraph:`${deleteChapter.name} could not be Deleted`})
-        setBannerVisible(true)
-        return
+  const handleConfirm = async () => {
+    const token = await AsyncStorage.getItem("token");
+    const deleted = await ChapterApi.DeleteAsync(token, ip, deleteChapter.id);
+    if (deleted.isError) {
+      console.log(deleted.error);
+      setDeleteChapterModalVisible(false);
+      setBannerText({
+        title: "Error",
+        paragraph: `${deleteChapter.name} could not be Deleted`,
+      });
+      setBannerVisible(true);
+      return;
     }
-    setDeleteChapterModalVisible(false)
-    setBannerVisible(true)
-    setBannerText({title: 'Deleted', paragraph:`${deleteChapter.name} has been Deleted`})
-}
-const modalTitle = () =>{
- return <>Are you sure you want to <Text style={{color: '#800909'}}>Delete</Text> {deleteChapter.name}</>
-}
+    const newItems = chapters.filter((item) => item.id !== deleteChapter.id);
+    setChapters(newItems);
+    setDeleteChapterModalVisible(false);
+    setBannerVisible(true);
+    setBannerText({
+      title: "Deleted",
+      paragraph: `${deleteChapter.name} has been Deleted`,
+    });
+  };
+  const modalTitle = () => {
+    return (
+      <>
+        Are you sure you want to{" "}
+        <Text style={{ color: "#800909" }}>Delete</Text> {deleteChapter.name}
+      </>
+    );
+  };
   return (
     <>
       <View style={styles.container}>
-       {loading ?
-       <>
-       {skeleton.map(s =>
-        <View key={s} style={styles.skeletonItem}>
-          <Skeleton animation='wave' width={'80%'} height={40} /> 
-          <Skeleton animation='wave' circle width={40} height={40} />
-        </View>
-        )}
-       
-        </>
-        :
-        <ScrollView>
-          {chapters.length > 0 &&
-            chapters.map((c) => <Item key={c.id} chapter={c} />)}
+        {loading ? (
+          <>
+            {skeleton.map((s) => (
+              <View key={s} style={styles.skeletonItem}>
+                <Skeleton animation="wave" width={"80%"} height={40} />
+                <Skeleton animation="wave" circle width={40} height={40} />
+              </View>
+            ))}
+          </>
+        ) : (
+          <ScrollView>
+            {chapters.length > 0 &&
+              chapters.map((c) => <Item key={c.id} chapter={c} />)}
             <MaterialCommunityIcons
               onPress={handleNewChapter}
               style={{ alignSelf: "center" }}
@@ -160,9 +174,8 @@ const modalTitle = () =>{
               color="#DAA520"
               size={40}
             />
-        </ScrollView>
-       }
-        
+          </ScrollView>
+        )}
       </View>
       <ChapterModal
         modalVisible={modalVisible}
@@ -172,25 +185,26 @@ const modalTitle = () =>{
         setBannerVisible={setBannerVisible}
       />
       <CreateChapterModal
-      modalVisible={createChapterModalVisible}
-      setModalVisible={setCreateChapterModalVisible}
-      setBannerText={setBannerText}
-      setBannerVisible={setBannerVisible}
+        modalVisible={createChapterModalVisible}
+        setModalVisible={setCreateChapterModalVisible}
+        setBannerText={setBannerText}
+        setBannerVisible={setBannerVisible}
       />
-      {deleteChapter &&
-       <CustomModal
-       modalVisible={deleteChapterModalVisible}
-       onClose={() => setDeleteChapterModalVisible(false)}
-       onConfrim={handleConfirm}
-       Children={<></>}
-       title={modalTitle()}
-       />
-      }
-     
-        <Banner hideDialog={hideDialog} visible={bannerVisible} text={bannerText}/>
+      {deleteChapter && (
+        <CustomModal
+          modalVisible={deleteChapterModalVisible}
+          onClose={() => setDeleteChapterModalVisible(false)}
+          onConfrim={handleConfirm}
+          Children={<></>}
+          title={modalTitle()}
+        />
+      )}
+
+      <Banner
+        hideDialog={hideDialog}
+        visible={bannerVisible}
+        text={bannerText}
+      />
     </>
   );
 };
-
-
-

@@ -8,7 +8,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import ChapterApi from "../dist/api/ChapterApi";
 import { ip } from "../utils/constants";
 
-export const CreateChapterModal = ({modalVisible, setModalVisible, setBannerText, setBannerVisible}) =>{
+export const CreateChapterModal = ({modalVisible, setModalVisible, setBannerText, setBannerVisible, addChapterState}) =>{
 
   const [name, setName] = useState('')
   const [date, setDate] = useState(new Date())

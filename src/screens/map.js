@@ -32,9 +32,9 @@ export const Map = () => {
   });
   const [modalTitle, setModalTitle] = useState("");
   const [selectedMarker, setSelectedMarker] = useState(null);
-  const [date, setDate] = useState(0)
+  const [date, setDate] = useState('')
   const [time, setTime] = useState('')
-  const [year, setYear] = useState(0)
+  const [year, setYear] = useState('')
   const [season, setSeason] = useState('')
   const [event, setEvent] = useState('')
   const [render, setRender] = useState(false)
@@ -188,9 +188,8 @@ export const Map = () => {
         time,
         season,
         year,
-        events: [event]
+        events: event === "" ? [] : [event]
       }
-      console.log(locationRequest)
       const createLocation = await LocationApi.CreateAsync(token, ip, locationRequest)
       if(createLocation.isError){
         console.log(createLocation.error, "map.handleSave()");
@@ -513,8 +512,8 @@ export const Map = () => {
   return (
     <View style={{ flex: 1, alignItems: "center" }}>
       <Button
-        disabled={selectedMarker}
-        opacity={selectedMarker ? 0.5 : 1}
+        disabled={!!selectedMarker}
+        opacity={!!selectedMarker ? 0.5 : 1}
         onPress={toggleMarkerType}
         text={markerType}
       />
@@ -555,15 +554,15 @@ export const Map = () => {
                 longitude: marker.longitude,
               }}
               draggable={
-                selectedMarker ? marker.id === selectedMarker.id : false
+                !!selectedMarker ? marker.id === selectedMarker.id : false
               }
               title={marker.title}
               key={marker.id}
               description={marker.description}
               onPress={() => selectMarker(marker)}
               onLongPress={handleEdit}
-              style={{width: 120 , height:120}}
-              image={image[`${marker.type.toLowerCase()}`]}
+              // style={{width: 120 , height:120}}
+              // image={image[`${marker.type.toLowerCase()}`]}
             >
               <CustomCallout
                 title={marker.title}
@@ -580,7 +579,7 @@ export const Map = () => {
                 longitude: Number(location.x),
               }}
               draggable={
-                selectedMarker ? location.id === selectedMarker.id : false
+                !!selectedMarker ? location.id === selectedMarker.id : false
               }
               key={location.id}
               onPress={() => setSelectedMarker(location)}
@@ -592,7 +591,7 @@ export const Map = () => {
                   year: location.year,
                   season: location.season,
                 }}
-                description={location.events ?? "Nothing Important Happend!"}
+                description={location.events}
               />
             </Marker>
           ))}
@@ -604,8 +603,8 @@ export const Map = () => {
           text="Edit Object"
         /> :
         <Button
-          disabled={markerLocation === null}
-          opacity={markerLocation === null ? 0.5 : 1}
+          disabled={!markerLocation}
+          opacity={!markerLocation ? 0.5 : 1}
           onPress={handleSave}
           text="Save Object"
         />
@@ -617,15 +616,15 @@ export const Map = () => {
           text="Edit Location"
         /> :
         <Button
-          disabled={markerLocation === null}
-          opacity={markerLocation === null ? 0.5 : 1}
+          disabled={!markerLocation}
+          opacity={!markerLocation ? 0.5 : 1}
           onPress={handleSave}
           text="Save Location"
         />
       )}
       <Button
-        disabled={markerLocation === null}
-        opacity={markerLocation === null ? 0.5 : 1}
+        disabled={!markerLocation}
+        opacity={!markerLocation ? 0.5 : 1}
         onPress={handleCancel}
         text="Cancel"
       />

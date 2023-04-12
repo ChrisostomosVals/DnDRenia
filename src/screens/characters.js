@@ -52,6 +52,7 @@ export const Characters = ({ navigation }) => {
     },
     dropDownContainer: {
       marginTop: "40%",
+      zIndex: 7
     },
     body: {
       justifyContent: "space-around",
@@ -95,7 +96,7 @@ export const Characters = ({ navigation }) => {
           open={open}
           textStyle={styles.pageText}
           arrowIconStyle={{ backgroundColor: "#DAA520", borderRadius: 25 }}
-          selectedItemContainerStyle={{ backgroundColor: "#DAA520", zIndex: 100 }}
+          selectedItemContainerStyle={{ backgroundColor: "#DAA520" }}
           value={category}
           setValue={(e) => setCategory(e)}
           setOpen={(thisOpen) => setOpen(thisOpen)}
@@ -103,13 +104,9 @@ export const Characters = ({ navigation }) => {
           style={styles.dropDownStyle}
           closeOnBackPressed
           itemSeparator={true}
-          zIndex={7}
           listMode="SCROLLVIEW"
           scrollViewProps={{
             nestedScrollEnabled: true,
-            style:{
-              zIndex: 100 
-            } 
           }}
         />
       </View>
@@ -119,7 +116,7 @@ export const Characters = ({ navigation }) => {
             width: "80%",
             maxHeight: "70%",
             minHeight: '40%',
-            ...globalStyles.card,
+            ...globalStyles.card
           }}
         >
           <List.Section style={styles.list}>

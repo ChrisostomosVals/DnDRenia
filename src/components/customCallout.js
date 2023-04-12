@@ -2,7 +2,6 @@ import { Callout } from "react-native-maps";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { globalStyles } from "../utils/styles";
 
-
 export const CustomCallout = ({ title, description }) => {
   return (
     <Callout tooltip={true}>
@@ -18,13 +17,23 @@ export const CustomCallout2 = ({ title, description }) => {
   return (
     <Callout tooltip={true}>
       <View style={styles.view}>
-          <Text style={styles.title}>Date: {title.date} Time: {title.time}</Text>
-          <Text style={styles.title}>Year: {title.year} Season: {title.season}</Text>
-          {Array.isArray(description) ? (
-            description.map((d, index) => <Text style={globalStyles.textStyle} key={index}>{d}</Text>)
-          ) : (
-            <Text style={globalStyles.textStyle}>{description}</Text>
-          )}
+        <Text style={styles.title}>
+          Date: {title.date} Time: {title.time}
+        </Text>
+        <Text style={styles.title}>
+          Year: {title.year} Season: {title.season}
+        </Text>
+        {description.length > 0 ? (
+          description.map((d, index) => (
+            <Text style={globalStyles.textStyle} key={index}>
+              {d}
+            </Text>
+          ))
+        ) : (
+          <Text style={globalStyles.textStyle}>
+            Apparently nothing important happened here...
+          </Text>
+        )}
       </View>
     </Callout>
   );
