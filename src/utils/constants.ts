@@ -886,10 +886,12 @@ export const equipment = {
   ],
 };
 
-export const wait = (timeout) => {
+export const wait = (timeout: any) => {
+  // @ts-expect-error TS(2769): No overload matches this call.
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
+// @ts-expect-error TS(7030): Not all code paths return a value.
 export const getSoundEffectsMode = async () => {
   try {
     const mode = await AsyncStorage.getItem("sound-effects");
@@ -1766,7 +1768,7 @@ export const exoticWeapons = {
 
 
 
-export const ip = 'https://d8f8-2a02-214a-8329-3700-8071-581f-ca02-e3ea.eu.ngrok.io/gateway'
+export const ip = 'https://ec34-2a02-214a-8417-9700-9000-1ccb-88a4-ed3b.ngrok-free.app/gateway'
 
 export const skillsInit = [
   { abilityMod: 0, miscMod: 0, name: "ACROBATICS", ranks: 0, trained: false },

@@ -1,3 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-//# sourceMappingURL=UpdateCharacterDefinitionRequestModel.js.map
+export default interface UpdateCharacterDefinitionRequestModel<T> {
+    id: string;
+    updateDefinition: T[];
+}

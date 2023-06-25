@@ -6,13 +6,15 @@ import { Slider } from "@miblanchard/react-native-slider";
 import { useEffect, useState } from "react";
 import { ControlledTooltip } from "../utils/controllerToolTip";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+// @ts-expect-error TS(2306): File 'D:/chris/Coding/Mobile/DnDRenia/DnDRenia/src... Remove this comment to see the full error message
 import CharacterApi from "../dist/api/CharacterApi";
-import { Banner } from "./banner";
 import IonIcon from "react-native-vector-icons/Ionicons";
 import { ScrollView } from "react-native-gesture-handler";
 import { ip } from "../utils/constants";
 
-export const MainStats = ({ hero }) => {
+export const MainStats = ({
+  hero
+}: any) => {
   const [heroStats, setHeroStats] = useState();
   const [visible, setVisible] = useState(false);
   const [edit, setEdit] = useState(false);
@@ -61,19 +63,19 @@ export const MainStats = ({ hero }) => {
       if((isNaN(item.value) || item.value === "-") && renderedStats.includes(item.name)) item.value = 0;
     }
     setPropsShown({
-      strength: hero.stats.find(s => s.name === "Strength").value,
-      maxHp: hero.stats.find(s => s.name === "Max HP").value,
-      currentHp: hero.stats.find(s => s.name === "Current HP").value,
-      dexterity: hero.stats.find(s => s.name === "Dexterity").value,
-      constitution: hero.stats.find(s => s.name === "Constitution").value,
-      wisdom: hero.stats.find(s => s.name === "Wisdom").value,
-      charisma: hero.stats.find(s => s.name === "Charisma").value,
-      intelligence: hero.stats.find(s => s.name === "Intelligence").value,
-      level: hero.stats.find(s => s.name === "Level").value,
-      armorClass: hero.stats.find(s => s.name === "Armor Class").value,
-      speed: hero.stats.find(s => s.name === "Speed").value,
-      baseAttackBonus: hero.stats.find(s => s.name === "Base Attack Bonus").value,
-      experience: hero.stats.find(s => s.name === "Experience").value
+      strength: hero.stats.find((s: any) => s.name === "Strength").value,
+      maxHp: hero.stats.find((s: any) => s.name === "Max HP").value,
+      currentHp: hero.stats.find((s: any) => s.name === "Current HP").value,
+      dexterity: hero.stats.find((s: any) => s.name === "Dexterity").value,
+      constitution: hero.stats.find((s: any) => s.name === "Constitution").value,
+      wisdom: hero.stats.find((s: any) => s.name === "Wisdom").value,
+      charisma: hero.stats.find((s: any) => s.name === "Charisma").value,
+      intelligence: hero.stats.find((s: any) => s.name === "Intelligence").value,
+      level: hero.stats.find((s: any) => s.name === "Level").value,
+      armorClass: hero.stats.find((s: any) => s.name === "Armor Class").value,
+      speed: hero.stats.find((s: any) => s.name === "Speed").value,
+      baseAttackBonus: hero.stats.find((s: any) => s.name === "Base Attack Bonus").value,
+      experience: hero.stats.find((s: any) => s.name === "Experience").value
     })
   };
   const styles = StyleSheet.create({
@@ -109,6 +111,7 @@ export const MainStats = ({ hero }) => {
   const handleEdit = async () => {
     setEdit(!edit);
     const token = await AsyncStorage.getItem("token");
+    // @ts-expect-error TS(2532): Object is possibly 'undefined'.
     const playerStats = await CharacterApi.GetStatsAsync(token, ip, heroStats.id);
     if(playerStats.isError){
       console.log(playerStats.error)
@@ -117,30 +120,33 @@ export const MainStats = ({ hero }) => {
     for(let item of playerStats.data){
       if((isNaN(item.value) || item.value === "-") && renderedStats.includes(item.name)) item.value = 0;
     }
+    // @ts-expect-error TS(2345): Argument of type '{ id: any; stats: any; }' is not... Remove this comment to see the full error message
     setHeroStats({id: heroStats.id, stats: playerStats.data});
     setPropsShown({
-      strength: playerStats.data.find(s => s.name === "Strength").value,
-      maxHp: playerStats.data.find(s => s.name === "Max HP").value,
-      currentHp: playerStats.data.find(s => s.name === "Current HP").value,
-      dexterity: playerStats.data.find(s => s.name === "Dexterity").value,
-      constitution: playerStats.data.find(s => s.name === "Constitution").value,
-      wisdom: playerStats.data.find(s => s.name === "Wisdom").value,
-      charisma: playerStats.data.find(s => s.name === "Charisma").value,
-      intelligence: playerStats.data.find(s => s.name === "Intelligence").value,
-      level: playerStats.data.find(s => s.name === "Level").value,
-      armorClass: playerStats.data.find(s => s.name === "Armor Class").value,
-      speed: playerStats.data.find(s => s.name === "Speed").value,
-      baseAttackBonus: playerStats.data.find(s => s.name === "Base Attack Bonus").value,
-      experience: playerStats.data.find(s => s.name === "Experience").value
+      strength: playerStats.data.find((s: any) => s.name === "Strength").value,
+      maxHp: playerStats.data.find((s: any) => s.name === "Max HP").value,
+      currentHp: playerStats.data.find((s: any) => s.name === "Current HP").value,
+      dexterity: playerStats.data.find((s: any) => s.name === "Dexterity").value,
+      constitution: playerStats.data.find((s: any) => s.name === "Constitution").value,
+      wisdom: playerStats.data.find((s: any) => s.name === "Wisdom").value,
+      charisma: playerStats.data.find((s: any) => s.name === "Charisma").value,
+      intelligence: playerStats.data.find((s: any) => s.name === "Intelligence").value,
+      level: playerStats.data.find((s: any) => s.name === "Level").value,
+      armorClass: playerStats.data.find((s: any) => s.name === "Armor Class").value,
+      speed: playerStats.data.find((s: any) => s.name === "Speed").value,
+      baseAttackBonus: playerStats.data.find((s: any) => s.name === "Base Attack Bonus").value,
+      experience: playerStats.data.find((s: any) => s.name === "Experience").value
     })
   };
   const hideDialog = () => setVisible(false);
   const handleSave = async () => {
     const token = await AsyncStorage.getItem("token");
     setHeroStats(s => {
-      s.stats.forEach(c => {
+      // @ts-expect-error TS(2532): Object is possibly 'undefined'.
+      s.stats.forEach((c: any) => {
         Object.keys(propsShown).forEach(p => {
           if(p.toUpperCase() == c.name.toUpperCase().replace(/\s/g,'')){
+            // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             c.value = propsShown[p].toString();
           }
         })
@@ -149,17 +155,23 @@ export const MainStats = ({ hero }) => {
       return s;
     });
     const update = {
+      // @ts-expect-error TS(2532): Object is possibly 'undefined'.
       id: heroStats.id,
+      // @ts-expect-error TS(2532): Object is possibly 'undefined'.
       updateDefinition: heroStats.stats
     }
     const updateStats = await CharacterApi.UpdateStatsAsync(token, ip, update);
     if (updateStats.isError) {
       console.log(updateStats.error, "mainStats.updateStats")
+      // @ts-expect-error TS(2345): Argument of type '"Error Occurred"' is not assigna... Remove this comment to see the full error message
       setTitle("Error Occurred");
+      // @ts-expect-error TS(2345): Argument of type '"Your Stats could not been Saved... Remove this comment to see the full error message
       setParagraph("Your Stats could not been Saved!");
       setVisible(true);
     } else {
+      // @ts-expect-error TS(2345): Argument of type '"Stats Updated"' is not assignab... Remove this comment to see the full error message
       setTitle("Stats Updated");
+      // @ts-expect-error TS(2345): Argument of type '"Your Stats have been Saved!"' i... Remove this comment to see the full error message
       setParagraph("Your Stats have been Saved!");
       setVisible(true);
     }
@@ -222,6 +234,7 @@ export const MainStats = ({ hero }) => {
             }}
             trackStyle={styles.track}
             onValueChange={(e) =>
+              // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
               setPropsShown({ ...propsShown, strength: parseInt(e[0]) })
             }
             value={propsShown.strength}
@@ -252,6 +265,7 @@ export const MainStats = ({ hero }) => {
             }}
             trackStyle={styles.track}
             onValueChange={(e) =>
+              // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
               setPropsShown({ ...propsShown, maxHp: parseInt(e[0]) })
             }
             value={propsShown.maxHp}
@@ -282,6 +296,7 @@ export const MainStats = ({ hero }) => {
             }}
             trackStyle={styles.track}
             onValueChange={(e) =>
+              // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
               setPropsShown({ ...propsShown, currentHp: parseInt(e[0]) })
             }
             value={propsShown.currentHp}
@@ -311,6 +326,7 @@ export const MainStats = ({ hero }) => {
             }}
             trackStyle={styles.track}
             onValueChange={(e) =>
+              // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
               setPropsShown({ ...propsShown, dexterity: parseInt(e[0]) })
             }
             value={propsShown.dexterity}
@@ -340,6 +356,7 @@ export const MainStats = ({ hero }) => {
             }}
             trackStyle={styles.track}
             onValueChange={(e) =>
+              // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
               setPropsShown({ ...propsShown, constitution: parseInt(e[0]) })
             }
             value={propsShown.constitution}
@@ -369,6 +386,7 @@ export const MainStats = ({ hero }) => {
             }}
             trackStyle={styles.track}
             onValueChange={(e) =>
+              // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
               setPropsShown({ ...propsShown, wisdom: parseInt(e[0]) })
             }
             value={propsShown.wisdom}
@@ -398,6 +416,7 @@ export const MainStats = ({ hero }) => {
             }}
             trackStyle={styles.track}
             onValueChange={(e) =>
+              // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
               setPropsShown({ ...propsShown, charisma: parseInt(e[0]) })
             }
             value={propsShown.charisma}
@@ -427,6 +446,7 @@ export const MainStats = ({ hero }) => {
             }}
             trackStyle={styles.track}
             onValueChange={(e) =>
+              // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
               setPropsShown({ ...propsShown, intelligence: parseInt(e[0]) })
             }
             value={propsShown.intelligence}
@@ -460,6 +480,7 @@ export const MainStats = ({ hero }) => {
             }}
             trackStyle={styles.track}
             onValueChange={(e) =>
+              // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
               setPropsShown({ ...propsShown, level: parseInt(e[0]), experience: 0 })
             }
             value={propsShown.level}
@@ -489,6 +510,7 @@ export const MainStats = ({ hero }) => {
             }}
             trackStyle={styles.track}
             onValueChange={(e) =>
+              // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
               setPropsShown({ ...propsShown, armorClass: parseInt(e[0]) })
             }
             value={propsShown.armorClass}
@@ -518,6 +540,7 @@ export const MainStats = ({ hero }) => {
             }}
             trackStyle={styles.track}
             onValueChange={(e) =>
+              // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
               setPropsShown({ ...propsShown, speed: parseInt(e[0]) })
             }
             value={propsShown.speed}
@@ -547,6 +570,7 @@ export const MainStats = ({ hero }) => {
             }}
             trackStyle={styles.track}
             onValueChange={(e) =>
+              // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
               setPropsShown({ ...propsShown, baseAttackBonus: parseInt(e[0]) })
             }
             value={propsShown.baseAttackBonus}
@@ -563,18 +587,21 @@ export const MainStats = ({ hero }) => {
           <Slider
             animateTransitions
             maximumValue={xpArray[propsShown.level]}
+            // @ts-expect-error TS(2532): Object is possibly 'undefined'.
             minimumTrackTintColor={`rgb(${propsShown.experience * (255/xpArray[propsShown.level])},${
               255 / propsShown.experience
             },0)`}
             containerStyle={{ width: "80%" }}
             thumbStyle={{
               ...styles.thumb,
+              // @ts-expect-error TS(2532): Object is possibly 'undefined'.
               backgroundColor: `rgb(${propsShown.experience * (255/xpArray[propsShown.level])},${
                 255 / (propsShown.experience + 1)
               },0)`,
             }}
             trackStyle={styles.track}
             onValueChange={(e) =>
+              // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
               setPropsShown({ ...propsShown, experience: parseInt(e[0]) })
             }
             value={propsShown.experience}
@@ -583,6 +610,7 @@ export const MainStats = ({ hero }) => {
 
         </View>
         <View style={styles.rowContainer}>
+          // @ts-expect-error TS(2769): No overload matches this call.
           <TextInput keyboardType="numeric" editable={edit} value={propsShown.experience} onChangeText={(e) =>
               setPropsShown({ ...propsShown, experience: parseInt(e) })
             } style={globalStyles.textStyle}></TextInput>

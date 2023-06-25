@@ -12,11 +12,13 @@ import { globalStyles } from "../utils/styles";
 import { Banner } from "../components/banner";
 import IonIcon from "react-native-vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+// @ts-expect-error TS(2306): File 'D:/chris/Coding/Mobile/DnDRenia/DnDRenia/src... Remove this comment to see the full error message
 import ConnectApi from "../dist/api/ConnectApi"
+// @ts-expect-error TS(2306): File 'D:/chris/Coding/Mobile/DnDRenia/DnDRenia/src... Remove this comment to see the full error message
 import UserApi from "../dist/api/UserApi";
 import { ip } from "../utils/constants";
 
-export const Login = (props) => {
+export const Login = (props: any) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);

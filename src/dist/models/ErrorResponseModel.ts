@@ -1,21 +1,26 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-class ErrorResponseModel {
-    constructor(error, message, exception, name) {
+export default class ErrorResponseModel {
+    public error: string | null;
+    public message: string | null;
+    protected exception: Error | null;
+    public name: string | null;
+
+
+    constructor(error: string, message: string, exception: Error | null, name: string | null){
         this.error = error;
         this.message = message;
         this.exception = exception;
         this.name = name;
     }
-    static NewErrorMsg(error, message) {
+
+    public static NewErrorMsg(error: string, message: string) : ErrorResponseModel{
         return new ErrorResponseModel(error, message, null, null);
     }
-    static NewErrorExMsg(error, message, exception) {
+
+    public static NewErrorExMsg(error: string, message: string, exception: Error) : ErrorResponseModel{
         return new ErrorResponseModel(error, message, exception, exception.name);
     }
-    static NewError(error, exception) {
+
+    public static NewError(error: string, exception: Error) : ErrorResponseModel{
         return new ErrorResponseModel(error, exception.message, exception, exception.name);
     }
 }
-exports.default = ErrorResponseModel;
-//# sourceMappingURL=ErrorResponseModel.js.map

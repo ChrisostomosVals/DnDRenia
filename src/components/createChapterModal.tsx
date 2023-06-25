@@ -5,10 +5,17 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import Modal from "react-native-modal";
 import Moment from "moment";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+// @ts-expect-error TS(2306): File 'D:/chris/Coding/Mobile/DnDRenia/DnDRenia/src... Remove this comment to see the full error message
 import ChapterApi from "../dist/api/ChapterApi";
 import { ip } from "../utils/constants";
 
-export const CreateChapterModal = ({modalVisible, setModalVisible, setBannerText, setBannerVisible, addChapterState}) =>{
+export const CreateChapterModal = ({
+  modalVisible,
+  setModalVisible,
+  setBannerText,
+  setBannerVisible,
+  addChapterState
+}: any) =>{
 
   const [name, setName] = useState('')
   const [date, setDate] = useState(new Date())
@@ -59,6 +66,7 @@ export const CreateChapterModal = ({modalVisible, setModalVisible, setBannerText
             color: 'white',
             margin: 10
           },
+          // @ts-expect-error TS(1117): An object literal cannot have multiple properties ... Remove this comment to see the full error message
           buttons: {
             flexDirection: "row",
             justifyContent: "space-around",
@@ -86,7 +94,7 @@ export const CreateChapterModal = ({modalVisible, setModalVisible, setBannerText
     const openDatePicker = () =>{
       setShowDatePicker(true)
     }
-    const handleDate = (event, selectedDate) =>{
+    const handleDate = (event: any, selectedDate: any) =>{
       setShowDatePicker(false)
         if(event.type === 'set'){
           setDate(Moment(selectedDate).utcOffset(0).set({hour:12,minute:0,second:0,millisecond:0}).toDate())
@@ -111,6 +119,7 @@ export const CreateChapterModal = ({modalVisible, setModalVisible, setBannerText
                 }}
               />
               {showDatePicker && 
+              // @ts-expect-error TS(2322): Type '{ fontFamily: string; color: string; }' is n... Remove this comment to see the full error message
               <DateTimePicker mode="date" style={globalStyles.textStyle} value={date} onTouchCancel={() => setShowDatePicker(false)} onChange={handleDate}></DateTimePicker>
               }
               
@@ -130,8 +139,10 @@ export const CreateChapterModal = ({modalVisible, setModalVisible, setBannerText
             <Text style={{...globalStyles.textStyle, fontSize: 30}}>Cancel</Text>
         </TouchableOpacity>
         <TouchableOpacity
+                  // @ts-expect-error TS(2367): This condition will always return 'false' since th... Remove this comment to see the full error message
                   style={{...globalStyles.button, opacity: story === '' || date === '' || name === '' ? 0.5 : 1}}
                   onPress={handleSave}
+                  // @ts-expect-error TS(2367): This condition will always return 'false' since th... Remove this comment to see the full error message
                   disabled={story === '' || date === '' || name === ''}
                 >
             <Text style={{...globalStyles.textStyle, fontSize: 30}}>Save</Text>

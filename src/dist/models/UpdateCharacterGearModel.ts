@@ -1,3 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-//# sourceMappingURL=UpdateCharacterGearModel.js.map
+export default interface UpdateCharacterGearRequestModel {
+    id: number;
+    name: string;
+    quantity: number;
+    weight: number;
+}

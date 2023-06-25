@@ -1,6 +1,6 @@
 import { Dimensions } from 'react-native';
 
-const msp = (dim, limit) => {
+const msp = (dim: any, limit: any) => {
   return dim.scale * dim.width >= limit || dim.scale * dim.height >= limit;
 };
 
@@ -11,6 +11,7 @@ const isPortrait = () => {
 };
 
 const isLandscape = () => {
+  // @ts-expect-error TS(2304): Cannot find name 'dim'.
   return dim.width >= dim.height;
 };
 

@@ -1,184 +1,153 @@
-"use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const ApiResponseModel_1 = __importDefault(require("../models/ApiResponseModel"));
-const ErrorResponseModel_1 = __importDefault(require("../models/ErrorResponseModel"));
-const constants_1 = require("../utils/constants");
-const httpService_1 = __importDefault(require("../utils/httpService"));
-class UserApi {
-    static GetAsync(token, url) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.userEndpoint}`;
-                const response = yield httpService_1.default.getAsync(token, uri);
-                if (response.ok) {
-                    const data = yield response.json();
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(data, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(data, null);
+
+
+import ApiResponseModel from "../models/ApiResponseModel";
+import UserModel from "../models/UserModel";
+import ErrorResponseModel from "../models/ErrorResponseModel";
+import { userEndpoint } from "../utils/constants";
+import HttpClient from "../utils/httpService";
+import InsertUserRequestModel from "../models/InsertUserRequestModel";
+import UpdateUserRequestModel from "../models/UpdateUserRequestModel";
+import ChangePasswordRequestModel from "../models/ChangePasswordModel";
+
+
+
+export default class UserApi{
+    public static async GetAsync(token:string, url: string) : Promise<ApiResponseModel<Array<UserModel>>> {
+        try {
+            const uri = `${url}/${userEndpoint}`;
+            const response = await HttpClient.getAsync(token, uri)
+            if(response.ok){
+                const data = await response.json();
+                if(data === null){
+                    return new ApiResponseModel<UserModel[]>(data, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(errorMsg.error, errorMsg.message));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<UserModel[]>(data, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("UserApi.GetAsync().Exception", error));
-                ;
+            else if(response.status == 400 || response.status == 404){
+                const errorMsg: ErrorResponseModel = await response.json();
+                return new ApiResponseModel<UserModel[]>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
             }
-        });
+            else if (response.status == 401){
+                const error = response.statusText;
+                return new ApiResponseModel<UserModel[]>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<UserModel[]>(null, ErrorResponseModel.NewError("UserApi.GetAsync().Exception", error));;
+        }
     }
-    static GetByIdAsync(token, url, id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.userEndpoint}/${id}`;
-                const response = yield httpService_1.default.getAsync(token, uri);
-                if (response.ok) {
-                    const data = yield response.json();
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(data, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(data, null);
+    public static async GetByIdAsync(token:string, url: string, id: number) : Promise<ApiResponseModel<UserModel>> {
+        try {
+            const uri = `${url}/${userEndpoint}/${id}`;
+            const response = await HttpClient.getAsync(token, uri)
+            if(response.ok){
+                const data = await response.json();
+                if(data === null){
+                    return new ApiResponseModel<UserModel>(data, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(errorMsg.error, errorMsg.message));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<UserModel>(data, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("UserApi.GetByIdAsync().Exception", error));
-                ;
+            else if(response.status == 400 || response.status == 404){
+                const errorMsg: ErrorResponseModel = await response.json();
+                return new ApiResponseModel<UserModel>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
             }
-        });
+            else if (response.status == 401){
+                const error = response.statusText;
+                return new ApiResponseModel<UserModel>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<UserModel>(null, ErrorResponseModel.NewError("UserApi.GetByIdAsync().Exception", error));;
+        }
     }
-    static GetProfileAsync(token, url) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.userEndpoint}/profile`;
-                const response = yield httpService_1.default.getAsync(token, uri);
-                if (response.ok) {
-                    const data = yield response.json();
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(data, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(data, null);
+    public static async GetProfileAsync(token:string, url: string) : Promise<ApiResponseModel<UserModel>> {
+        try {
+            const uri = `${url}/${userEndpoint}/profile`;
+            const response = await HttpClient.getAsync(token, uri)
+            if(response.ok){
+                const data = await response.json();
+                if(data === null){
+                    return new ApiResponseModel<UserModel>(data, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(errorMsg.error, errorMsg.message));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<UserModel>(data, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("UserApi.GetProfileAsync().Exception", error));
-                ;
+            else if(response.status == 400 || response.status == 404){
+                const errorMsg: ErrorResponseModel = await response.json();
+                return new ApiResponseModel<UserModel>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
             }
-        });
+            else if (response.status == 401){
+                const error = response.statusText;
+                return new ApiResponseModel<UserModel>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<UserModel>(null, ErrorResponseModel.NewError("UserApi.GetProfileAsync().Exception", error));;
+        }
     }
-    static InsertAsync(token, url, request) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.userEndpoint}`;
-                const response = yield httpService_1.default.postAsync(token, uri, request);
-                if (response.ok) {
-                    const data = response.statusText;
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(null, null);
+    public static async InsertAsync(token:string, url: string, request: InsertUserRequestModel) : Promise<ApiResponseModel<void>> {
+        try {
+            const uri = `${url}/${userEndpoint}`;
+            const response = await HttpClient.postAsync(token, uri, request)
+            if(response.ok){
+                const data = response.statusText;
+                if(data === null){
+                    return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(errorMsg.error, errorMsg.message));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<void>(null, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("UserApi.InsertAsync().Exception", error));
-                ;
+            else if(response.status == 400 || response.status == 404){
+                const errorMsg: ErrorResponseModel = await response.json();
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
             }
-        });
+            else if (response.status == 401){
+                const error = response.statusText;
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("UserApi.InsertAsync().Exception", error));;
+        }
     }
-    static UpdateAsync(token, url, request) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.userEndpoint}`;
-                const response = yield httpService_1.default.putAsync(token, uri, request);
-                if (response.ok) {
-                    const data = response.statusText;
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(null, null);
+    public static async UpdateAsync(token:string, url: string, request: UpdateUserRequestModel) : Promise<ApiResponseModel<void>> {
+        try {
+            const uri = `${url}/${userEndpoint}`;
+            const response = await HttpClient.putAsync(token, uri, request)
+            if(response.ok){
+                const data = response.statusText;
+                if(data === null){
+                    return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(errorMsg.error, errorMsg.message));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<void>(null, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("UserApi.UpdateAsync().Exception", error));
-                ;
+            else if(response.status == 400 || response.status == 404){
+                const errorMsg: ErrorResponseModel = await response.json();
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
             }
-        });
+            else if (response.status == 401){
+                const error = response.statusText;
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("UserApi.UpdateAsync().Exception", error));;
+        }
     }
-    static ChangePassword(token, url, id, request) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.userEndpoint}/${id}/changepassword`;
-                const response = yield httpService_1.default.patchAsync(token, uri, request);
-                if (response.ok) {
-                    const data = response.status;
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(null, null);
+    public static async ChangePassword(token:string, url: string, id: string, request: ChangePasswordRequestModel) : Promise<ApiResponseModel<void>> {
+        try {
+            const uri = `${url}/${userEndpoint}/${id}/changepassword`;
+            const response = await HttpClient.patchAsync(token, uri, request)
+            if(response.ok){
+                const data = response.status;
+                if(data === null){
+                    return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(errorMsg.error, errorMsg.message));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<void>(null, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("UserApi.ChangePassword().Exception", error));
-                ;
+            else if(response.status == 400 || response.status == 404){
+                const errorMsg: ErrorResponseModel = await response.json();
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
             }
-        });
+            else if (response.status == 401){
+                const error = response.statusText;
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("UserApi.ChangePassword().Exception", error));;
+        }
     }
 }
-exports.default = UserApi;
-//# sourceMappingURL=UserApi.js.map

@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+// @ts-expect-error TS(2306): File 'D:/chris/Coding/Mobile/DnDRenia/DnDRenia/src... Remove this comment to see the full error message
 import ChapterApi from "../dist/api/ChapterApi";
 import { useIsFocused } from "@react-navigation/native";
 import { globalStyles } from "../utils/styles";
@@ -82,7 +83,9 @@ export const Chapters = () => {
     },
   });
 
-  const Item = ({ chapter }) => {
+  const Item = ({
+    chapter
+  }: any) => {
     return (
       <View style={styles.itemLine}>
         <View style={{ flex: 9 }}>
@@ -107,11 +110,11 @@ export const Chapters = () => {
       </View>
     );
   };
-  const handleChapter = (chapter) => {
+  const handleChapter = (chapter: any) => {
     setChapter(chapter);
     setModalVisible(true);
   };
-  const handleDelete = (id) => {
+  const handleDelete = (id: any) => {
     setDeleteChapter(id);
     setDeleteChapterModalVisible(true);
   };
@@ -123,23 +126,27 @@ export const Chapters = () => {
   };
   const handleConfirm = async () => {
     const token = await AsyncStorage.getItem("token");
+    // @ts-expect-error TS(2532): Object is possibly 'undefined'.
     const deleted = await ChapterApi.DeleteAsync(token, ip, deleteChapter.id);
     if (deleted.isError) {
       console.log(deleted.error);
       setDeleteChapterModalVisible(false);
       setBannerText({
         title: "Error",
+        // @ts-expect-error TS(2532): Object is possibly 'undefined'.
         paragraph: `${deleteChapter.name} could not be Deleted`,
       });
       setBannerVisible(true);
       return;
     }
+    // @ts-expect-error TS(2339): Property 'id' does not exist on type 'never'.
     const newItems = chapters.filter((item) => item.id !== deleteChapter.id);
     setChapters(newItems);
     setDeleteChapterModalVisible(false);
     setBannerVisible(true);
     setBannerText({
       title: "Deleted",
+      // @ts-expect-error TS(2532): Object is possibly 'undefined'.
       paragraph: `${deleteChapter.name} has been Deleted`,
     });
   };
@@ -147,6 +154,7 @@ export const Chapters = () => {
     return (
       <>
         Are you sure you want to{" "}
+        // @ts-expect-error TS(2532): Object is possibly 'undefined'.
         <Text style={{ color: "#800909" }}>Delete</Text> {deleteChapter.name}
       </>
     );
@@ -158,6 +166,7 @@ export const Chapters = () => {
           <>
             {skeleton.map((s) => (
               <View key={s} style={styles.skeletonItem}>
+                // @ts-expect-error TS(2322): Type 'string' is not assignable to type 'number'.
                 <Skeleton animation="wave" width={"80%"} height={40} />
                 <Skeleton animation="wave" circle width={40} height={40} />
               </View>
@@ -166,6 +175,7 @@ export const Chapters = () => {
         ) : (
           <ScrollView>
             {chapters.length > 0 &&
+              // @ts-expect-error TS(2339): Property 'id' does not exist on type 'never'.
               chapters.map((c) => <Item key={c.id} chapter={c} />)}
             <MaterialCommunityIcons
               onPress={handleNewChapter}

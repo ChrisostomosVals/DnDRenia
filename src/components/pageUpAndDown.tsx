@@ -3,12 +3,19 @@ import { Text, StyleSheet, TouchableOpacity } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { globalStyles } from "../utils/styles";
-export const PageUpAndDown = ({ page, setPage, equipment, parent, pageLength }) => {
+export const PageUpAndDown = ({
+  page,
+  setPage,
+  equipment,
+  parent,
+  pageLength
+}: any) => {
   const [openPageSelection, setOpenPageSelection] = useState(false)
   const [numberPages, setNumberPages] = useState([])
   useEffect(() =>{
     setNumberPages([])
     for(let i = 0; i <= pageLength; i++){
+      // @ts-expect-error TS(2345): Argument of type '(pages: never[]) => { value: num... Remove this comment to see the full error message
       setNumberPages(pages => [...pages, {value: i, label: i+1}])
     }
   },[equipment])
@@ -46,19 +53,19 @@ export const PageUpAndDown = ({ page, setPage, equipment, parent, pageLength }) 
       marginBottom: 10,
     },
   });
-  const handlePage = (action) => {
+  const handlePage = (action: any) => {
     if(parent === 'cart'){
       if (action === "up" && (page + 1) * 4 < equipment.length) {
-        setPage((page) => ++page);
+        setPage((page: any) => ++page);
       } else if (action === "down" && page > 0) {
-        setPage((page) => --page);
+        setPage((page: any) => --page);
       }
     }
     else{
       if (action === "up" && (page + 1) * 8 < equipment.length) {
-        setPage((page) => ++page);
+        setPage((page: any) => ++page);
       } else if (action === "down" && page > 0) {
-        setPage((page) => --page);
+        setPage((page: any) => --page);
       }
     }
   };
@@ -94,6 +101,7 @@ export const PageUpAndDown = ({ page, setPage, equipment, parent, pageLength }) 
         setOpen={setOpenPageSelection}
         items={numberPages}
         value={page}
+        // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
         setValue={(e) => setPage(e())}
         textStyle={styles.pageText}
         style={styles.dropDownStyle}

@@ -1,3 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-//# sourceMappingURL=UserRoleModel.js.map
+export default interface UserRoleModel {
+    id: string;
+    role: string;
+}

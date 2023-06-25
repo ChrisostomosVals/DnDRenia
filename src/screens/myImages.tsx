@@ -14,13 +14,16 @@ import {
 import { globalStyles } from "../utils/styles";
 import { useFocusEffect } from "@react-navigation/native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+// @ts-expect-error TS(2306): File 'D:/chris/Coding/Mobile/DnDRenia/DnDRenia/src... Remove this comment to see the full error message
 import CharacterApi from "../dist/api/CharacterApi";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Banner } from "../components/banner";
+// @ts-expect-error TS(2306): File 'D:/chris/Coding/Mobile/DnDRenia/DnDRenia/src... Remove this comment to see the full error message
 import { MediaApi } from "../dist/api/MediaApi";
 import { CustomModal } from "../components/CustomModal";
 import { ip } from "../utils/constants";
 
+// @ts-expect-error TS(2339): Property 'route' does not exist on type '{}'.
 export const MyImages = memo(function MyImages({ route }) {
   const { heroId, navigation } = route.params;
   const width = Dimensions.get("window").width;
@@ -38,6 +41,7 @@ export const MyImages = memo(function MyImages({ route }) {
   const [render, setRender] = useState(false)
   useEffect(() => {
     setModalVisible(false);
+    // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
     setDeleteItem();
     fetchImages();
   }, [route, render]);
@@ -71,6 +75,7 @@ export const MyImages = memo(function MyImages({ route }) {
         fileReaderInstance.readAsDataURL(downloadFile.data);
         fileReaderInstance.onload = () => {
           let base64data = fileReaderInstance.result;
+          // @ts-expect-error TS(2345): Argument of type '(img: never[]) => { image: strin... Remove this comment to see the full error message
           setImages((img) => [
             ...img,
             {
@@ -81,7 +86,9 @@ export const MyImages = memo(function MyImages({ route }) {
             },
           ]);
         };
+        // @ts-expect-error TS(2345): Argument of type '(desc: never[]) => any[]' is not... Remove this comment to see the full error message
         setDescriptions((desc) => [...desc, prop.description]);
+        // @ts-expect-error TS(2345): Argument of type '(desc: never[]) => any[]' is not... Remove this comment to see the full error message
         setInitDesc((desc) => [...desc, prop.description]);
       }
       }
@@ -94,12 +101,14 @@ export const MyImages = memo(function MyImages({ route }) {
         return true;
       };
       BackHandler.addEventListener("hardwareBackPress", onBackPress);
+      // @ts-expect-error TS(2554): Expected 2 arguments, but got 1.
       return () => BackHandler.removeEventListener("hardwareBackPress");
     }, [])
   );
-  const handleDescription = (e, index) => {
+  const handleDescription = (e: any, index: any) => {
     setDescriptions((desc) =>
       desc.map((d, indx) => {
+        // @ts-expect-error TS(2322): Type 'any' is not assignable to type 'never'.
         if (indx === index) d = e;
         return d;
       })
@@ -118,6 +127,7 @@ export const MyImages = memo(function MyImages({ route }) {
       return;
     }
     for (let prop of props.data) {
+      // @ts-expect-error TS(2339): Property 'value' does not exist on type 'never'.
       let item = images.find((i) => i.value === prop.value);
       if (item) {
         prop.description = descriptions[images.indexOf(item)];
@@ -174,7 +184,7 @@ export const MyImages = memo(function MyImages({ route }) {
         JSON.stringify(initDesc) === JSON.stringify(descriptions) ? 0.5 : 1,
     },
   });
-  const handleDelete = async(item) =>{
+  const handleDelete = async (item: any) => {
     setModalVisible(true)
     setDeleteItem(item)
   }
@@ -190,7 +200,8 @@ export const MyImages = memo(function MyImages({ route }) {
       setBannerVisible(true);
       return;
     }
-    props.data = props.data.filter(d => deleteItem.value !== d.value)
+    // @ts-expect-error TS(2532): Object is possibly 'undefined'.
+    props.data = props.data.filter((d: any) => deleteItem.value !== d.value)
     const updateProps = {
       id: heroId,
       updateDefinition: props.data,
@@ -210,6 +221,7 @@ export const MyImages = memo(function MyImages({ route }) {
       setBannerVisible(true);
       return;
     }
+    // @ts-expect-error TS(2532): Object is possibly 'undefined'.
     const deleteImage = await MediaApi.DeleteAsync(token, ip, encodeURIComponent(deleteItem.value))
     if(deleteImage.isError){
         console.log(deleteImage.error, 'deleteImage')
@@ -221,6 +233,7 @@ export const MyImages = memo(function MyImages({ route }) {
           setBannerVisible(true);
           return;
     }
+    // @ts-expect-error TS(2339): Property 'value' does not exist on type 'never'.
     const newItems = images.filter(img => img.value !== deleteItem.value);
     setImages(newItems)
     setBannerText({
@@ -263,6 +276,7 @@ export const MyImages = memo(function MyImages({ route }) {
               style={{ right: 10, top: 10, position: "absolute" }}
             />
             <Image
+              // @ts-expect-error TS(2532): Object is possibly 'undefined'.
               source={{ uri: images[index].image }}
               style={{ width: width, height: height / 2 }}
             />

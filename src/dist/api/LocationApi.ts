@@ -1,188 +1,157 @@
-"use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const ApiResponseModel_1 = __importDefault(require("../models/ApiResponseModel"));
-const ErrorResponseModel_1 = __importDefault(require("../models/ErrorResponseModel"));
-const constants_1 = require("../utils/constants");
-const httpService_1 = __importDefault(require("../utils/httpService"));
-class LocationApi {
-    static GetAsync(token, url) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.locationEndpoint}`;
-                const response = yield httpService_1.default.getAsync(token, uri);
-                if (response.ok) {
-                    const data = yield response.json();
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(data, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(data, null);
+
+
+import ApiResponseModel from "../models/ApiResponseModel";
+import LocationModel from "../models/LocationModel";
+import ErrorResponseModel from "../models/ErrorResponseModel";
+import { locationEndpoint } from "../utils/constants";
+import HttpClient from "../utils/httpService";
+import InsertLocationRequestModel from "../models/InsertLocationRequestModel";
+import UpdateLocationRequestModel from "../models/UpdateLocationRequestModel";
+
+
+
+export default class LocationApi {
+    public static async GetAsync(token: string, url: string): Promise<ApiResponseModel<LocationModel[]>> {
+        try {
+            const uri = `${url}/${locationEndpoint}`;
+            const response = await HttpClient.getAsync(token, uri)
+            if (response.ok) {
+                const data = await response.json();
+                if (data === null) {
+                    return new ApiResponseModel<LocationModel[]>(data, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(errorMsg.error, errorMsg.message));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<LocationModel[]>(data, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("LocationApi.GetAsync().Exception", error));
-                ;
+            else if (response.status == 400 || response.status == 404) {
+                const errorMsg: ErrorResponseModel = await response.json();
+                return new ApiResponseModel<LocationModel[]>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
             }
-        });
+            else if (response.status == 401) {
+                const error = response.statusText;
+                return new ApiResponseModel<LocationModel[]>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+
+        } catch (error) {
+            return new ApiResponseModel<LocationModel[]>(null, ErrorResponseModel.NewError("LocationApi.GetAsync().Exception", error));;
+        }
     }
-    static GetLatestAsync(token, url) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.locationEndpoint}/?latest=true`;
-                const response = yield httpService_1.default.getAsync(token, uri);
-                if (response.ok) {
-                    const data = yield response.json();
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(data, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(data, null);
+    public static async GetLatestAsync(token: string, url: string):  Promise<ApiResponseModel<LocationModel>>{
+        try{
+            const uri = `${url}/${locationEndpoint}/?latest=true`;
+            const response = await HttpClient.getAsync(token, uri)
+            if (response.ok) {
+                const data = await response.json();
+                if (data === null) {
+                    return new ApiResponseModel<LocationModel>(data, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(errorMsg.error, errorMsg.message));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<LocationModel>(data, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("LocationApi.GetAsync().Exception", error));
-                ;
+            else if (response.status == 400 || response.status == 404) {
+               const errorMsg: ErrorResponseModel = await response.json();
+                return new ApiResponseModel<LocationModel>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
             }
-        });
+            else if (response.status == 401) {
+                const error = response.statusText;
+                return new ApiResponseModel<LocationModel>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        }catch (error) {
+            return new ApiResponseModel<LocationModel>(null, ErrorResponseModel.NewError("LocationApi.GetAsync().Exception", error));;
+        }
     }
-    static GetByIdAsync(token, url, id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.locationEndpoint}/${id}`;
-                const response = yield httpService_1.default.getAsync(token, uri);
-                if (response.ok) {
-                    const data = yield response.json();
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(data, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(data, null);
+    public static async GetByIdAsync(token: string, url: string, id: number): Promise<ApiResponseModel<LocationModel>> {
+        try {
+            const uri = `${url}/${locationEndpoint}/${id}`;
+            const response = await HttpClient.getAsync(token, uri)
+            if (response.ok) {
+                const data = await response.json();
+                if (data === null) {
+                    return new ApiResponseModel<LocationModel>(data, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(errorMsg.error, errorMsg.message));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<LocationModel>(data, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("LocationApi.GetByIdAsync().Exception", error));
-                ;
+            else if (response.status == 400 || response.status == 404) {
+                const errorMsg = await response.json();
+                const error = response.statusText;
+                return new ApiResponseModel<LocationModel>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
             }
-        });
+            else if (response.status == 401) {
+                const error = response.statusText;
+                return new ApiResponseModel<LocationModel>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<LocationModel>(null, ErrorResponseModel.NewError("LocationApi.GetByIdAsync().Exception", error));;
+        }
     }
-    static CreateAsync(token, url, request) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.locationEndpoint}`;
-                const response = yield httpService_1.default.postAsync(token, uri, request);
-                if (response.ok) {
-                    const data = response.statusText;
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(null, null);
+    public static async CreateAsync(token: string, url: string, request: InsertLocationRequestModel): Promise<ApiResponseModel<void>> {
+        try {
+            const uri = `${url}/${locationEndpoint}`;
+            const response = await HttpClient.postAsync(token, uri, request)
+            if (response.ok) {
+                const data = response.statusText;
+                if (data === null) {
+                    return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(errorMsg.error, errorMsg.message));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<void>(null, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("LocationApi.CreateAsync().Exception", error));
-                ;
+            else if (response.status == 400 || response.status == 404) {
+                const errorMsg = await response.json();
+                const error = response.statusText;
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
             }
-        });
+            else if (response.status == 401) {
+                const error = response.statusText;
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("LocationApi.CreateAsync().Exception", error));;
+        }
     }
-    static UpdateAsync(token, url, request) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.locationEndpoint}`;
-                const response = yield httpService_1.default.putAsync(token, uri, request);
-                if (response.ok) {
-                    const data = response.statusText;
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(null, null);
+    public static async UpdateAsync(token: string, url: string, request: UpdateLocationRequestModel): Promise<ApiResponseModel<void>> {
+        try {
+            const uri = `${url}/${locationEndpoint}`;
+            const response = await HttpClient.putAsync(token, uri, request)
+            if (response.ok) {
+                const data = response.statusText;
+                if (data === null) {
+                    return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(errorMsg.error, errorMsg.message));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<void>(null, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("LocationApi.UpdateAsync().Exception", error));
-                ;
+            else if (response.status == 400 || response.status == 404) {
+                const errorMsg = await response.json();
+                const error = response.statusText;
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
             }
-        });
+            else if (response.status == 401) {
+                const error = response.statusText;
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("LocationApi.UpdateAsync().Exception", error));;
+        }
     }
-    static DeleteAsync(token, url, id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.locationEndpoint}/${id}/delete`;
-                const response = yield httpService_1.default.deleteAsync(token, uri);
-                if (response.ok) {
-                    const data = response.statusText;
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(null, null);
+    public static async DeleteAsync(token: string, url: string, id: string): Promise<ApiResponseModel<void>> {
+        try {
+            const uri = `${url}/${locationEndpoint}/${id}/delete`;
+            const response = await HttpClient.deleteAsync(token, uri)
+            if (response.ok) {
+                const data = response.statusText;
+                if (data === null) {
+                    return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(errorMsg.error, errorMsg.message));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<void>(null, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("LocationApi.DeleteAsync().Exception", error));
-                ;
+            else if (response.status == 400 || response.status == 404) {
+                const errorMsg = await response.json();
+                const error = response.statusText;
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
             }
-        });
+            else if (response.status == 401) {
+                const error = response.statusText;
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("LocationApi.DeleteAsync().Exception", error));;
+        }
     }
 }
-exports.default = LocationApi;
-//# sourceMappingURL=LocationApi.js.map

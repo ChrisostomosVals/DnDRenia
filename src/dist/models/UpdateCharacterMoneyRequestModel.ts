@@ -1,3 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-//# sourceMappingURL=UpdateCharacterMoneyRequestModel.js.map
+export default interface UpdateCharacterMoneyRequestModel {
+    id: string;
+    gearId: string | null;
+    quantity: number;
+}

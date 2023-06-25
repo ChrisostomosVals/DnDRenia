@@ -1,3 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-//# sourceMappingURL=UpdateCharacterArsenalRequestModel.js.map
+import ArsenalModel from "./ArsenalModel";
+
+export default interface UpdateCharacterArsenalModelRequestModel extends ArsenalModel {
+    id: string;
+}

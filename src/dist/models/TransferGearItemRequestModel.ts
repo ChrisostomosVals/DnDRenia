@@ -1,3 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-//# sourceMappingURL=TransferGearItemRequestModel.js.map
+export default interface TransferGearItemRequestModel {
+    characterId: string;
+    gearId: string;
+    quantity: number;
+}

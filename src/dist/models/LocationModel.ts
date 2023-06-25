@@ -1,3 +1,10 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-//# sourceMappingURL=LocationModel.js.map
+export default interface LocationModel {
+    id: string;
+    x: string;
+    y: string;
+    date: number;
+    time: string;
+    year: number;
+    season: string;
+    events: string[] | null;
+}

@@ -5,7 +5,12 @@ import { globalStyles } from "../utils/styles";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-export const ProfileSheet = ({ images, navigation, heroId, refs }) => {
+export const ProfileSheet = ({
+  images,
+  navigation,
+  heroId,
+  refs
+}: any) => {
  
 
   const snapPoints = useMemo(() => ["25%", "50%"], []);
@@ -44,8 +49,8 @@ export const ProfileSheet = ({ images, navigation, heroId, refs }) => {
     elevation: 24,
     }
   });
-  const handleNavigate = (page, props) => navigation.navigate(page, props);
-  const handleSheetChanges = useCallback((index) => {}, []);
+  const handleNavigate = (page: any, props: any) => navigation.navigate(page, props);
+  const handleSheetChanges = useCallback((index: any) => {}, []);
   return (
     <BottomSheet
       ref={refs}

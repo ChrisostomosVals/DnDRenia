@@ -1,3 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-//# sourceMappingURL=UpdateWorldObjectRequestModel.js.map
+import CreateWorldObjectRequestModel from "./CreateWorldObjectRequestModel";
+
+export default interface UpdateWorldObjectRequestModel extends CreateWorldObjectRequestModel {
+    id: string;
+}

@@ -1,3 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-//# sourceMappingURL=FileModel.js.map
+
+
+export default interface FileModel extends File{
+    uri: string;
+}

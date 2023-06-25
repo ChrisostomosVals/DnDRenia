@@ -4,7 +4,10 @@ import { Image, BackHandler } from "react-native";
 
 
 
-export const ImageView = ({navigation, route}) =>{
+export const ImageView = ({
+  navigation,
+  route
+}: any) =>{
     useEffect(()=>{
     },[route])
     useFocusEffect(
@@ -15,6 +18,7 @@ export const ImageView = ({navigation, route}) =>{
           };
           BackHandler.addEventListener('hardwareBackPress', onBackPress);
           return () =>
+            // @ts-expect-error TS(2554): Expected 2 arguments, but got 1.
             BackHandler.removeEventListener('hardwareBackPress');
         }, [])
       );

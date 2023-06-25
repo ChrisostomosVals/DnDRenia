@@ -17,12 +17,17 @@ import { useIsFocused } from "@react-navigation/native";
 import { TouchableImage } from "../components/TouchableImage";
 import { Banner } from "../components/banner";
 import { CustomModal } from "../components/CustomModal";
+// @ts-expect-error TS(2306): File 'D:/chris/Coding/Mobile/DnDRenia/DnDRenia/src... Remove this comment to see the full error message
 import CharacterApi from "../dist/api/CharacterApi";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+// @ts-expect-error TS(2306): File 'D:/chris/Coding/Mobile/DnDRenia/DnDRenia/src... Remove this comment to see the full error message
 import { MediaApi } from "../dist/api/MediaApi";
 import { ip } from "../utils/constants";
 
-export const ChooseProfileImage = ({ route, navigation }) => {
+export const ChooseProfileImage = ({
+  route,
+  navigation
+}: any) => {
   const { images, heroId } = route.params;
   const { width } = Dimensions.get("window");
   const isFocused = useIsFocused();
@@ -60,6 +65,7 @@ export const ChooseProfileImage = ({ route, navigation }) => {
     setTranslateY(-1000);
     fetchPhonePhotos();
     fetchCharacterImages();
+    // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
     setItem();
     setDescription('');
   }, [isFocused]);
@@ -86,6 +92,7 @@ export const ChooseProfileImage = ({ route, navigation }) => {
         sortBy: "modificationTime",
       });
       getPhotos.assets.sort(function (a, b) {
+        // @ts-expect-error TS(2362): The left-hand side of an arithmetic operation must... Remove this comment to see the full error message
         return new Date(b.modificationTime) - new Date(a.modificationTime);
       });
       for (let item of getPhotos.assets) {
@@ -95,6 +102,7 @@ export const ChooseProfileImage = ({ route, navigation }) => {
           format: SaveFormat.JPEG,
         });
         const photo = { ...media, uri: manipResult.uri, type: "system" };
+        // @ts-expect-error TS(2345): Argument of type '(ph: never[]) => { uri: string; ... Remove this comment to see the full error message
         setPhotos((ph) => [...ph, photo]);
       }
     }
@@ -102,6 +110,7 @@ export const ChooseProfileImage = ({ route, navigation }) => {
   const fetchCharacterImages = async () => {
     setCharacterImages([]);
     for (let item of images) {
+      // @ts-expect-error TS(2345): Argument of type '(img: never[]) => { id: any; uri... Remove this comment to see the full error message
       setCharacterImages((img) => [
         ...img,
         {
@@ -114,34 +123,43 @@ export const ChooseProfileImage = ({ route, navigation }) => {
       ]);
     }
   };
-  const handleSlide = (type) => {
+  const handleSlide = (type: any) => {
     Animated.spring(translateX, {
       toValue: type,
+      // @ts-expect-error TS(2345): Argument of type '{ toValue: any; duration: number... Remove this comment to see the full error message
       duration: 100,
       useNativeDriver: true,
     }).start();
     if (active === 0) {
       Animated.parallel([
+        // @ts-expect-error TS(2322): Type 'void' is not assignable to type 'CompositeAn... Remove this comment to see the full error message
         Animated.spring(translateXTabOne, {
           toValue: 0,
+          // @ts-expect-error TS(2345): Argument of type '{ toValue: number; duration: num... Remove this comment to see the full error message
           duration: 100,
           useNativeDriver: true,
         }).start(),
+        // @ts-expect-error TS(2322): Type 'void' is not assignable to type 'CompositeAn... Remove this comment to see the full error message
         Animated.spring(translateXTabTwo, {
           toValue: width,
+          // @ts-expect-error TS(2345): Argument of type '{ toValue: number; duration: num... Remove this comment to see the full error message
           duration: 100,
           useNativeDriver: true,
         }).start(),
       ]);
     } else {
       Animated.parallel([
+        // @ts-expect-error TS(2322): Type 'void' is not assignable to type 'CompositeAn... Remove this comment to see the full error message
         Animated.spring(translateXTabOne, {
           toValue: -width,
+          // @ts-expect-error TS(2345): Argument of type '{ toValue: number; duration: num... Remove this comment to see the full error message
           duration: 100,
           useNativeDriver: true,
         }).start(),
+        // @ts-expect-error TS(2322): Type 'void' is not assignable to type 'CompositeAn... Remove this comment to see the full error message
         Animated.spring(translateXTabTwo, {
           toValue: 0,
+          // @ts-expect-error TS(2345): Argument of type '{ toValue: number; duration: num... Remove this comment to see the full error message
           duration: 100,
           useNativeDriver: true,
         }).start(),
@@ -194,7 +212,9 @@ export const ChooseProfileImage = ({ route, navigation }) => {
   };
   const handleSave = async () => {
     const token = await AsyncStorage.getItem("token");
+    // @ts-expect-error TS(2532): Object is possibly 'undefined'.
     if (item.type === "update") {
+      // @ts-expect-error TS(2532): Object is possibly 'undefined'.
       if (item.item.type === "Profile Image") {
         setBannerText({
           title: "Profile Image",
@@ -221,6 +241,7 @@ export const ChooseProfileImage = ({ route, navigation }) => {
       }
       for (let prop of characterProps.data) {
         if (prop.type === "Profile Image" || prop.type === "Image") {
+            // @ts-expect-error TS(2532): Object is possibly 'undefined'.
             if(prop.value === item.item.value) prop.type = "Profile Image"
             else prop.type = "Image"
         }
@@ -247,8 +268,10 @@ export const ChooseProfileImage = ({ route, navigation }) => {
       setModalVisible(false);
       setBannerVisible(true);
     }
+    // @ts-expect-error TS(2532): Object is possibly 'undefined'.
     else if(item.type === "create"){
         const files=[];
+        // @ts-expect-error TS(2532): Object is possibly 'undefined'.
         const img = await MediaLibrary.getAssetInfoAsync(item.item.id)
         const character = await CharacterApi.GetByIdAsync(token, ip , heroId);
         if(character.isError){
@@ -263,6 +286,7 @@ export const ChooseProfileImage = ({ route, navigation }) => {
         }
         const response = await fetch(img.uri);
         const blob = await response.blob();
+        // @ts-expect-error TS(2552): Cannot find name 'File'. Did you mean 'file'?
         const file = new File([img.filename], blob._data.name, {type: blob._data.type})
         files.push({
             name: file.name,
@@ -333,7 +357,7 @@ export const ChooseProfileImage = ({ route, navigation }) => {
           setBannerVisible(true);
     } 
   };
-  const deleteImage = async(token, ip, data) =>{
+  const deleteImage = async(token: any, ip: any, data: any) =>{
     const deleteImage = await MediaApi.DeleteAsync(token, ip, encodeURIComponent(data))
     if(deleteImage.isError){
         console.log(deleteImage.error, 'deleteImage')
@@ -347,7 +371,7 @@ export const ChooseProfileImage = ({ route, navigation }) => {
     }
   }
  
-  const handleDescription = (e) => useCallback(() => {
+  const handleDescription = (e: any) => useCallback(() => {
     setDescription(e)
   }, []);
   return (
@@ -408,12 +432,14 @@ export const ChooseProfileImage = ({ route, navigation }) => {
             numColumns={3}
             renderItem={({ item }) => (
               <TouchableImage
+                // @ts-expect-error TS(2322): Type '{ item: never; type: string; setItem: Dispat... Remove this comment to see the full error message
                 item={item}
                 type={"create"}
                 setItem={setItem}
                 openModal={openModal}
               />
             )}
+            // @ts-expect-error TS(2339): Property 'id' does not exist on type 'never'.
             keyExtractor={(item) => item.id}
             removeClippedSubviews={true} // Unmount components when outside of window
             initialNumToRender={2} // Reduce initial render amount
@@ -443,12 +469,14 @@ export const ChooseProfileImage = ({ route, navigation }) => {
           numColumns={3}
           renderItem={({ item }) => (
             <TouchableImage
+              // @ts-expect-error TS(2322): Type '{ item: never; type: string; setItem: Dispat... Remove this comment to see the full error message
               item={item}
               type={"update"}
               setItem={setItem}
               openModal={openModal}
             />
           )}
+          // @ts-expect-error TS(2339): Property 'id' does not exist on type 'never'.
           keyExtractor={(item) => item.id}
           removeClippedSubviews={true} // Unmount components when outside of window
           initialNumToRender={2} // Reduce initial render amount
@@ -483,7 +511,12 @@ export const ChooseProfileImage = ({ route, navigation }) => {
   );
 };
 
-const Children = ({description, setDescription, item, styles}) => {
+const Children = ({
+  description,
+  setDescription,
+  item,
+  styles
+}: any) => {
   useEffect(()=>{
     console.log('f')
 

@@ -10,10 +10,11 @@ import IonIcon from "react-native-vector-icons/Ionicons";
 import { WeaponsShop } from "../components/weaponsShop";
 import { WeaponsCategory } from "../components/weaponsCategory";
 import { globalStyles } from "../utils/styles";
+// @ts-expect-error TS(2306): File 'D:/chris/Coding/Mobile/DnDRenia/DnDRenia/src... Remove this comment to see the full error message
 import CharacterApi from "../dist/api/CharacterApi";
 import { Banner } from "../components/banner";
 
-export const BuyGear = (props) => {
+export const BuyGear = (props: any) => {
   const isFocused = useIsFocused();
   const [heroId, setHeroId] = useState();
   const [money, setMoney] = useState();
@@ -64,6 +65,7 @@ export const BuyGear = (props) => {
       if(fetchMoney.isError){
         console.log(fetchMoney.error, 'BuyGear Screen')
         setMoney({
+          // @ts-expect-error TS(2345): Argument of type '{ gold: number; silver: number; ... Remove this comment to see the full error message
           gold: 0,
           silver: 0,
           copper: 0
@@ -81,29 +83,39 @@ export const BuyGear = (props) => {
         copper: copper,
         quantity: fetchMoney.data.quantity
       };
+      // @ts-expect-error TS(2345): Argument of type '{ id: any; gold: any; silver: an... Remove this comment to see the full error message
       setMoney(money);
   };
-  const deleteItemFromCart = (name) => {
+  const deleteItemFromCart = (name: any) => {
+    // @ts-expect-error TS(2339): Property 'name' does not exist on type 'never'.
     const doesItemExist = cart.find((item) => item.name === name);
     if (doesItemExist) {
       return setCart((cartItems) =>
+        // @ts-expect-error TS(2339): Property 'name' does not exist on type 'never'.
         cartItems.filter((item) => item.name !== name)
       );
     }
   };
-  const removeItemFromCart = (name) => {
+  const removeItemFromCart = (name: any) => {
+    // @ts-expect-error TS(2339): Property 'name' does not exist on type 'never'.
     const doesItemExist = cart.find((item) => item.name === name);
     if (doesItemExist) {
+      // @ts-expect-error TS(2339): Property 'quantity' does not exist on type 'never'... Remove this comment to see the full error message
       if (doesItemExist.quantity < 2) {
         return setCart((cartItems) =>
+          // @ts-expect-error TS(2339): Property 'name' does not exist on type 'never'.
           cartItems.filter((item) => item.name !== name)
         );
       }
+      // @ts-expect-error TS(2345): Argument of type '(itemCart: never[]) => any[]' is... Remove this comment to see the full error message
       return setCart((itemCart) => {
         const newCart = itemCart.map((item) => {
+          // @ts-expect-error TS(2339): Property 'name' does not exist on type 'never'.
           if (item.name === name) {
             return {
+              // @ts-expect-error TS(2698): Spread types may only be created from object types... Remove this comment to see the full error message
               ...item,
+              // @ts-expect-error TS(2339): Property 'quantity' does not exist on type 'never'... Remove this comment to see the full error message
               quantity: item.quantity - 1,
             };
           }
@@ -113,20 +125,26 @@ export const BuyGear = (props) => {
       });
     }
   };
-  const addItemToCart = (name, cost, weight) => {
+  const addItemToCart = (name: any, cost: any, weight: any) => {
     if (cart.length === 0) {
+      // @ts-expect-error TS(2345): Argument of type '(prevCart: never[]) => { name: a... Remove this comment to see the full error message
       return setCart((prevCart) => [
         ...prevCart,
         { name: name, cost: cost, weight: weight, quantity: 1 },
       ]);
     }
+    // @ts-expect-error TS(2339): Property 'name' does not exist on type 'never'.
     const doesItemExist = cart.find((item) => item.name === name);
     if (doesItemExist) {
+      // @ts-expect-error TS(2345): Argument of type '(itemCart: never[]) => any[]' is... Remove this comment to see the full error message
       return setCart((itemCart) => {
         const newCart = itemCart.map((item) => {
+          // @ts-expect-error TS(2339): Property 'name' does not exist on type 'never'.
           if (item.name === name) {
             return {
+              // @ts-expect-error TS(2698): Spread types may only be created from object types... Remove this comment to see the full error message
               ...item,
+              // @ts-expect-error TS(2339): Property 'quantity' does not exist on type 'never'... Remove this comment to see the full error message
               quantity: item.quantity + 1,
             };
           }
@@ -135,6 +153,7 @@ export const BuyGear = (props) => {
         return newCart;
       });
     } else {
+      // @ts-expect-error TS(2345): Argument of type '(prevCart: never[]) => { name: a... Remove this comment to see the full error message
       return setCart((prevCart) => [
         ...prevCart,
         { name: name, cost: cost, weight: weight, quantity: 1 },
@@ -148,6 +167,7 @@ export const BuyGear = (props) => {
       fontSize: 30,
       textAlign: "center",
       backgroundColor: "rgba(16,36,69,0.95)",
+      // @ts-expect-error TS(1117): An object literal cannot have multiple properties ... Remove this comment to see the full error message
       borderRadius: 15,
     },
     container: {
@@ -195,7 +215,7 @@ export const BuyGear = (props) => {
       marginTop: "15%",
     },
   });
-  const navigateToPage = (category, equipment) => {
+  const navigateToPage = (category: any, equipment: any) => {
     setCategory(category);
     setSelectedEquipment(equipment);
     setShopVisible(false);
@@ -203,7 +223,9 @@ export const BuyGear = (props) => {
   const handleBuy = async () => {
     let total = 0;
     for (let item of cart) {
+      // @ts-expect-error TS(2339): Property 'cost' does not exist on type 'never'.
       let cost = item.cost.split(" ")[0];
+      // @ts-expect-error TS(2339): Property 'cost' does not exist on type 'never'.
       const curr = item.cost.split(" ")[1];
       switch (curr) {
         case "gp":
@@ -218,9 +240,11 @@ export const BuyGear = (props) => {
         default:
           break;
       }
+      // @ts-expect-error TS(2339): Property 'quantity' does not exist on type 'never'... Remove this comment to see the full error message
       cost = (item.quantity * cost) / 1000;
       total += cost;
     }
+    // @ts-expect-error TS(2532): Object is possibly 'undefined'.
     if (total > money.quantity) {
       setBannerText({
         title: "Failed",
@@ -241,17 +265,23 @@ export const BuyGear = (props) => {
       setBannerVisible(true);
       return;
     }
-    let findMoney = gear.data.find(item => item.id === money.id)
+    // @ts-expect-error TS(2532): Object is possibly 'undefined'.
+    let findMoney = gear.data.find((item: any) => item.id === money.id)
     findMoney.quantity = (findMoney.quantity - total).toFixed(2);
     for (let item of cart) {
-      let findItem = gear.data.find(g => g.name === item.name)
+      // @ts-expect-error TS(2339): Property 'name' does not exist on type 'never'.
+      let findItem = gear.data.find((g: any) => g.name === item.name)
       if(findItem){
+        // @ts-expect-error TS(2339): Property 'quantity' does not exist on type 'never'... Remove this comment to see the full error message
         findItem.quantity += item.quantity
       }
       else{
         gear.data.push({
+          // @ts-expect-error TS(2339): Property 'name' does not exist on type 'never'.
           name: item.name,
+          // @ts-expect-error TS(2339): Property 'quantity' does not exist on type 'never'... Remove this comment to see the full error message
           quantity: item.quantity,
+          // @ts-expect-error TS(2339): Property 'weight' does not exist on type 'never'.
           weight: item.weight
         })
       }
@@ -280,6 +310,7 @@ export const BuyGear = (props) => {
     setModalVisible(false);
     setBannerVisible(true);
   };
+  // @ts-expect-error TS(7030): Not all code paths return a value.
   const renderCategory = () => {
     if (goodCategories.includes(category)) {
       return (
@@ -328,6 +359,7 @@ export const BuyGear = (props) => {
             <View style={styles.categoryTitle}>
               <Text style={styles.titleStyle}>What are you looking for?</Text>
             </View>
+            // @ts-expect-error TS(2786): 'Shop' cannot be used as a JSX component.
             <Shop setRender={setRender} />
           </>
         );
@@ -336,6 +368,7 @@ export const BuyGear = (props) => {
         item = (
           <>
             {title}
+            // @ts-expect-error TS(2786): 'GoodAndServices' cannot be used as a JSX componen... Remove this comment to see the full error message
             <GoodAndServices
               setRender={setRender}
               navigateToPage={navigateToPage}
@@ -347,6 +380,7 @@ export const BuyGear = (props) => {
         item = (
           <>
             {title}
+            // @ts-expect-error TS(2786): 'WeaponsShop' cannot be used as a JSX component.
             <WeaponsShop
               setRender={setRender}
               navigateToPage={navigateToPage}
@@ -361,6 +395,7 @@ export const BuyGear = (props) => {
   return (
     <>
       <View style={styles.cartAndMoney}>
+        // @ts-expect-error TS(2786): 'CartAndMoney' cannot be used as a JSX component.
         <CartAndMoney setModalVisible={setModalVisible} money={money} />
       </View>
       {shopVisible ? renderComponent() : renderCategory()}

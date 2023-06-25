@@ -3,6 +3,7 @@ import { exoticWeapons, getSoundEffectsMode, martialWeapons, simpleWeapons } fro
 import { globalStyles } from "../utils/styles";
 import { Audio } from "expo-av";
 import { useState, useEffect } from "react";
+// @ts-expect-error TS(2306): File 'D:/chris/Coding/Mobile/DnDRenia/DnDRenia/src... Remove this comment to see the full error message
 import CharacterApi from "../dist/api/CharacterApi";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ip } from "../utils/constants";
@@ -17,11 +18,12 @@ export const ModalQuestion = ({
   setBannerText,
   heroId,
   handleRender
-}) => {
+}: any) => {
   const [soundEffect, setSoundEffect] = useState();
   useEffect(() => {
     return soundEffect
       ? () => {
+          // @ts-expect-error TS(2339): Property 'unloadAsync' does not exist on type 'nev... Remove this comment to see the full error message
           soundEffect.unloadAsync();
         }
       : undefined;
@@ -66,6 +68,7 @@ export const ModalQuestion = ({
       if(!findItem) findItem = simpleWeapons.oneHandedMeleeWeapons.find(item => item.name === selectedItems[0].name)
       if(!findItem) {
         findItem = simpleWeapons.twoHandedMeleeWeapons.find(item => item.name === selectedItems[0].name)
+        // @ts-expect-error TS(2339): Property 'doubleHanded' does not exist on type '{ ... Remove this comment to see the full error message
         if(findItem) findItem.doubleHanded = true
       }
       if(!findItem) findItem = simpleWeapons.rangedWeapons.find(item => item.name === selectedItems[0].name)
@@ -73,6 +76,7 @@ export const ModalQuestion = ({
       if(!findItem) findItem = martialWeapons.oneHandedMeleeWeapons.find(item => item.name === selectedItems[0].name)
       if(!findItem) {
         findItem = martialWeapons.twoHandedMeleeWeapons.find(item => item.name === selectedItems[0].name)
+        // @ts-expect-error TS(2339): Property 'doubleHanded' does not exist on type '{ ... Remove this comment to see the full error message
         if(findItem) findItem.doubleHanded = true
       }
       if(!findItem) findItem = martialWeapons.rangedWeapons.find(item => item.name === selectedItems[0].name)
@@ -80,6 +84,7 @@ export const ModalQuestion = ({
       if(!findItem) findItem = exoticWeapons.oneHandedMeleeWeapons.find(item => item.name === selectedItems[0].name)
       if(!findItem) {
         findItem = exoticWeapons.twoHandedMeleeWeapons.find(item => item.name === selectedItems[0].name)
+        // @ts-expect-error TS(2339): Property 'doubleHanded' does not exist on type '{ ... Remove this comment to see the full error message
         if(findItem) findItem.doubleHanded = true
       }
       if(!findItem) findItem = exoticWeapons.rangedWeapons.find(item => item.name === selectedItems[0].name)
@@ -100,14 +105,16 @@ export const ModalQuestion = ({
           return;
         }
         let attackBonus=0;
-        playerStats.data.forEach(s =>{
+        playerStats.data.forEach((s: any) => {
           if(s.name === "Strength"){
+            // @ts-expect-error TS(2345): Argument of type 'number' is not assignable to par... Remove this comment to see the full error message
             attackBonus += parseInt((s.value - 10) / 2)
           }
           if(s.name === "Base Attack Bonus"){
             attackBonus += parseInt(s.value)
           }
         })
+        // @ts-expect-error TS(2339): Property 'doubleHanded' does not exist on type '{ ... Remove this comment to see the full error message
         if(findItem.doubleHanded === true){
           attackBonus += 1
         }
@@ -149,6 +156,7 @@ export const ModalQuestion = ({
           isLooping: false,
         }
       );
+      // @ts-expect-error TS(2345): Argument of type 'Sound' is not assignable to para... Remove this comment to see the full error message
       setSoundEffect(sound)
       await sound.playAsync()
     }

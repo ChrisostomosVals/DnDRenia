@@ -1,3 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-//# sourceMappingURL=WorldMiscModel.js.map
+export default interface WorldMiscModel {
+    id: number;
+    property: string;
+    value: string;
+    dependId: number;
+    dependLocation: string | null;
+}

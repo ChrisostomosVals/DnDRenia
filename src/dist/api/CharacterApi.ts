@@ -1,741 +1,635 @@
-"use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const ApiResponseModel_1 = __importDefault(require("../models/ApiResponseModel"));
-const ErrorResponseModel_1 = __importDefault(require("../models/ErrorResponseModel"));
-const constants_1 = require("../utils/constants");
-const httpService_1 = __importDefault(require("../utils/httpService"));
-class CharacterApi {
-    static GetAsync(token, url, type) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = type === null ? `${url}/${constants_1.characterEndpoint}` : `${url}/${constants_1.characterEndpoint}?type=${type}`;
-                const response = yield httpService_1.default.getAsync(token, uri);
-                if (response.ok) {
-                    const data = yield response.json();
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(data, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(data, null);
+import ApiResponseModel from "../models/ApiResponseModel";
+import ArsenalModel from "../models/ArsenalModel";
+import CharacterModel from "../models/CharacterModel";
+import CreateCharacterRequestModel from "../models/CreateCharacterRequestModel";
+import ErrorResponseModel from "../models/ErrorResponseModel";
+import GearModel from "../models/GearModel";
+import PropertyModel from "../models/PropertyModel";
+import SkillModel from "../models/SkillModel";
+import StatModel from "../models/StatModel";
+import TransferGearItemRequestModel from "../models/TransferGearItemRequestModel";
+import UpdateCharacterArsenalModelRequestModel from "../models/UpdateCharacterArsenalRequestModel";
+import UpdateCharacterDefinitionRequestModel from "../models/UpdateCharacterDefinitionRequestModel";
+import UpdateCharacterMoneyRequestModel from "../models/UpdateCharacterMoneyRequestModel";
+import UpdateCharacterRequestModel from "../models/UpdateCharacterRequestModel";
+import { characterEndpoint } from "../utils/constants";
+import HttpClient from "../utils/httpService";
+
+
+export default class CharacterApi{
+    public static async GetAsync(token:string, url: string, type: string | null) : Promise<ApiResponseModel<Array<CharacterModel>>> {
+        try {
+            const uri = type === null ? `${url}/${characterEndpoint}` : `${url}/${characterEndpoint}?type=${type}`;
+            const response = await HttpClient.getAsync(token, uri)
+            if(response.ok){
+                const data = await response.json();
+                if(data === null){
+                    return new ApiResponseModel<CharacterModel[]>(data, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, errorMsg));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<CharacterModel[]>(data, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("CharacterApi.GetAsync().Exception", error));
-                ;
+            else if(response.status == 400 || response.status == 404){
+                const errorMsg = await response.json();
+                const error = response.statusText;
+                return new ApiResponseModel<CharacterModel[]>(null, ErrorResponseModel.NewErrorMsg(error, errorMsg));
             }
-        });
+            else if (response.status == 401){
+                const error = response.statusText;
+                return new ApiResponseModel<CharacterModel[]>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<CharacterModel[]>(null, ErrorResponseModel.NewError("CharacterApi.GetAsync().Exception", error));;
+        }
     }
-    static GetByIdAsync(token, url, id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.characterEndpoint}/${id}`;
-                const response = yield httpService_1.default.getAsync(token, uri);
-                if (response.ok) {
-                    const data = yield response.json();
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(data, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(data, null);
+    public static async GetByIdAsync(token:string, url: string, id: string) : Promise<ApiResponseModel<CharacterModel>> {
+        try {
+            const uri = `${url}/${characterEndpoint}/${id}`;
+            const response = await HttpClient.getAsync(token, uri)
+            if(response.ok){
+                const data = await response.json();
+                if(data === null){
+                    return new ApiResponseModel<CharacterModel>(data, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, errorMsg));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<CharacterModel>(data, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("CharacterApi.GetByIdAsync().Exception", error));
-                ;
+            else if(response.status == 400 || response.status == 404){
+                const errorMsg = await response.json();
+                const error = response.statusText;
+                return new ApiResponseModel<CharacterModel>(null, ErrorResponseModel.NewErrorMsg(error, errorMsg));
             }
-        });
+            else if (response.status == 401){
+                const error = response.statusText;
+                return new ApiResponseModel<CharacterModel>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<CharacterModel>(null, ErrorResponseModel.NewError("CharacterApi.GetByIdAsync().Exception", error));;
+        }
     }
-    static GetGearAsync(token, url, id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.characterEndpoint}/${id}/gear`;
-                const response = yield httpService_1.default.getAsync(token, uri);
-                if (response.ok) {
-                    const data = yield response.json();
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(data, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(data, null);
+    public static async GetGearAsync(token:string, url: string, id: string) : Promise<ApiResponseModel<GearModel[]>> {
+        try {
+            const uri = `${url}/${characterEndpoint}/${id}/gear`;
+            const response = await HttpClient.getAsync(token, uri)
+            if(response.ok){
+                const data = await response.json();
+                if(data === null){
+                    return new ApiResponseModel<GearModel[]>(data, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, errorMsg));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<GearModel[]>(data, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("CharacterApi.GetGearAsync().Exception", error));
-                ;
+            else if(response.status == 400 || response.status == 404){
+                const errorMsg = await response.json();
+                const error = response.statusText;
+                return new ApiResponseModel<GearModel[]>(null, ErrorResponseModel.NewErrorMsg(error, errorMsg));
             }
-        });
+            else if (response.status == 401){
+                const error = response.statusText;
+                return new ApiResponseModel<GearModel[]>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<GearModel[]>(null, ErrorResponseModel.NewError("CharacterApi.GetGearAsync().Exception", error));;
+        }
     }
-    static GetGearItemAsync(token, url, id, gearId) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.characterEndpoint}/${id}/gear/${gearId}`;
-                const response = yield httpService_1.default.getAsync(token, uri);
-                if (response.ok) {
-                    const data = yield response.json();
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(data, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(data, null);
+    public static async GetGearItemAsync(token:string, url: string, id: string, gearId: string) : Promise<ApiResponseModel<GearModel>> {
+        try {
+            const uri = `${url}/${characterEndpoint}/${id}/gear/${gearId}`;
+            const response = await HttpClient.getAsync(token, uri)
+            if(response.ok){
+                const data = await response.json();
+                if(data === null){
+                    return new ApiResponseModel<GearModel>(data, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, errorMsg));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<GearModel>(data, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("CharacterApi.GetGearItemAsync().Exception", error));
-                ;
+            else if(response.status == 400 || response.status == 404){
+                const errorMsg = await response.json();
+                const error = response.statusText;
+                return new ApiResponseModel<GearModel>(null, ErrorResponseModel.NewErrorMsg(error, errorMsg));
             }
-        });
+            else if (response.status == 401){
+                const error = response.statusText;
+                return new ApiResponseModel<GearModel>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<GearModel>(null, ErrorResponseModel.NewError("CharacterApi.GetGearItemAsync().Exception", error));;
+        }
     }
-    static GetMoneyAsync(token, url, id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.characterEndpoint}/${id}/money`;
-                const response = yield httpService_1.default.getAsync(token, uri);
-                if (response.ok) {
-                    const data = yield response.json();
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(data, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(data, null);
+    public static async GetMoneyAsync(token:string, url: string, id: string) : Promise<ApiResponseModel<GearModel>> {
+        try {
+            const uri = `${url}/${characterEndpoint}/${id}/money`;
+            const response = await HttpClient.getAsync(token, uri)
+            if(response.ok){
+                const data = await response.json();
+                if(data === null){
+                    return new ApiResponseModel<GearModel>(data, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, errorMsg));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<GearModel>(data, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("CharacterApi.GetMoneyAsync().Exception", error));
-                ;
+            else if(response.status == 400 || response.status == 404){
+                const errorMsg = await response.json();
+                const error = response.statusText;
+                return new ApiResponseModel<GearModel>(null, ErrorResponseModel.NewErrorMsg(error, errorMsg));
             }
-        });
+            else if (response.status == 401){
+                const error = response.statusText;
+                return new ApiResponseModel<GearModel>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<GearModel>(null, ErrorResponseModel.NewError("CharacterApi.GetMoneyAsync().Exception", error));;
+        }
     }
-    static GetArsenalAsync(token, url, id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.characterEndpoint}/${id}/arsenal`;
-                const response = yield httpService_1.default.getAsync(token, uri);
-                if (response.ok) {
-                    const data = yield response.json();
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(data, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(data, null);
+    public static async GetArsenalAsync(token:string, url: string, id: string) : Promise<ApiResponseModel<ArsenalModel[]>> {
+        try {
+            const uri = `${url}/${characterEndpoint}/${id}/arsenal`;
+            const response = await HttpClient.getAsync(token, uri)
+            if(response.ok){
+                const data = await response.json();
+                if(data === null){
+                    return new ApiResponseModel<ArsenalModel[]>(data, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, errorMsg));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<ArsenalModel[]>(data, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("CharacterApi.GetArsenalAsync().Exception", error));
-                ;
+            else if(response.status == 400 || response.status == 404){
+                const errorMsg = await response.json();
+                const error = response.statusText;
+                return new ApiResponseModel<ArsenalModel[]>(null, ErrorResponseModel.NewErrorMsg(error, errorMsg));
             }
-        });
+            else if (response.status == 401){
+                const error = response.statusText;
+                return new ApiResponseModel<ArsenalModel[]>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<ArsenalModel[]>(null, ErrorResponseModel.NewError("CharacterApi.GetArsenalAsync().Exception", error));;
+        }
     }
-    static GetPropertiesAsync(token, url, id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.characterEndpoint}/${id}/properties`;
-                const response = yield httpService_1.default.getAsync(token, uri);
-                if (response.ok) {
-                    const data = yield response.json();
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(data, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(data, null);
+    public static async GetPropertiesAsync(token:string, url: string, id: string) : Promise<ApiResponseModel<PropertyModel[]>> {
+        try {
+            const uri = `${url}/${characterEndpoint}/${id}/properties`;
+            const response = await HttpClient.getAsync(token, uri)
+            if(response.ok){
+                const data = await response.json();
+                if(data === null){
+                    return new ApiResponseModel<PropertyModel[]>(data, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, errorMsg));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<PropertyModel[]>(data, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("CharacterApi.GetPropertiesAsync().Exception", error));
-                ;
+            else if(response.status == 400 || response.status == 404){
+                const errorMsg = await response.json();
+                const error = response.statusText;
+                return new ApiResponseModel<PropertyModel[]>(null, ErrorResponseModel.NewErrorMsg(error, errorMsg));
             }
-        });
+            else if (response.status == 401){
+                const error = response.statusText;
+                return new ApiResponseModel<PropertyModel[]>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<PropertyModel[]>(null, ErrorResponseModel.NewError("CharacterApi.GetPropertiesAsync().Exception", error));;
+        }
     }
-    static GetSkillsAsync(token, url, id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.characterEndpoint}/${id}/skills`;
-                const response = yield httpService_1.default.getAsync(token, uri);
-                if (response.ok) {
-                    const data = yield response.json();
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(data, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(data, null);
+    public static async GetSkillsAsync(token:string, url: string, id: string) : Promise<ApiResponseModel<SkillModel[]>> {
+        try {
+            const uri = `${url}/${characterEndpoint}/${id}/skills`;
+            const response = await HttpClient.getAsync(token, uri)
+            if(response.ok){
+                const data = await response.json();
+                if(data === null){
+                    return new ApiResponseModel<SkillModel[]>(data, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, errorMsg));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<SkillModel[]>(data, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("CharacterApi.GetSkillsAsync().Exception", error));
-                ;
+            else if(response.status == 400 || response.status == 404){
+                const errorMsg = await response.json();
+                const error = response.statusText;
+                return new ApiResponseModel<SkillModel[]>(null, ErrorResponseModel.NewErrorMsg(error, errorMsg));
             }
-        });
+            else if (response.status == 401){
+                const error = response.statusText;
+                return new ApiResponseModel<SkillModel[]>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<SkillModel[]>(null, ErrorResponseModel.NewError("CharacterApi.GetSkillsAsync().Exception", error));;
+        }
     }
-    static GetFeatsAsync(token, url, id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.characterEndpoint}/${id}/feats`;
-                const response = yield httpService_1.default.getAsync(token, uri);
-                if (response.ok) {
-                    const data = yield response.json();
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(data, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(data, null);
+    public static async GetFeatsAsync(token:string, url: string, id: string) : Promise<ApiResponseModel<string[]>> {
+        try {
+            const uri = `${url}/${characterEndpoint}/${id}/feats`;
+            const response = await HttpClient.getAsync(token, uri)
+            if(response.ok){
+                const data = await response.json();
+                if(data === null){
+                    return new ApiResponseModel<string[]>(data, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, errorMsg));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<string[]>(data, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("CharacterApi.GetFeatsAsync().Exception", error));
-                ;
+            else if(response.status == 400 || response.status == 404){
+                const errorMsg = await response.json();
+                const error = response.statusText;
+                return new ApiResponseModel<string[]>(null, ErrorResponseModel.NewErrorMsg(error, errorMsg));
             }
-        });
+            else if (response.status == 401){
+                const error = response.statusText;
+                return new ApiResponseModel<string[]>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<string[]>(null, ErrorResponseModel.NewError("CharacterApi.GetFeatsAsync().Exception", error));;
+        }
     }
-    static GetSpecialAbilitiesAsync(token, url, id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.characterEndpoint}/${id}/specialAbilities`;
-                const response = yield httpService_1.default.getAsync(token, uri);
-                if (response.ok) {
-                    const data = yield response.json();
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(data, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(data, null);
+    public static async GetSpecialAbilitiesAsync(token:string, url: string, id: string) : Promise<ApiResponseModel<string[]>> {
+        try {
+            const uri = `${url}/${characterEndpoint}/${id}/specialAbilities`;
+            const response = await HttpClient.getAsync(token, uri)
+            if(response.ok){
+                const data = await response.json();
+                if(data === null){
+                    return new ApiResponseModel<string[]>(data, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, errorMsg));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<string[]>(data, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("CharacterApi.GetSpecialAbilitiesAsync().Exception", error));
-                ;
+            else if(response.status == 400 || response.status == 404){
+                const errorMsg = await response.json();
+                const error = response.statusText;
+                return new ApiResponseModel<string[]>(null, ErrorResponseModel.NewErrorMsg(error, errorMsg));
             }
-        });
+            else if (response.status == 401){
+                const error = response.statusText;
+                return new ApiResponseModel<string[]>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<string[]>(null, ErrorResponseModel.NewError("CharacterApi.GetSpecialAbilitiesAsync().Exception", error));;
+        }
     }
-    static GetStatsAsync(token, url, id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.characterEndpoint}/${id}/stats`;
-                const response = yield httpService_1.default.getAsync(token, uri);
-                if (response.ok) {
-                    const data = yield response.json();
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(data, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(data, null);
+    public static async GetStatsAsync(token:string, url: string, id: string) : Promise<ApiResponseModel<StatModel[]>> {
+        try {
+            const uri = `${url}/${characterEndpoint}/${id}/stats`;
+            const response = await HttpClient.getAsync(token, uri)
+            if(response.ok){
+                const data = await response.json();
+                if(data === null){
+                    return new ApiResponseModel<StatModel[]>(data, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, errorMsg));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<StatModel[]>(data, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("CharacterApi.GetStatsAsync().Exception", error));
-                ;
+            else if(response.status == 400 || response.status == 404){
+                const errorMsg = await response.json();
+                const error = response.statusText;
+                return new ApiResponseModel<StatModel[]>(null, ErrorResponseModel.NewErrorMsg(error, errorMsg));
             }
-        });
+            else if (response.status == 401){
+                const error = response.statusText;
+                return new ApiResponseModel<StatModel[]>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<StatModel[]>(null, ErrorResponseModel.NewError("CharacterApi.GetStatsAsync().Exception", error));;
+        }
     }
-    static CreateAsync(token, url, request) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.characterEndpoint}`;
-                const response = yield httpService_1.default.postAsync(token, uri, request);
-                if (response.ok) {
-                    const data = response.statusText;
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(null, null);
+    public static async CreateAsync(token:string, url: string, request: CreateCharacterRequestModel) : Promise<ApiResponseModel<void>> {
+        try {
+            const uri = `${url}/${characterEndpoint}`;
+            const response = await HttpClient.postAsync(token, uri, request)
+            if(response.ok){
+                const data = response.statusText;
+                if(data === null){
+                    return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, errorMsg));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<void>(null, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("CharacterApi.CreateAsync().Exception", error));
-                ;
+            else if(response.status == 400 || response.status == 404){
+                const errorMsg = await response.json();
+                const error = response.statusText;
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, errorMsg));
             }
-        });
+            else if (response.status == 401){
+                const error = response.statusText;
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("CharacterApi.CreateAsync().Exception", error));;
+        }
     }
-    static UpdateAsync(token, url, request) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.characterEndpoint}`;
-                const response = yield httpService_1.default.putAsync(token, uri, request);
-                if (response.ok) {
-                    const data = response.statusText;
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(null, null);
+    public static async UpdateAsync(token:string, url: string, request: UpdateCharacterRequestModel) : Promise<ApiResponseModel<void>> {
+        try {
+            const uri = `${url}/${characterEndpoint}`;
+            const response = await HttpClient.putAsync(token, uri, request)
+            if(response.ok){
+                const data = response.statusText;
+                if(data === null){
+                    return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, errorMsg));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<void>(null, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("CharacterApi.UpdateAsync().Exception", error));
-                ;
+            else if(response.status == 400 || response.status == 404){
+                const errorMsg = await response.json();
+                const error = response.statusText;
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, errorMsg));
             }
-        });
+            else if (response.status == 401){
+                const error = response.statusText;
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("CharacterApi.UpdateAsync().Exception", error));;
+        }
     }
-    static UpdateGearAsync(token, url, request) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.characterEndpoint}/gear`;
-                const response = yield httpService_1.default.putAsync(token, uri, request);
-                if (response.ok) {
-                    const data = response.statusText;
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(null, null);
+    public static async UpdateGearAsync(token:string, url: string, request: UpdateCharacterDefinitionRequestModel<GearModel>) : Promise<ApiResponseModel<void>> {
+        try {
+            const uri = `${url}/${characterEndpoint}/gear`;
+            const response = await HttpClient.putAsync(token, uri, request)
+            if(response.ok){
+                const data = response.statusText;
+                if(data === null){
+                    return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, errorMsg));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<void>(null, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("CharacterApi.UpdateGearAsync().Exception", error));
-                ;
+            else if(response.status == 400 || response.status == 404){
+                const errorMsg = await response.json();
+                const error = response.statusText;
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, errorMsg));
             }
-        });
+            else if (response.status == 401){
+                const error = response.statusText;
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("CharacterApi.UpdateGearAsync().Exception", error));;
+        }
     }
-    static AddMoneyAsync(token, url, request) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.characterEndpoint}/gear/money/add`;
-                const response = yield httpService_1.default.putAsync(token, uri, request);
-                if (response.ok) {
-                    const data = response.statusText;
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(null, null);
+    public static async AddMoneyAsync(token:string, url: string, request: UpdateCharacterMoneyRequestModel) : Promise<ApiResponseModel<void>> {
+        try {
+            const uri = `${url}/${characterEndpoint}/gear/money/add`;
+            const response = await HttpClient.putAsync(token, uri, request)
+            if(response.ok){
+                const data = response.statusText;
+                if(data === null){
+                    return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, errorMsg));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<void>(null, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("CharacterApi.AddMoneyAsync().Exception", error));
-                ;
+            else if(response.status == 400 || response.status == 404){
+                const errorMsg = await response.json();
+                const error = response.statusText;
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, errorMsg));
             }
-        });
+            else if (response.status == 401){
+                const error = response.statusText;
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("CharacterApi.AddMoneyAsync().Exception", error));;
+        }
     }
-    static RemoveMoneyAsync(token, url, request) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.characterEndpoint}/gear/money/remove`;
-                const response = yield httpService_1.default.putAsync(token, uri, request);
-                if (response.ok) {
-                    const data = response.statusText;
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(null, null);
+    public static async RemoveMoneyAsync(token:string, url: string, request: UpdateCharacterMoneyRequestModel) : Promise<ApiResponseModel<void>> {
+        try {
+            const uri = `${url}/${characterEndpoint}/gear/money/remove`;
+            const response = await HttpClient.putAsync(token, uri, request)
+            if(response.ok){
+                const data = response.statusText;
+                if(data === null){
+                    return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, errorMsg));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<void>(null, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("CharacterApi.RemoveMoneyAsync().Exception", error));
-                ;
+            else if(response.status == 400 || response.status == 404){
+                const errorMsg = await response.json();
+                const error = response.statusText;
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, errorMsg));
             }
-        });
+            else if (response.status == 401){
+                const error = response.statusText;
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("CharacterApi.RemoveMoneyAsync().Exception", error));;
+        }
     }
-    static TransferGearAsync(token, url, request) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.characterEndpoint}/gear/transfer`;
-                const response = yield httpService_1.default.putAsync(token, uri, request);
-                if (response.ok) {
-                    const data = response.statusText;
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(null, null);
+    public static async TransferGearAsync(token:string, url: string, request: TransferGearItemRequestModel) : Promise<ApiResponseModel<void>> {
+        try {
+            const uri = `${url}/${characterEndpoint}/gear/transfer`;
+            const response = await HttpClient.putAsync(token, uri, request)
+            if(response.ok){
+                const data = response.statusText;
+                if(data === null){
+                    return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, errorMsg));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<void>(null, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("CharacterApi.TransferGearAsync().Exception", error));
-                ;
+            else if(response.status == 400 || response.status == 404){
+                const errorMsg = await response.json();
+                const error = response.statusText;
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, errorMsg));
             }
-        });
+            else if (response.status == 401){
+                const error = response.statusText;
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("CharacterApi.TransferGearAsync().Exception", error));;
+        }
     }
-    static EquipItemAsync(token, url, request) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.characterEndpoint}/arsenal/add`;
-                const response = yield httpService_1.default.putAsync(token, uri, request);
-                if (response.ok) {
-                    const data = response.statusText;
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(null, null);
+    public static async EquipItemAsync(token:string, url: string, request: UpdateCharacterArsenalModelRequestModel) : Promise<ApiResponseModel<void>> {
+        try {
+            const uri = `${url}/${characterEndpoint}/arsenal/add`;
+            const response = await HttpClient.putAsync(token, uri, request)
+            if(response.ok){
+                const data = response.statusText;
+                if(data === null){
+                    return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(errorMsg.error, errorMsg.message));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<void>(null, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("CharacterApi.EquipItemAsync().Exception", error));
-                ;
+            else if(response.status == 400 || response.status == 404){
+                const errorMsg: ErrorResponseModel = await response.json();
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
             }
-        });
+            else if (response.status == 401){
+                const error = response.statusText;
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("CharacterApi.EquipItemAsync().Exception", error));;
+        }
     }
-    static UnEquipItemAsync(token, url, request) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.characterEndpoint}/arsenal/remove`;
-                const response = yield httpService_1.default.putAsync(token, uri, request);
-                if (response.ok) {
-                    const data = response.statusText;
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(null, null);
+    public static async UnEquipItemAsync(token:string, url: string, request: UpdateCharacterArsenalModelRequestModel) : Promise<ApiResponseModel<void>> {
+        try {
+            const uri = `${url}/${characterEndpoint}/arsenal/remove`;
+            const response = await HttpClient.putAsync(token, uri, request)
+            if(response.ok){
+                const data = response.statusText;
+                if(data === null){
+                    return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(errorMsg.error, errorMsg.message));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<void>(null, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("CharacterApi.UnEquipItemAsync().Exception", error));
-                ;
+            else if(response.status == 400 || response.status == 404){
+                const errorMsg: ErrorResponseModel = await response.json();
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
             }
-        });
+            else if (response.status == 401){
+                const error = response.statusText;
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("CharacterApi.UnEquipItemAsync().Exception", error));;
+        }
     }
-    static UpdateSkillsAsync(token, url, request) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.characterEndpoint}/skills`;
-                const response = yield httpService_1.default.putAsync(token, uri, request);
-                if (response.ok) {
-                    const data = response.statusText;
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(null, null);
+    public static async UpdateSkillsAsync(token:string, url: string, request: UpdateCharacterDefinitionRequestModel<SkillModel>) : Promise<ApiResponseModel<void>> {
+        try {
+            const uri = `${url}/${characterEndpoint}/skills`;
+            const response = await HttpClient.putAsync(token, uri, request)
+            if(response.ok){
+                const data = response.statusText;
+                if(data === null){
+                    return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(errorMsg.error, errorMsg.message));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<void>(null, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("CharacterApi.UpdateSkillsAsync().Exception", error));
-                ;
+            else if(response.status == 400 || response.status == 404){
+                const errorMsg: ErrorResponseModel = await response.json();
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
             }
-        });
+            else if (response.status == 401){
+                const error = response.statusText;
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("CharacterApi.UpdateSkillsAsync().Exception", error));;
+        }
     }
-    static UpdateFeatsAsync(token, url, request) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.characterEndpoint}/feats`;
-                const response = yield httpService_1.default.putAsync(token, uri, request);
-                if (response.ok) {
-                    const data = response.statusText;
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(null, null);
+    public static async UpdateFeatsAsync(token:string, url: string, request: UpdateCharacterDefinitionRequestModel<string>) : Promise<ApiResponseModel<void>> {
+        try {
+            const uri = `${url}/${characterEndpoint}/feats`;
+            const response = await HttpClient.putAsync(token, uri, request)
+            if(response.ok){
+                const data = response.statusText;
+                if(data === null){
+                    return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(errorMsg.error, errorMsg.message));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<void>(null, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("CharacterApi.UpdateFeatsAsync().Exception", error));
-                ;
+            else if(response.status == 400 || response.status == 404){
+                const errorMsg: ErrorResponseModel = await response.json();
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
             }
-        });
+            else if (response.status == 401){
+                const error = response.statusText;
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("CharacterApi.UpdateFeatsAsync().Exception", error));;
+        }
     }
-    static UpdateSpecialAbilitiesAsync(token, url, request) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.characterEndpoint}/specialAbilities`;
-                const response = yield httpService_1.default.putAsync(token, uri, request);
-                if (response.ok) {
-                    const data = response.statusText;
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(null, null);
+    public static async UpdateSpecialAbilitiesAsync(token:string, url: string, request: UpdateCharacterDefinitionRequestModel<string>) : Promise<ApiResponseModel<void>> {
+        try {
+            const uri = `${url}/${characterEndpoint}/specialAbilities`;
+            const response = await HttpClient.putAsync(token, uri, request)
+            if(response.ok){
+                const data = response.statusText;
+                if(data === null){
+                    return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(errorMsg.error, errorMsg.message));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<void>(null, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("CharacterApi.UpdateSpecialAbilitiesAsync().Exception", error));
-                ;
+            else if(response.status == 400 || response.status == 404){
+                const errorMsg: ErrorResponseModel = await response.json();
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
             }
-        });
+            else if (response.status == 401){
+                const error = response.statusText;
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("CharacterApi.UpdateSpecialAbilitiesAsync().Exception", error));;
+        }
     }
-    static UpdateStatsAsync(token, url, request) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.characterEndpoint}/stats`;
-                const response = yield httpService_1.default.putAsync(token, uri, request);
-                if (response.ok) {
-                    const data = response.statusText;
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(null, null);
+    public static async UpdateStatsAsync(token:string, url: string, request: UpdateCharacterDefinitionRequestModel<StatModel>) : Promise<ApiResponseModel<void>> {
+        try {
+            const uri = `${url}/${characterEndpoint}/stats`;
+            const response = await HttpClient.putAsync(token, uri, request)
+            if(response.ok){
+                const data = response.statusText;
+                if(data === null){
+                    return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(errorMsg.error, errorMsg.message));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<void>(null, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("CharacterApi.UpdateStatsAsync().Exception", error));
-                ;
+            else if(response.status == 400 || response.status == 404){
+                const errorMsg: ErrorResponseModel = await response.json();
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
             }
-        });
+            else if (response.status == 401){
+                const error = response.statusText;
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("CharacterApi.UpdateStatsAsync().Exception", error));;
+        }
     }
-    static UpdatePropertiesAsync(token, url, request) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.characterEndpoint}/properties`;
-                const response = yield httpService_1.default.putAsync(token, uri, request);
-                if (response.ok) {
-                    const data = response.statusText;
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(null, null);
+    public static async UpdatePropertiesAsync(token:string, url: string, request: UpdateCharacterDefinitionRequestModel<PropertyModel>) : Promise<ApiResponseModel<void>> {
+        try {
+            const uri = `${url}/${characterEndpoint}/properties`;
+            const response = await HttpClient.putAsync(token, uri, request)
+            if(response.ok){
+                const data = response.statusText;
+                if(data === null){
+                    return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(errorMsg.error, errorMsg.message));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<void>(null, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("CharacterApi.UpdatePropertiesAsync().Exception", error));
-                ;
+            else if(response.status == 400 || response.status == 404){
+                const errorMsg: ErrorResponseModel = await response.json();
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
             }
-        });
+            else if (response.status == 401){
+                const error = response.statusText;
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("CharacterApi.UpdatePropertiesAsync().Exception", error));;
+        }
     }
-    static ChangeVisibilityAsync(token, url, id, visible) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.characterEndpoint}/${id}/visibility/${visible}`;
-                const response = yield httpService_1.default.putAsync(token, uri, null);
-                if (response.ok) {
-                    const data = response.statusText;
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(null, null);
+    public static async ChangeVisibilityAsync(token:string, url: string, id: string, visible: boolean) : Promise<ApiResponseModel<void>> {
+        try {
+            const uri = `${url}/${characterEndpoint}/${id}/visibility/${visible}`;
+            const response = await HttpClient.putAsync(token, uri, null)
+            if(response.ok){
+                const data = response.statusText;
+                if(data === null){
+                    return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(errorMsg.error, errorMsg.message));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<void>(null, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("CharacterApi.ChangeVisibilityAsync().Exception", error));
-                ;
+            else if(response.status == 400 || response.status == 404){
+                const errorMsg: ErrorResponseModel = await response.json();
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
             }
-        });
+            else if (response.status == 401){
+                const error = response.statusText;
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("CharacterApi.ChangeVisibilityAsync().Exception", error));;
+        }
     }
-    static DeleteAsync(token, url, id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const uri = `${url}/${constants_1.characterEndpoint}/${id}/delete`;
-                const response = yield httpService_1.default.deleteAsync(token, uri);
-                if (response.ok) {
-                    const data = response.statusText;
-                    if (data === null) {
-                        return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg("content-null", "The response body was empty"));
-                    }
-                    return new ApiResponseModel_1.default(null, null);
+    public static async DeleteAsync(token:string, url: string, id: string) : Promise<ApiResponseModel<void>> {
+        try {
+            const uri = `${url}/${characterEndpoint}/${id}/delete`;
+            const response = await HttpClient.deleteAsync(token, uri)
+            if(response.ok){
+                const data = response.statusText;
+                if(data === null){
+                    return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg("content-null", "The response body was empty"));
                 }
-                else if (response.status == 400 || response.status == 404) {
-                    const errorMsg = yield response.json();
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(errorMsg.error, errorMsg.message));
-                }
-                else if (response.status == 401) {
-                    const error = response.statusText;
-                    return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewErrorMsg(error, "Unauthorized access"));
-                }
+                return new ApiResponseModel<void>(null, null);
             }
-            catch (error) {
-                return new ApiResponseModel_1.default(null, ErrorResponseModel_1.default.NewError("CharacterApi.DeleteAsync().Exception", error));
-                ;
+            else if(response.status == 400 || response.status == 404){
+                const errorMsg: ErrorResponseModel = await response.json();
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
             }
-        });
+            else if (response.status == 401){
+                const error = response.statusText;
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
+            }
+        } catch (error) {
+            return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("CharacterApi.DeleteAsync().Exception", error));;
+        }
     }
 }
-exports.default = CharacterApi;
-//# sourceMappingURL=CharacterApi.js.map

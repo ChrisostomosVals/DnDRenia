@@ -1,3 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-//# sourceMappingURL=PropertyModel.js.map
+export default interface PropertyModel {
+    type: string;
+    value: string;
+    description: string | null;
+}

@@ -17,8 +17,8 @@ export const WeaponsCategory = ({
   weapons,
   setShopVisible,
   removeItem,
-  addItem,
-}) => {
+  addItem
+}: any) => {
   const [selectedCategory, setSelectedCategory] = useState(0);
   const [categories, setCategories] = useState([]);
   const [selectedWeapons, setSelectedWeapons] = useState([]);
@@ -27,6 +27,7 @@ export const WeaponsCategory = ({
     setCategories([])
     if (weapons.unarmedAttacks) {
       setCategories([
+        // @ts-expect-error TS(2322): Type 'string' is not assignable to type 'never'.
         { label: "Unarmed Attacks", value: 1, category: "unarmedAttacks" },
       ]);
       setSelectedCategory(1);
@@ -35,6 +36,7 @@ export const WeaponsCategory = ({
       setSelectedCategory(2);
       setSelectedWeapons(weapons.lightMeleeWeapons);
     }
+    // @ts-expect-error TS(2345): Argument of type '(cat: never[]) => { label: strin... Remove this comment to see the full error message
     setCategories((cat) => [
       ...cat,
       { label: "Light Melee Weapons", value: 2, category: "lightMeleeWeapons" },
@@ -143,9 +145,11 @@ export const WeaponsCategory = ({
         left: 5
     }
   });
-  const handleWeaponCategory = (e) => {
+  const handleWeaponCategory = (e: any) => {
     console.log(e)
+    // @ts-expect-error TS(2339): Property 'value' does not exist on type 'never'.
     const findCategory = categories.find((c) => c.value === e);
+    // @ts-expect-error TS(2532): Object is possibly 'undefined'.
     setSelectedWeapons(weapons[`${findCategory.category}`]);
   };
   return (
@@ -231,7 +235,9 @@ export const WeaponsCategory = ({
             {selectedWeapons &&
               selectedWeapons.length > 0 &&
               selectedWeapons.map((e, index) => (
+                // @ts-expect-error TS(2786): 'WeaponItem' cannot be used as a JSX component.
                 <WeaponItem
+                  // @ts-expect-error TS(2339): Property 'name' does not exist on type 'never'.
                   key={e.name + index}
                   cart={cart}
                   removeItemFromCart={removeItem}

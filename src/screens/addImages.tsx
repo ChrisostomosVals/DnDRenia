@@ -15,11 +15,15 @@ import * as MediaLibrary from "expo-media-library";
 import { manipulateAsync, FlipType, SaveFormat } from "expo-image-manipulator";
 import { CustomModal } from "../components/CustomModal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+// @ts-expect-error TS(2306): File 'D:/chris/Coding/Mobile/DnDRenia/DnDRenia/src... Remove this comment to see the full error message
 import CharacterApi from "../dist/api/CharacterApi";
+// @ts-expect-error TS(2306): File 'D:/chris/Coding/Mobile/DnDRenia/DnDRenia/src... Remove this comment to see the full error message
 import { MediaApi } from "../dist/api/MediaApi";
 import { ip } from "../utils/constants";
 
-export const AddImages = ({ route }) => {
+export const AddImages = ({
+  route
+}: any) => {
   const { heroId, navigation } = route.params;
   const isFocused = useIsFocused();
   const [photos, setPhotos] = useState([]);
@@ -40,6 +44,7 @@ export const AddImages = ({ route }) => {
         return true;
       };
       BackHandler.addEventListener("hardwareBackPress", onBackPress);
+      // @ts-expect-error TS(2554): Expected 2 arguments, but got 1.
       return () => BackHandler.removeEventListener("hardwareBackPress");
     }, [])
   );
@@ -60,6 +65,7 @@ export const AddImages = ({ route }) => {
     if (!isFocused) return;
     const res = await MediaLibrary.requestPermissionsAsync();
     if (!res.granted) {
+      // @ts-expect-error TS(2304): Cannot find name 'requestPermission'.
       await requestPermission();
       return;
     }
@@ -77,6 +83,7 @@ export const AddImages = ({ route }) => {
         format: SaveFormat.JPEG
       });
       const photo = { ...media, uri: manipResult.uri, type: "system" };
+      // @ts-expect-error TS(2345): Argument of type '(ph: never[]) => { uri: string; ... Remove this comment to see the full error message
       setPhotos((ph) => [...ph, photo]);
     }
   };
@@ -84,14 +91,18 @@ export const AddImages = ({ route }) => {
     const token = await AsyncStorage.getItem("token");
     const files = [];
     for (let item of items) {
+      // @ts-expect-error TS(2339): Property 'id' does not exist on type 'never'.
       const img = await MediaLibrary.getAssetInfoAsync(item.id);
       const response = await fetch(img.uri);
       const blob = await response.blob();
+      // @ts-expect-error TS(2552): Cannot find name 'File'. Did you mean 'file'?
       const file = new File([img.filename], blob._data.name, {
+        // @ts-expect-error TS(2339): Property '_data' does not exist on type 'Blob'.
         type: blob._data.type,
       });
       let type = file.type
       if(type === null || type === ""){
+        // @ts-expect-error TS(2339): Property '_data' does not exist on type 'Blob'.
         if(blob._data.name.endsWith(".png")) type = "image/png"
       }
       files.push({
@@ -171,7 +182,7 @@ export const AddImages = ({ route }) => {
     setModalVisible(false);
     setBannerVisible(true);
   };
-  const deleteImages = async (token, ip, data) => {
+  const deleteImages = async (token: any, ip: any, data: any) => {
     for (let path of data) {
       const deleteImage = await MediaApi.DeleteAsync(
         token,
@@ -198,12 +209,14 @@ export const AddImages = ({ route }) => {
         numColumns={3}
         renderItem={({ item }) => (
           <TouchableImage
+            // @ts-expect-error TS(2322): Type '{ item: never; type: string; setItem: Dispat... Remove this comment to see the full error message
             item={item}
             type={"new"}
             setItem={setItems}
             openModal={openModal}
           />
         )}
+        // @ts-expect-error TS(2339): Property 'id' does not exist on type 'never'.
         keyExtractor={(item) => item.id}
         removeClippedSubviews={true} // Unmount components when outside of window
         initialNumToRender={2} // Reduce initial render amount

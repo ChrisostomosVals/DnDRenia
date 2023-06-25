@@ -8,12 +8,15 @@ import IonIcon from "react-native-vector-icons/Ionicons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+// @ts-expect-error TS(2306): File 'D:/chris/Coding/Mobile/DnDRenia/DnDRenia/src... Remove this comment to see the full error message
 import CharacterApi from "../dist/api/CharacterApi";
 import { ip } from "../utils/constants";
 import { Banner } from "./banner";
 import { skillsInit } from "../utils/constants";
 
-export const Skills = ({ hero }) => {
+export const Skills = ({
+  hero
+}: any) => {
   const [edit, setEdit] = useState(false);
   const [skills, setSkills] = useState(skillsInit);
   useEffect(() => {
@@ -36,34 +39,41 @@ export const Skills = ({ hero }) => {
   };
 
   const hideDialog = () => setBannerVisible(false);
-  const toggleTrain = (index) => {
+  const toggleTrain = (index: any) => {
     let arr = [...skills];
+    // @ts-expect-error TS(2532): Object is possibly 'undefined'.
     arr[index].trained = !arr[index].trained;
     setSkills(arr);
   };
-  const changeRank = (index, action) => {
+  const changeRank = (index: any, action: any) => {
     let arr = [...skills];
     if (action === "down") {
+      // @ts-expect-error TS(2532): Object is possibly 'undefined'.
       if (arr[index].ranks > 0) arr[index].ranks -= 1;
     } else if (action === "up") {
+      // @ts-expect-error TS(2532): Object is possibly 'undefined'.
       arr[index].ranks += 1;
     }
     setSkills(arr);
   };
-  const changeMisc = (index, action) => {
+  const changeMisc = (index: any, action: any) => {
     let arr = [...skills];
     if (action === "down") {
+      // @ts-expect-error TS(2532): Object is possibly 'undefined'.
       if (arr[index].miscMod > 0) arr[index].miscMod -= 1;
     } else if (action === "up") {
+      // @ts-expect-error TS(2532): Object is possibly 'undefined'.
       arr[index].miscMod += 1;
     }
     setSkills(arr);
   };
-  const changeAbility = (index, action) => {
+  const changeAbility = (index: any, action: any) => {
     let arr = [...skills];
     if (action === "down") {
+      // @ts-expect-error TS(2532): Object is possibly 'undefined'.
       if (arr[index].abilityMod > 0) arr[index].abilityMod -= 1;
     } else if (action === "up") {
+      // @ts-expect-error TS(2532): Object is possibly 'undefined'.
       arr[index].abilityMod += 1;
     }
     setSkills(arr);
@@ -122,6 +132,7 @@ export const Skills = ({ hero }) => {
           )}
         </View>
         <ScrollView>
+          // @ts-expect-error TS(2339): Property 'rowContainer' does not exist on type '{ ... Remove this comment to see the full error message
           <View style={styles.rowContainer}>
             {skills.length > 0 &&
               skills.map((skill, index) => (
@@ -222,6 +233,7 @@ export const Skills = ({ hero }) => {
                       </Text>
                     </View>
                     <CheckBox
+                      // @ts-expect-error TS(2322): Type '{ backgroundColor: null; justifyContent: "ce... Remove this comment to see the full error message
                       containerStyle={{
                         backgroundColor: null,
                         justifyContent: "center",

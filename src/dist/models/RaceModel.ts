@@ -1,3 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-//# sourceMappingURL=RaceModel.js.map
+export default interface RaceModel {
+    id: string;
+    name: string;
+    categoryId: string;
+    size: string;
+}

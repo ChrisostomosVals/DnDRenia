@@ -1,3 +1,9 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-//# sourceMappingURL=WorldObjectModel.js.map
+import WorldObjectPropModel from "./WorldObjectPropModel";
+
+export default interface WorldObjectModel {
+    id: string;
+    name: string;
+    type: string;
+    description: string | null;
+    properties: WorldObjectPropModel[] | null;
+}

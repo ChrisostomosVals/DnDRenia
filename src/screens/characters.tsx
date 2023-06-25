@@ -1,6 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { View, StyleSheet, Text } from "react-native";
+// @ts-expect-error TS(2306): File 'D:/chris/Coding/Mobile/DnDRenia/DnDRenia/src... Remove this comment to see the full error message
 import CharacterApi from "../dist/api/CharacterApi";
 import { List } from "react-native-paper";
 import { Card } from "@rneui/base";
@@ -12,7 +13,9 @@ import { ScrollView } from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ip } from "../utils/constants";
 
-export const Characters = ({ navigation }) => {
+export const Characters = ({
+  navigation
+}: any) => {
   const isFocused = useIsFocused();
   const [characters, setCharacters] = useState([]);
   const [open, setOpen] = useState(false);
@@ -72,7 +75,7 @@ export const Characters = ({ navigation }) => {
     }
     setCharacters(heroes.data);
   };
-  const fetchCharacters = async (e) => {
+  const fetchCharacters = async (e: any) => {
     const token = await AsyncStorage.getItem("token");
     const fetchHeroes = await CharacterApi.GetAsync(token, ip, e.type);
     if(fetchHeroes.isError){
@@ -83,7 +86,7 @@ export const Characters = ({ navigation }) => {
     setTitle(e.label);
     setCharacters(fetchHeroes.data);
   };
-  const navigateToInfo = (id) => {
+  const navigateToInfo = (id: any) => {
     navigation.navigate("CharacterInfo", { characterId: id, navigation: navigation });
   };
 
@@ -119,6 +122,7 @@ export const Characters = ({ navigation }) => {
             ...globalStyles.card
           }}
         >
+          // @ts-expect-error TS(2339): Property 'list' does not exist on type '{ containe... Remove this comment to see the full error message
           <List.Section style={styles.list}>
             <List.Subheader
               style={{
@@ -142,8 +146,11 @@ export const Characters = ({ navigation }) => {
                       ...globalStyles.textStyle,
                       color: "gray",
                     }}
+                    // @ts-expect-error TS(2339): Property 'name' does not exist on type 'never'.
                     title={h.name}
+                    // @ts-expect-error TS(2339): Property 'type' does not exist on type 'never'.
                     description={h.type}
+                    // @ts-expect-error TS(2339): Property 'id' does not exist on type 'never'.
                     key={h.id}
                     right={(props) => (
                       <MaterialCommunityIcons
@@ -152,6 +159,7 @@ export const Characters = ({ navigation }) => {
                         color="orange"
                       />
                     )}
+                    // @ts-expect-error TS(2339): Property 'id' does not exist on type 'never'.
                     onPress={() => navigateToInfo(h.id)}
                   />
                 )):

@@ -2,6 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState, useCallback } from "react";
 import { View, StyleSheet, Text, RefreshControl, Image, Switch } from "react-native";
 import { MainStats } from "../components/mainStats";
+// @ts-expect-error TS(2306): File 'D:/chris/Coding/Mobile/DnDRenia/DnDRenia/src... Remove this comment to see the full error message
 import CharacterApi from "../dist/api/CharacterApi";
 import { globalStyles } from "../utils/styles";
 import { useIsFocused } from "@react-navigation/native";
@@ -13,7 +14,7 @@ import { Skills } from "../components/skills";
 import { ScrollView } from "react-native-gesture-handler";
 
 
-export const Index = (props) => {
+export const Index = (props: any) => {
   const isFocused = useIsFocused();
   const [hero, setHero] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
@@ -53,6 +54,7 @@ export const Index = (props) => {
       color: 'white',
       textAlign: "center",
       backgroundColor: 'rgba(16,36,69,0.95)',
+      // @ts-expect-error TS(1117): An object literal cannot have multiple properties ... Remove this comment to see the full error message
       borderRadius: 15
     },
     equipment:{
@@ -79,7 +81,7 @@ export const Index = (props) => {
       setHero(fetchHero.data);
     }
   };
-  const navigateToPage = (page, id) =>{
+  const navigateToPage = (page: any, id: any) =>{
     props.navigation.navigate(page, {heroId: id})
   }
   const toggleSwitch = () => {
@@ -106,14 +108,17 @@ export const Index = (props) => {
         <>
           <View style={styles.hidden}></View>
           <View style={styles.header}>
+            // @ts-expect-error TS(2339): Property 'name' does not exist on type 'never'.
             <Text style={{...styles.welcomeStyle, ...globalStyles.textStyle}}>{hero.name}</Text>
             <View style={styles.equipment}>
             <View style={globalStyles.card}>
+              // @ts-expect-error TS(2339): Property 'id' does not exist on type 'never'.
               <TouchableOpacity onPress={() => navigateToPage('MyGear', hero.id)}>
             <Image source={require('../assets/images/Rucksack_80px.png')} />
             </TouchableOpacity>
              </View>
              <View style={globalStyles.card}>
+             // @ts-expect-error TS(2339): Property 'id' does not exist on type 'never'.
              <TouchableOpacity onPress={() => navigateToPage('MyProperties', hero.id)}>
              <MaterialCommunityIcons
                 name="account"
@@ -122,6 +127,7 @@ export const Index = (props) => {
             />
             </TouchableOpacity>
              </View>
+             // @ts-expect-error TS(2339): Property 'id' does not exist on type 'never'.
              <TouchableOpacity onPress={() => navigateToPage('MyArsenal', hero.id)}>
 
               <View style={globalStyles.card}>
@@ -141,9 +147,11 @@ export const Index = (props) => {
           />
           <View style={styles.stats}>
             {visibleData === 'mainStats' &&
+              // @ts-expect-error TS(2339): Property 'id' does not exist on type 'never'.
               <MainStats hero={{id: hero.id, stats: hero.stats}} />
             }
             {visibleData === 'skills' &&
+              // @ts-expect-error TS(2339): Property 'id' does not exist on type 'never'.
               <Skills hero={{id: hero.id}}/>
             }
           </View>

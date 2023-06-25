@@ -1,8 +1,10 @@
 import { useEffect, useState, useRef } from "react";
 import { View, Image, StyleSheet, Text, TouchableOpacity, TextInput } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
+// @ts-expect-error TS(2306): File 'D:/chris/Coding/Mobile/DnDRenia/DnDRenia/src... Remove this comment to see the full error message
 import CharacterApi from "../dist/api/CharacterApi";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+// @ts-expect-error TS(2306): File 'D:/chris/Coding/Mobile/DnDRenia/DnDRenia/src... Remove this comment to see the full error message
 import { MediaApi } from "../dist/api/MediaApi";
 import { globalStyles } from "../utils/styles";
 import { ProfileSheet } from "../components/profileSheet";
@@ -11,7 +13,10 @@ import Animated, {EasingNode, useAnimatedStyle, useSharedValue, withRepeat, with
 import { ip } from "../utils/constants";
 import { Banner } from "../components/banner";
 
-export const MyProperties = ({ heroId, navigation }) => {
+export const MyProperties = ({
+  heroId,
+  navigation
+}: any) => {
   const isFocused = useIsFocused();
   const [properties, setProperties] = useState([]);
   const [images, setImages] = useState([]);
@@ -78,7 +83,9 @@ useEffect(() => {
         fileReaderInstance.readAsDataURL(downloadFile.data);
         fileReaderInstance.onload = () => {
           let base64data = fileReaderInstance.result;
+          // @ts-expect-error TS(2345): Argument of type 'string | ArrayBuffer' is not ass... Remove this comment to see the full error message
           setProfileImage(base64data);
+          // @ts-expect-error TS(2345): Argument of type '(img: never[]) => { image: strin... Remove this comment to see the full error message
           setImages((img) => [
             ...img,
             {
@@ -103,6 +110,7 @@ useEffect(() => {
         fileReaderInstance.readAsDataURL(downloadFile.data);
         fileReaderInstance.onload = () => {
           let base64data = fileReaderInstance.result;
+          // @ts-expect-error TS(2345): Argument of type '(img: never[]) => { image: strin... Remove this comment to see the full error message
           setImages((img) => [
             ...img,
             {
@@ -126,7 +134,8 @@ useEffect(() => {
       console.log(getStats.error, "MyProperties.fetchStats");
       return;
     }
-    getStats.data.forEach((stat) => {
+    getStats.data.forEach((stat: any) => {
+      // @ts-expect-error TS(2345): Argument of type '(st: never[]) => any[]' is not a... Remove this comment to see the full error message
       setStats((st) => [...st, stat]);
     });
   };
@@ -137,6 +146,7 @@ useEffect(() => {
     },
     backgroundStyle: {
       fontSize: 30,
+      // @ts-expect-error TS(2783): 'color' is specified more than once, so this usage... Remove this comment to see the full error message
       color: "white",
       textAlign: "center",
       backgroundColor: "rgba(16,36,69,0.95)",
@@ -168,8 +178,9 @@ useEffect(() => {
       paddingTop: 5
     },
   });
-  const handleStat = (e, index) =>{
+  const handleStat = (e: any, index: any) =>{
     const newItems = [...stats];
+    // @ts-expect-error TS(2532): Object is possibly 'undefined'.
     newItems[index].value = e;
     setStats(newItems)
   }
@@ -180,6 +191,7 @@ useEffect(() => {
        toValue: 3,
        duration: 3000,
        easing: EasingNode.linear,
+       // @ts-expect-error TS(2345): Argument of type '{ toValue: number; duration: num... Remove this comment to see the full error message
        useNativeDriver: true,
       },
     ).start();
@@ -187,9 +199,11 @@ useEffect(() => {
   const handleSheet = () => {
     if (profileModal) {
       setProfileModal(false);
+      // @ts-expect-error TS(2532): Object is possibly 'undefined'.
       bottomSheetRef.current.snapToIndex(0);
     } else {
       setProfileModal(true);
+      // @ts-expect-error TS(2532): Object is possibly 'undefined'.
       bottomSheetRef.current.close();
     }
   };
@@ -254,9 +268,12 @@ useEffect(() => {
           )}
           </View>
           
+            // @ts-expect-error TS(7030): Not all code paths return a value.
             {stats.map((s, index) => {
+              // @ts-expect-error TS(2339): Property 'name' does not exist on type 'never'.
               if (renderedStats.includes(s.name)) {
                 return (
+                  // @ts-expect-error TS(2339): Property 'name' does not exist on type 'never'.
                   <View key={s.name} style={styles.rowContainer}>
                     <Text
                       style={{
@@ -265,9 +282,11 @@ useEffect(() => {
                         fontSize: 20,
                       }}
                     >
+                      // @ts-expect-error TS(2339): Property 'name' does not exist on type 'never'.
                       {s.name}:
                     </Text>
                     <TextInput
+                      // @ts-expect-error TS(2769): No overload matches this call.
                       style={{
                         ...globalStyles.textStyle,
                         color: "#CD853F",
@@ -280,6 +299,7 @@ useEffect(() => {
                         opacity: edit ? 1: 0.6
                       }}
                       editable={edit}
+                      // @ts-expect-error TS(2339): Property 'value' does not exist on type 'never'.
                       value={s.value}
                       onChangeText={(e) => handleStat(e, index)}
                     >

@@ -22,8 +22,8 @@ export const GoodCategory = ({
   equipment,
   setShopVisible,
   removeItem,
-  addItem,
-}) => {
+  addItem
+}: any) => {
   const [page, setPage] = useState(0);
 
   useEffect(() => {
@@ -112,67 +112,67 @@ export const GoodCategory = ({
   if (!equipment) {
     return <Text style={styles.textStyle}>Loading...</Text>;
   }
-  return (
-    <>
-      <View style={styles.title}>
-        <View style={styles.categoryTitle}>
-          <IonIcon
-            style={styles.backButton}
-            name="arrow-back-circle"
-            color="#DAA520"
-            size={30}
-            onPress={() => setShopVisible(true)}
-          />
-          <Text style={styles.welcomeStyle}>{category}</Text>
-        </View>
+  return <>
+    <View style={styles.title}>
+      <View style={styles.categoryTitle}>
+        <IonIcon
+          style={styles.backButton}
+          name="arrow-back-circle"
+          color="#DAA520"
+          size={30}
+          onPress={() => setShopVisible(true)}
+        />
+        <Text style={styles.welcomeStyle}>{category}</Text>
       </View>
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        <View style={styles.table}>
-          <Grid style={{...styles.grid, backgroundColor: '#DAA520'}}>
-            <Row style={styles.row}>
-              <Col>
-                <Text style={styles.textStyle}>Goods</Text>
-              </Col>
-              <Col>
-                <Text style={styles.textStyle}>Cost</Text>
-              </Col>
-              <Col>
-                <Text style={styles.textStyle}>Weight</Text>
-              </Col>
-              <Col></Col>
-            </Row>
-            <View
-              style={{
-                borderBottomColor: "white",
-                borderBottomWidth: StyleSheet.hairlineWidth,
-              }}
-            />
-          </Grid>
-          {equipment &&
-            equipment.length > 0 &&
-            equipment.map((e, index) => (
-              <GoodItem
-                key={e.name}
-                cart={cart}
-                removeItemFromCart={removeItem}
-                page={page}
-                addItemToCart={addItem}
-                e={e}
-                index={index}
-                category={category}
-              />
-            ))}
-        </View>
-
-        {category !== "Food Drink And Lodging" && (
-          <PageUpAndDown
-            page={page}
-            setPage={setPage}
-            equipment={equipment}
-            pageLength={parseInt(equipment.length / 8)}
+    </View>
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <View style={styles.table}>
+        <Grid style={{...styles.grid, backgroundColor: '#DAA520'}}>
+          <Row style={styles.row}>
+            <Col>
+              <Text style={styles.textStyle}>Goods</Text>
+            </Col>
+            <Col>
+              <Text style={styles.textStyle}>Cost</Text>
+            </Col>
+            <Col>
+              <Text style={styles.textStyle}>Weight</Text>
+            </Col>
+            <Col></Col>
+          </Row>
+          <View
+            style={{
+              borderBottomColor: "white",
+              borderBottomWidth: StyleSheet.hairlineWidth,
+            }}
           />
-        )}
-      </ScrollView>
-    </>
-  );
+        </Grid>
+        {equipment &&
+          equipment.length > 0 &&
+          equipment.map((e: any, index: any) => (
+            // @ts-expect-error TS(2786): 'GoodItem' cannot be used as a JSX component.
+            <GoodItem
+              key={e.name}
+              cart={cart}
+              removeItemFromCart={removeItem}
+              page={page}
+              addItemToCart={addItem}
+              e={e}
+              index={index}
+              category={category}
+            />
+          ))}
+      </View>
+
+      {category !== "Food Drink And Lodging" && (
+        <PageUpAndDown
+          page={page}
+          setPage={setPage}
+          equipment={equipment}
+          // @ts-expect-error TS(2345): Argument of type 'number' is not assignable to par... Remove this comment to see the full error message
+          pageLength={parseInt(equipment.length / 8)}
+        />
+      )}
+    </ScrollView>
+  </>;
 };

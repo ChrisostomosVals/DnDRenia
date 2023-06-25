@@ -12,11 +12,14 @@ import { Col, Row, Grid } from "react-native-easy-grid";
 import { ModalQuestion } from "../components/modalQuestion";
 import { Banner } from "../components/banner";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+// @ts-expect-error TS(2306): File 'D:/chris/Coding/Mobile/DnDRenia/DnDRenia/src... Remove this comment to see the full error message
 import CharacterApi from "../dist/api/CharacterApi";
 import { useIsFocused } from "@react-navigation/native";
 import { ip } from "../utils/constants";
 
-export const MyGear = ({ heroId }) => {
+export const MyGear = ({
+  heroId
+}: any) => {
   const isFocused = useIsFocused();
   const [gear, setGear] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -105,9 +108,9 @@ export const MyGear = ({ heroId }) => {
       return;
     }
     setWeight(0);
-    const gear = getGear.data.filter((g) => g.name !== "Money");
+    const gear = getGear.data.filter((g: any) => g.name !== "Money");
     setGear(gear);
-    getGear.data.forEach((g) => {
+    getGear.data.forEach((g: any) => {
       if (g.name === "Money") {
         let moneyArr = g.quantity.toFixed(2);
         const gold = moneyArr.split(".")[0];
@@ -128,14 +131,20 @@ export const MyGear = ({ heroId }) => {
       }
     });
   };
-  const toggleItem = (item) => {
+  const toggleItem = (item: any) => {
+    // @ts-expect-error TS(2345): Argument of type 'any' is not assignable to parame... Remove this comment to see the full error message
     if (selectedItems.includes(item)) {
       setSelectedItems((i) => i.filter((it) => it !== item));
     } else {
+      // @ts-expect-error TS(2345): Argument of type '(i: never[]) => any[]' is not as... Remove this comment to see the full error message
       setSelectedItems((i) => [...i, item]);
     }
   };
-  const Item = ({ item, onPress, backgroundColor }) => (
+  const Item = ({
+    item,
+    onPress,
+    backgroundColor
+  }: any) => (
     <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
       <Text style={{ ...globalStyles.textStyle, textAlign: "center" }}>
         {item.name}
@@ -148,16 +157,19 @@ export const MyGear = ({ heroId }) => {
     </TouchableOpacity>
   );
 
-    const handleModal = (action) =>{
+    const handleModal = (action: any) => {
       if(action === 'equip'){
+        // @ts-expect-error TS(2532): Object is possibly 'undefined'.
         setModalTitle(`Are you sure you want to equip ${selectedItems[0].name} to your Arsenal?`)
         setModalVisible(true);
       }
     }
 
-  const renderItem = (item) => {
+  const renderItem = (item: any) => {
+    // @ts-expect-error TS(2345): Argument of type 'any' is not assignable to parame... Remove this comment to see the full error message
     const backgroundColor = selectedItems.includes(item)
       ? "#DAA520"
+      // @ts-expect-error TS(2339): Property 'gearId' does not exist on type 'never'.
       : (arsenal.find(ars =>  ars.gearId === item.id) ?
       '#004e00' : "rgb(16,36,69)")
     return (
@@ -205,8 +217,11 @@ export const MyGear = ({ heroId }) => {
             <Row style={styles.row}>
               <Col style={{ alignItems: "center" }}>
                 <Text style={{ ...globalStyles.textStyle, fontSize: 30 }}>
+                  // @ts-expect-error TS(2339): Property 'gold' does not exist on type '{}'.
                   {money.gold} <FontAwesome5 name="coins" color="gold" />{" "}
+                  // @ts-expect-error TS(2339): Property 'silver' does not exist on type '{}'.
                   {money.silver} <FontAwesome5 name="coins" color="silver" />{" "}
+                  // @ts-expect-error TS(2339): Property 'copper' does not exist on type '{}'.
                   {money.copper} <FontAwesome5 name="coins" color="#b87333" />
                 </Text>
               </Col>

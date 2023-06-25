@@ -4,7 +4,9 @@ import MapView, { UrlTile, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { useEffect, useState } from "react";
 import { globalStyles } from "../utils/styles";
 import { Button } from "../components/button";
+// @ts-expect-error TS(2306): File 'D:/chris/Coding/Mobile/DnDRenia/DnDRenia/src... Remove this comment to see the full error message
 import WorldObjectApi from "../dist/api/WorldObjectApi";
+// @ts-expect-error TS(2306): File 'D:/chris/Coding/Mobile/DnDRenia/DnDRenia/src... Remove this comment to see the full error message
 import LocationApi from "../dist/api/LocationApi";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CustomModal } from "../components/CustomModal";
@@ -43,13 +45,16 @@ export const Map = () => {
     setSelectedMarker(null);
     fetchObjects();
     fetchLocations();
+    // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
     setMarkerTitle();
+    // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
     setObjectType();
+    // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
     setDescription();
     setModalVisible(false);
     setEditModalVisible(false);
   }, [isFocused, render]);
-  const handlePress = (event) => {
+  const handlePress = (event: any) => {
     const { coordinate } = event.nativeEvent;
     setMarkerLocation(coordinate);
   };
@@ -66,6 +71,7 @@ export const Map = () => {
     for (let location of locations.data) {
       locationsArray.push(location);
     }
+    // @ts-expect-error TS(2345): Argument of type 'any[]' is not assignable to para... Remove this comment to see the full error message
     setLocations(locationsArray);
   };
   const fetchObjects = async () => {
@@ -87,16 +93,21 @@ export const Map = () => {
       if (item.properties !== null) {
         for (let prop of item.properties) {
           if (prop.name === "longitude") {
+            // @ts-expect-error TS(2339): Property 'longitude' does not exist on type '{ id:... Remove this comment to see the full error message
             marker.longitude = Number(prop.value);
           } else if (prop.name === "latitude") {
+            // @ts-expect-error TS(2339): Property 'latitude' does not exist on type '{ id: ... Remove this comment to see the full error message
             marker.latitude = Number(prop.value);
           }
+          // @ts-expect-error TS(2339): Property 'longitude' does not exist on type '{ id:... Remove this comment to see the full error message
           if (marker.longitude === null) marker.longitude = 0;
+          // @ts-expect-error TS(2339): Property 'latitude' does not exist on type '{ id: ... Remove this comment to see the full error message
           if (marker.latitude === null) marker.latitude = 0;
         }
         markersArray.push(marker);
       }
     }
+    // @ts-expect-error TS(2345): Argument of type '{ id: any; title: any; type: any... Remove this comment to see the full error message
     setMarkers(markersArray);
   };
 
@@ -157,10 +168,12 @@ export const Map = () => {
         properties: [
           {
             name: "latitude",
+            // @ts-expect-error TS(2531): Object is possibly 'null'.
             value: markerLocation.latitude.toString(),
           },
           {
             name: "longitude",
+            // @ts-expect-error TS(2531): Object is possibly 'null'.
             value: markerLocation.longitude.toString(),
           },
         ],
@@ -182,7 +195,9 @@ export const Map = () => {
       setBannerVisible(true);
     } else if (markerType === "Locations") {
       const locationRequest = {
+        // @ts-expect-error TS(2531): Object is possibly 'null'.
         x: markerLocation.longitude.toString(),
+        // @ts-expect-error TS(2531): Object is possibly 'null'.
         y: markerLocation.latitude.toString(),
         date,
         time,
@@ -221,6 +236,7 @@ export const Map = () => {
   const hideDialog = () => {
     setBannerVisible(false);
   };
+  // @ts-expect-error TS(7030): Not all code paths return a value.
   const Children = useMemo(() => {
     if (markerType === "Objects") {
       return (
@@ -229,6 +245,7 @@ export const Map = () => {
             placeholder="Set Title"
             value={markerTitle}
             style={styles.input}
+            // @ts-expect-error TS(2769): No overload matches this call.
             onChangeText={setMarkerTitle}
             placeholderTextColor={"rgba(255,255,255, 0.3)"}
           />
@@ -236,6 +253,7 @@ export const Map = () => {
             placeholder="Set Type"
             value={objectType}
             style={styles.input}
+            // @ts-expect-error TS(2769): No overload matches this call.
             onChangeText={setObjectType}
             placeholderTextColor={"rgba(255,255,255, 0.3)"}
           />
@@ -243,6 +261,7 @@ export const Map = () => {
             placeholder="Set Description"
             value={description}
             style={styles.input}
+            // @ts-expect-error TS(2769): No overload matches this call.
             onChangeText={setDescription}
             placeholderTextColor={"rgba(255,255,255, 0.3)"}
           />
@@ -297,20 +316,26 @@ export const Map = () => {
     const token = await AsyncStorage.getItem("token");
     setEditModalVisible(false);
     if(markerType === "Objects"){
+      // @ts-expect-error TS(2531): Object is possibly 'null'.
       const findObject = await WorldObjectApi.GetByIdAsync(token, ip, selectedMarker.id);
       if(findObject.isError){
         console.log(findObject.error, 'map.editObject()')
         setBannerText({
           title: "Error",
+          // @ts-expect-error TS(2531): Object is possibly 'null'.
           paragraph: `There was an error updating ${selectedMarker.title}`,
         });
       setBannerVisible(true);
         return;
       }
       const object = {
+        // @ts-expect-error TS(2531): Object is possibly 'null'.
         id: selectedMarker.id,
+        // @ts-expect-error TS(2531): Object is possibly 'null'.
         name: selectedMarker.title,
+        // @ts-expect-error TS(2531): Object is possibly 'null'.
         description: selectedMarker.description,
+        // @ts-expect-error TS(2531): Object is possibly 'null'.
         type: selectedMarker.type,
         properties: findObject.data.properties
       }
@@ -319,6 +344,7 @@ export const Map = () => {
         console.log(update.error, 'map.editObject()')
         setBannerText({
           title: "Error",
+          // @ts-expect-error TS(2531): Object is possibly 'null'.
           paragraph: `There was an error updating ${selectedMarker.title}`,
         });
       setBannerVisible(true);
@@ -331,6 +357,7 @@ export const Map = () => {
     setBannerVisible(true);
     }
     else if(markerType === "Locations"){
+      // @ts-expect-error TS(2531): Object is possibly 'null'.
       const findLocation = await LocationApi.GetByIdAsync(token, ip, selectedMarker.id)
       if(findLocation.isError){
         console.log(findLocation.error, 'map.editObject()')
@@ -342,13 +369,21 @@ export const Map = () => {
       return;
       }
       const location = {
+        // @ts-expect-error TS(2531): Object is possibly 'null'.
         id: selectedMarker.id,
+        // @ts-expect-error TS(2531): Object is possibly 'null'.
         x: selectedMarker.x,
+        // @ts-expect-error TS(2531): Object is possibly 'null'.
         y: selectedMarker.y,
+        // @ts-expect-error TS(2531): Object is possibly 'null'.
         date: selectedMarker.date,
+        // @ts-expect-error TS(2531): Object is possibly 'null'.
         time: selectedMarker.time,
+        // @ts-expect-error TS(2531): Object is possibly 'null'.
         year: selectedMarker.year,
+        // @ts-expect-error TS(2531): Object is possibly 'null'.
         season: selectedMarker.season,
+        // @ts-expect-error TS(2531): Object is possibly 'null'.
         events: selectedMarker.events
       }
       const update = await LocationApi.UpdateAsync(token, ip, location)
@@ -373,11 +408,13 @@ export const Map = () => {
     const token = await AsyncStorage.getItem("token");
     setEditModalVisible(false);
     if(markerType === "Objects"){
+      // @ts-expect-error TS(2531): Object is possibly 'null'.
       const deleteObject = await WorldObjectApi.DeleteAsync(token, ip, selectedMarker.id)
       if(deleteObject.isError){
         console.log(deleteObject.error, 'map.editObject()')
         setBannerText({
           title: "Error",
+          // @ts-expect-error TS(2531): Object is possibly 'null'.
           paragraph: `There was an error deleting ${selectedMarker.title}`,
         });
       setBannerVisible(true);
@@ -390,6 +427,7 @@ export const Map = () => {
       setBannerVisible(true);
     }
     else if(markerType === "Locations"){
+      // @ts-expect-error TS(2531): Object is possibly 'null'.
       const deleteLocation = await LocationApi.DeleteAsync(token, ip, selectedMarker.id)
       if(deleteLocation.isError){
         console.log(deleteLocation.error, 'map.editObject()')
@@ -409,6 +447,7 @@ export const Map = () => {
     setRender(!render);
   } 
 
+  // @ts-expect-error TS(7030): Not all code paths return a value.
   const EditChildren = useMemo(() => {
     if(!selectedMarker) return;
     if (markerType === "Objects") {
@@ -416,22 +455,28 @@ export const Map = () => {
         <>
           <TextInput
             placeholder="Set Title"
+            // @ts-expect-error TS(2339): Property 'title' does not exist on type 'never'.
             value={selectedMarker.title}
             style={styles.input}
+            // @ts-expect-error TS(2698): Spread types may only be created from object types... Remove this comment to see the full error message
             onChangeText={(e) => setSelectedMarker(marker => ({...marker, title: e}))}
             placeholderTextColor={"rgba(255,255,255, 0.3)"}
           />
           <TextInput
             placeholder="Set Type"
+            // @ts-expect-error TS(2339): Property 'type' does not exist on type 'never'.
             value={selectedMarker.type}
             style={styles.input}
+            // @ts-expect-error TS(2698): Spread types may only be created from object types... Remove this comment to see the full error message
             onChangeText={(e) => setSelectedMarker(marker => ({...marker, type: e}))}
             placeholderTextColor={"rgba(255,255,255, 0.3)"}
           />
           <TextInput
             placeholder="Set Description"
+            // @ts-expect-error TS(2339): Property 'description' does not exist on type 'nev... Remove this comment to see the full error message
             value={selectedMarker.description}
             style={styles.input}
+            // @ts-expect-error TS(2698): Spread types may only be created from object types... Remove this comment to see the full error message
             onChangeText={(e) => setSelectedMarker(marker => ({...marker, description: e}))}
             placeholderTextColor={"rgba(255,255,255, 0.3)"}
           />
@@ -442,38 +487,48 @@ export const Map = () => {
         <>
           <TextInput
             placeholder="Set Date"
+            // @ts-expect-error TS(2339): Property 'date' does not exist on type 'never'.
             value={selectedMarker.date.toString()}
             keyboardType="number-pad"
             style={styles.input}
+            // @ts-expect-error TS(2698): Spread types may only be created from object types... Remove this comment to see the full error message
             onChangeText={(e) => setSelectedMarker(marker => ({...marker, date: Number(e)}))}
             placeholderTextColor={"rgba(255,255,255, 0.3)"}
           />
           <TextInput
             placeholder="Set Time"
+            // @ts-expect-error TS(2339): Property 'time' does not exist on type 'never'.
             value={selectedMarker.time}
             style={styles.input}
+            // @ts-expect-error TS(2698): Spread types may only be created from object types... Remove this comment to see the full error message
             onChangeText={(e) => setSelectedMarker(marker => ({...marker, time: e}))}
             placeholderTextColor={"rgba(255,255,255, 0.3)"}
           />
           <TextInput
             placeholder="Set Year"
+            // @ts-expect-error TS(2339): Property 'year' does not exist on type 'never'.
             value={selectedMarker.year.toString()}
             keyboardType="number-pad"
             style={styles.input}
+            // @ts-expect-error TS(2698): Spread types may only be created from object types... Remove this comment to see the full error message
             onChangeText={(e) => setSelectedMarker(marker => ({...marker, year: Number(e)}))}
             placeholderTextColor={"rgba(255,255,255, 0.3)"}
           />
           <TextInput
             placeholder="Set Season"
+            // @ts-expect-error TS(2339): Property 'season' does not exist on type 'never'.
             value={selectedMarker.season}
             style={styles.input}
+            // @ts-expect-error TS(2698): Spread types may only be created from object types... Remove this comment to see the full error message
             onChangeText={(e) => setSelectedMarker(marker => ({...marker, season: e}))}
             placeholderTextColor={"rgba(255,255,255, 0.3)"}
           />
            <TextInput
             placeholder="Set Event"
+            // @ts-expect-error TS(2339): Property 'events' does not exist on type 'never'.
             value={selectedMarker.events[0]}
             style={styles.input}
+            // @ts-expect-error TS(2698): Spread types may only be created from object types... Remove this comment to see the full error message
             onChangeText={(e) => setSelectedMarker(marker => ({...marker, events: [e]}))}
             placeholderTextColor={"rgba(255,255,255, 0.3)"}
           />
@@ -494,7 +549,7 @@ export const Map = () => {
     }
   };
 
-  const selectMarker = (marker) => {
+  const selectMarker = (marker: any) => {
     setSelectedMarker(marker);
   };
   const handleEdit = () => {
@@ -511,6 +566,7 @@ export const Map = () => {
 
   return (
     <View style={{ flex: 1, alignItems: "center" }}>
+      // @ts-expect-error TS(2786): 'Button' cannot be used as a JSX component.
       <Button
         disabled={!!selectedMarker}
         opacity={!!selectedMarker ? 0.5 : 1}
@@ -526,6 +582,7 @@ export const Map = () => {
         onPress={() => setSelectedMarker(null)}
         onLongPress={handlePress}
         onMarkerDrag={handlePress}
+        // @ts-expect-error TS(2739): Type '{ top: number; }' is missing the following p... Remove this comment to see the full error message
         legalLabelInsets={{ top: -500 }}
         mapType={"none"}
         toolbarEnabled={false}
@@ -550,22 +607,32 @@ export const Map = () => {
           markers.map((marker) => (
             <Marker
               coordinate={{
+                // @ts-expect-error TS(2339): Property 'latitude' does not exist on type 'never'... Remove this comment to see the full error message
                 latitude: marker.latitude,
+                // @ts-expect-error TS(2339): Property 'longitude' does not exist on type 'never... Remove this comment to see the full error message
                 longitude: marker.longitude,
               }}
               draggable={
+                // @ts-expect-error TS(2339): Property 'id' does not exist on type 'never'.
                 !!selectedMarker ? marker.id === selectedMarker.id : false
               }
+              // @ts-expect-error TS(2339): Property 'title' does not exist on type 'never'.
               title={marker.title}
+              // @ts-expect-error TS(2339): Property 'id' does not exist on type 'never'.
               key={marker.id}
+              // @ts-expect-error TS(2339): Property 'description' does not exist on type 'nev... Remove this comment to see the full error message
               description={marker.description}
               onPress={() => selectMarker(marker)}
+              // @ts-expect-error TS(2322): Type '{ children: Element; coordinate: { latitude:... Remove this comment to see the full error message
               onLongPress={handleEdit}
               // style={{width: 120 , height:120}}
               // image={image[`${marker.type.toLowerCase()}`]}
             >
+              // @ts-expect-error TS(2786): 'CustomCallout' cannot be used as a JSX component.
               <CustomCallout
+                // @ts-expect-error TS(2339): Property 'title' does not exist on type 'never'.
                 title={marker.title}
+                // @ts-expect-error TS(2339): Property 'type' does not exist on type 'never'.
                 description={marker.type + ': ' + marker.description}
               />
             </Marker>
@@ -575,22 +642,32 @@ export const Map = () => {
           locations.map((location) => (
             <Marker
               coordinate={{
+                // @ts-expect-error TS(2339): Property 'y' does not exist on type 'never'.
                 latitude: Number(location.y),
+                // @ts-expect-error TS(2339): Property 'x' does not exist on type 'never'.
                 longitude: Number(location.x),
               }}
               draggable={
+                // @ts-expect-error TS(2339): Property 'id' does not exist on type 'never'.
                 !!selectedMarker ? location.id === selectedMarker.id : false
               }
+              // @ts-expect-error TS(2339): Property 'id' does not exist on type 'never'.
               key={location.id}
               onPress={() => setSelectedMarker(location)}
             >
+              // @ts-expect-error TS(2786): 'CustomCallout2' cannot be used as a JSX component... Remove this comment to see the full error message
               <CustomCallout2
                 title={{
+                  // @ts-expect-error TS(2339): Property 'date' does not exist on type 'never'.
                   date: location.date,
+                  // @ts-expect-error TS(2339): Property 'time' does not exist on type 'never'.
                   time: location.time,
+                  // @ts-expect-error TS(2339): Property 'year' does not exist on type 'never'.
                   year: location.year,
+                  // @ts-expect-error TS(2339): Property 'season' does not exist on type 'never'.
                   season: location.season,
                 }}
+                // @ts-expect-error TS(2339): Property 'events' does not exist on type 'never'.
                 description={location.events}
               />
             </Marker>
@@ -598,10 +675,12 @@ export const Map = () => {
       </MapView>
       {markerType === "Objects" && (
         selectedMarker ? 
+        // @ts-expect-error TS(2786): 'Button' cannot be used as a JSX component.
         <Button
           onPress={handleEdit}
           text="Edit Object"
         /> :
+        // @ts-expect-error TS(2786): 'Button' cannot be used as a JSX component.
         <Button
           disabled={!markerLocation}
           opacity={!markerLocation ? 0.5 : 1}
@@ -611,10 +690,12 @@ export const Map = () => {
       )}
       {markerType === "Locations" && (
         selectedMarker ? 
+        // @ts-expect-error TS(2786): 'Button' cannot be used as a JSX component.
         <Button
           onPress={handleEdit}
           text="Edit Location"
         /> :
+        // @ts-expect-error TS(2786): 'Button' cannot be used as a JSX component.
         <Button
           disabled={!markerLocation}
           opacity={!markerLocation ? 0.5 : 1}
@@ -622,6 +703,7 @@ export const Map = () => {
           text="Save Location"
         />
       )}
+      // @ts-expect-error TS(2786): 'Button' cannot be used as a JSX component.
       <Button
         disabled={!markerLocation}
         opacity={!markerLocation ? 0.5 : 1}

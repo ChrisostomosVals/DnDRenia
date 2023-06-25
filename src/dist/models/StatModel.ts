@@ -1,3 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-//# sourceMappingURL=StatModel.js.map
+export default interface StatModel {
+    name: string;
+    value: string;
+    shown: boolean;
+}

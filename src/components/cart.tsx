@@ -14,7 +14,7 @@ export const Cart = ({
   removeItemFromCart,
   deleteItemFromCart,
   onBuy
-}) => {
+}: any) => {
   const [page, setPage] = useState(0);
   const [totalCost, setTotalCost] = useState({
     gold: "",
@@ -48,8 +48,11 @@ export const Cart = ({
     if (total !== 0) {
       const tot = total.toFixed(2);
       setTotalCost({
+        // @ts-expect-error TS(2322): Type 'string | undefined' is not assignable to typ... Remove this comment to see the full error message
         gold: tot.split(".")[0],
+        // @ts-expect-error TS(2322): Type 'string | undefined' is not assignable to typ... Remove this comment to see the full error message
         silver: tot.split(".")[1][0],
+        // @ts-expect-error TS(2322): Type 'string | undefined' is not assignable to typ... Remove this comment to see the full error message
         copper: tot.split(".")[1][1],
       });
     }
@@ -186,7 +189,8 @@ export const Cart = ({
                     </Grid>
                   )}
                   {cart.length > 0 &&
-                    cart.map((e, index) => {
+                    // @ts-expect-error TS(7030): Not all code paths return a value.
+                    cart.map((e: any, index: any) => {
                       if (index >= page * 4 && index < 4 * (page + 1)) {
                         return (
                           <Grid key={e.name} style={styles.grid}>

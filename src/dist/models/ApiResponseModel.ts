@@ -1,19 +1,23 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-class ApiResponseModel {
-    constructor(data, error) {
+import ErrorResponseModel from './ErrorResponseModel'
+
+export default class ApiResponseModel<T> {
+    public data!: T | null;
+    public error!: ErrorResponseModel | null;
+    public isError: boolean;
+    constructor(data:T | null, error: ErrorResponseModel | null){
         this.isError = error !== null;
-        if (this.isError) {
+        if(this.isError){
             this.setError(error);
         }
         this.setModel(data);
+        
     }
-    setModel(params) {
-        this.data = params;
+    
+    private setModel(params: T | null) {
+        this.data = params
     }
-    setError(params) {
-        this.error = params;
+
+    private setError(params: ErrorResponseModel | null){
+        this.error = params
     }
 }
-exports.default = ApiResponseModel;
-//# sourceMappingURL=ApiResponseModel.js.map

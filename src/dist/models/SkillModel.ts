@@ -1,3 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-//# sourceMappingURL=SkillModel.js.map
+export default interface SkillModel {
+    name: string;
+    abilityMod: number;
+    trained: boolean;
+    ranks: number;
+    miscMod: number;
+}

@@ -2,7 +2,16 @@ import { useEffect } from "react";
 import { Text, StyleSheet, View, TouchableOpacity, Modal } from "react-native"
 import { globalStyles } from "../utils/styles";
 
-export const CustomModal2 = ({modalVisible, onConfrim, onClose, closeModal, title, Children, confirmTitle, closeTitle}) =>{
+export const CustomModal2 = ({
+    modalVisible,
+    onConfrim,
+    onClose,
+    closeModal,
+    title,
+    Children,
+    confirmTitle,
+    closeTitle
+}: any) =>{
     useEffect(()=>{
 
     }, [modalVisible])

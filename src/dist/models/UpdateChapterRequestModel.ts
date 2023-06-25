@@ -1,3 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-//# sourceMappingURL=UpdateChapterRequestModel.js.map
+import CreateChapterRequestModel from "./CreateChapterRequestModel";
+
+export default interface UpdateChapterRequestModel extends CreateChapterRequestModel {
+    id: string;
+}

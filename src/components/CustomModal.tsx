@@ -3,7 +3,13 @@ import { Text, StyleSheet, View, TouchableOpacity, Modal } from "react-native"
 import { globalStyles } from "../utils/styles";
 import { memo } from "react";
 
-export const CustomModal = ({modalVisible, onConfrim, onClose, title, Children}) =>{
+export const CustomModal = ({
+    modalVisible,
+    onConfrim,
+    onClose,
+    title,
+    Children
+}: any) =>{
     useEffect(()=>{
 
     }, [modalVisible])

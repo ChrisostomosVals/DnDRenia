@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import IonIcon from "react-native-vector-icons/Ionicons";
 
+// @ts-expect-error TS(2339): Property 'item' does not exist on type '{}'.
 export const TouchableImage = memo(function TouchableImage({ item, type, setItem, openModal }) {
   useEffect(()=>{
     setOpacity(false)
@@ -15,9 +16,9 @@ export const TouchableImage = memo(function TouchableImage({ item, type, setItem
   const [opacity, setOpacity] = useState(false)
   const handleImage = () =>{
     if(type === "new"){
-      setItem(items => {
+      setItem((items: any) => {
         if(items.includes(item)){
-            return items.filter(i => i !== item)
+            return items.filter((i: any) => i !== item);
         }
         else
           return [...items, item]
@@ -33,6 +34,7 @@ export const TouchableImage = memo(function TouchableImage({ item, type, setItem
   return (
     <TouchableOpacity onPress={handleImage}>
       <Image
+        // @ts-expect-error TS(2769): No overload matches this call.
         PlaceholderContent={<ActivityIndicator />}
         source={{ uri: item.uri }}
         style={styles.image}

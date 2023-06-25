@@ -1,3 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-//# sourceMappingURL=InsertUserRequestModel.js.map
+export default interface InsertUserRequestModel {
+    characterId: string | null;
+    name: string | null;
+    email: string;
+    password: string;
+}

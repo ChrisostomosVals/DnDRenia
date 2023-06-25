@@ -1,3 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-//# sourceMappingURL=ChapterModel.js.map
+export default interface ChapterModel {
+    id: string;
+    name: string;
+    story: string;
+    date: string;
+}

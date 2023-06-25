@@ -1,3 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-//# sourceMappingURL=UploadMediaRequestModel.js.map
+import FileModel from "./FileModel";
+
+export default interface UploadMediaRequestModel {
+    type: string;
+    name: string;
+    files: FileModel[];
+}

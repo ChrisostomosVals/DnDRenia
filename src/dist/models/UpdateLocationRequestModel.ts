@@ -1,3 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-//# sourceMappingURL=UpdateLocationRequestModel.js.map
+import InsertLocationRequestModel from "./InsertLocationRequestModel";
+
+export default interface UpdateLocationRequestModel extends InsertLocationRequestModel {
+    id: string;
+}

@@ -6,10 +6,10 @@ import { globalStyles } from "../utils/styles";
 
 
 export const LogOut = ({
-    modalVisible,
-    setModalVisible,
-    handleRender
-}) =>{
+  modalVisible,
+  setModalVisible,
+  handleRender
+}: any) =>{
 
     const styles = StyleSheet.create({
         centeredView: {
@@ -55,35 +55,55 @@ export const LogOut = ({
         handleRender();
     }
 
+    // @ts-expect-error TS(2322): Type 'string' is not assignable to type 'Modal'.
     return (
         <Modal
+          // @ts-expect-error TS(2304): Cannot find name 'animationType'.
           animationType="fade"
+          // @ts-expect-error TS(7027): Unreachable code detected.
           transparent={true}
+          // @ts-expect-error TS(2304): Cannot find name 'visible'.
           visible={modalVisible}
+          // @ts-expect-error TS(2304): Cannot find name 'onRequestClose'.
           onRequestClose={() => setModalVisible(!modalVisible)}
         >
+          // @ts-expect-error TS(2304): Cannot find name 'style'.
           <View style={styles.centeredView}>
+            // @ts-expect-error TS(2304): Cannot find name 'style'.
             <View style={styles.modalView}>
+                // @ts-expect-error TS(2304): Cannot find name 'style'.
                 <Text style={styles.welcomeStyle}>
+                  // @ts-expect-error TS(2552): Cannot find name 'Log'. Did you mean '_log'?
                   Log Out?
                 </Text>
+                // @ts-expect-error TS(2304): Cannot find name 'style'.
                 <Text style={styles.welcomeStyle}>
+                  // @ts-expect-error TS(2304): Cannot find name 'Are'.
                   Are you sure you want to log out?
                 </Text>
+              // @ts-expect-error TS(2304): Cannot find name 'style'.
               <View style={styles.buttons}>
               <TouchableOpacity
+                  // @ts-expect-error TS(2304): Cannot find name 'style'.
                   style={globalStyles.button}
+                  // @ts-expect-error TS(2304): Cannot find name 'onPress'.
                   onPress={() => logout()}
                 >
+                  // @ts-expect-error TS(2304): Cannot find name 'style'.
                   <Text style={{ ...globalStyles.textStyle, fontSize: 30 }}>
+                    // @ts-expect-error TS(2304): Cannot find name 'Confirm'.
                     Confirm
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
+                  // @ts-expect-error TS(2304): Cannot find name 'style'.
                   style={globalStyles.button}
+                  // @ts-expect-error TS(2304): Cannot find name 'onPress'.
                   onPress={() => setModalVisible(false)}
                 >
+                  // @ts-expect-error TS(2304): Cannot find name 'style'.
                   <Text style={{ ...globalStyles.textStyle, fontSize: 30 }}>
+                    // @ts-expect-error TS(2304): Cannot find name 'Cancel'.
                     Cancel
                   </Text>
                 </TouchableOpacity>

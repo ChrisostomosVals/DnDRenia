@@ -5,11 +5,12 @@ import { globalStyles } from "../utils/styles";
 
 
 export const WeaponItem = ({
-    e,
-    index,
-    removeItemFromCart,
-    addItemToCart,
-    cart,}) =>{
+  e,
+  index,
+  removeItemFromCart,
+  addItemToCart,
+  cart
+}: any) =>{
 
         const styles = StyleSheet.create({
             textStyle: {
@@ -40,132 +41,204 @@ export const WeaponItem = ({
               alignItems: 'center'
             }
           });
+        // @ts-expect-error TS(2322): Type 'boolean' is not assignable to type 'Grid'.
         return (
-            <Grid style={styles.grid}>
-              <Row style={styles.row}>
-                <Col style={{paddingright: '1%', paddingleft: '1%'}}>
+          // @ts-expect-error TS(2304): Cannot find name 'style'.
+          <Grid style={styles.grid}>
+            // @ts-expect-error TS(7027): Unreachable code detected.
+            <Row style={styles.row}>
+              // @ts-expect-error TS(2304): Cannot find name 'style'.
+              <Col style={{paddingright: '1%', paddingleft: '1%'}}>
+                <Text
+                  // @ts-expect-error TS(2304): Cannot find name 'style'.
+                  style={{
+                    // @ts-expect-error TS(2304): Cannot find name 'styles'.
+                    ...styles.textStyle,
+                    // @ts-expect-error TS(2304): Cannot find name 'color'.
+                    color: index % 2 ? "white" : "#DAA520",
+                  }}
+                // @ts-expect-error TS(2365): Operator '<' cannot be applied to types 'boolean' ... Remove this comment to see the full error message
+                >
+                  // @ts-expect-error TS(18004): No value exists in scope for the shorthand propert... Remove this comment to see the full error message
+                  {e.name}
+                </Text>
+              </Col>
+              // @ts-expect-error TS(2304): Cannot find name 'style'.
+              <Col style={{paddingRight: '1%', paddingLeft: '1%'}}>
+                <Text
+                  // @ts-expect-error TS(2304): Cannot find name 'style'.
+                  style={{
+                    // @ts-expect-error TS(2304): Cannot find name 'styles'.
+                    ...styles.textStyle,
+                    // @ts-expect-error TS(2304): Cannot find name 'color'.
+                    color: index % 2 ? "white" : "#DAA520",
+                  }}
+                // @ts-expect-error TS(2365): Operator '<' cannot be applied to types 'boolean' ... Remove this comment to see the full error message
+                >
+                  // @ts-expect-error TS(18004): No value exists in scope for the shorthand propert... Remove this comment to see the full error message
+                  {e.cost}
+                </Text>
+              </Col>
+              // @ts-expect-error TS(2304): Cannot find name 'style'.
+              <Col style={{paddingright: '1%', paddingleft: '1%'}}>
+                <Text
+                  // @ts-expect-error TS(2304): Cannot find name 'style'.
+                  style={{
+                    // @ts-expect-error TS(2304): Cannot find name 'styles'.
+                    ...styles.textStyle,
+                    // @ts-expect-error TS(2304): Cannot find name 'color'.
+                    color: index % 2 ? "white" : "#DAA520",
+                  }}
+                // @ts-expect-error TS(2365): Operator '<' cannot be applied to types 'boolean' ... Remove this comment to see the full error message
+                >
+                  // @ts-expect-error TS(18004): No value exists in scope for the shorthand propert... Remove this comment to see the full error message
+                  {e.dmgS}
+                </Text>
+              </Col>
+              // @ts-expect-error TS(2304): Cannot find name 'style'.
+              <Col style={{paddingright: '1%', paddingleft: '1%'}}>
+                <Text
+                  // @ts-expect-error TS(2304): Cannot find name 'style'.
+                  style={{
+                    // @ts-expect-error TS(2304): Cannot find name 'styles'.
+                    ...styles.textStyle,
+                    // @ts-expect-error TS(2304): Cannot find name 'color'.
+                    color: index % 2 ? "white" : "#DAA520",
+                  }}
+                // @ts-expect-error TS(2365): Operator '<' cannot be applied to types 'boolean' ... Remove this comment to see the full error message
+                >
+                  // @ts-expect-error TS(18004): No value exists in scope for the shorthand propert... Remove this comment to see the full error message
+                  {e.dmgM}
+                </Text>
+              </Col>
+              // @ts-expect-error TS(2304): Cannot find name 'style'.
+              <Col style={{paddingright: '1%', paddingleft: '1%'}}>
+                <Text
+                  // @ts-expect-error TS(2304): Cannot find name 'style'.
+                  style={{
+                    // @ts-expect-error TS(2304): Cannot find name 'styles'.
+                    ...styles.textStyle,
+                    // @ts-expect-error TS(2304): Cannot find name 'color'.
+                    color: index % 2 ? "white" : "#DAA520",
+                  }}
+                // @ts-expect-error TS(2365): Operator '<' cannot be applied to types 'boolean' ... Remove this comment to see the full error message
+                >
+                  // @ts-expect-error TS(18004): No value exists in scope for the shorthand propert... Remove this comment to see the full error message
+                  {e.critical}
+                </Text>
+              </Col>
+              // @ts-expect-error TS(2304): Cannot find name 'style'.
+              <Col style={{paddingright: '1%', paddingleft: '1%'}}>
+                <Text
+                  // @ts-expect-error TS(2304): Cannot find name 'style'.
+                  style={{
+                    // @ts-expect-error TS(2304): Cannot find name 'styles'.
+                    ...styles.textStyle,
+                    // @ts-expect-error TS(2304): Cannot find name 'color'.
+                    color: index % 2 ? "white" : "#DAA520",
+                  }}
+                // @ts-expect-error TS(2365): Operator '<' cannot be applied to types 'boolean' ... Remove this comment to see the full error message
+                >
+                  // @ts-expect-error TS(18004): No value exists in scope for the shorthand propert... Remove this comment to see the full error message
+                  {e.rangeIncrement}
+                </Text>
+              </Col>
+              // @ts-expect-error TS(2304): Cannot find name 'style'.
+              <Col style={{paddingright: '1%', paddingleft: '1%'}}>
+                <Text
+                  // @ts-expect-error TS(2304): Cannot find name 'style'.
+                  style={{
+                    // @ts-expect-error TS(2304): Cannot find name 'styles'.
+                    ...styles.textStyle,
+                    // @ts-expect-error TS(2304): Cannot find name 'color'.
+                    color: index % 2 ? "white" : "#DAA520",
+                  }}
+                // @ts-expect-error TS(2365): Operator '<' cannot be applied to types 'boolean' ... Remove this comment to see the full error message
+                >
+                  // @ts-expect-error TS(18004): No value exists in scope for the shorthand propert... Remove this comment to see the full error message
+                  {e.weight}
+                </Text>
+              </Col>
+              <Col>
+                <Text
+                  // @ts-expect-error TS(2304): Cannot find name 'style'.
+                  style={{
+                    // @ts-expect-error TS(2304): Cannot find name 'styles'.
+                    ...styles.textStyle,
+                    // @ts-expect-error TS(2304): Cannot find name 'color'.
+                    color: index % 2 ? "white" : "#DAA520",
+                  }}
+                // @ts-expect-error TS(2365): Operator '<' cannot be applied to types 'boolean' ... Remove this comment to see the full error message
+                >
+                  // @ts-expect-error TS(18004): No value exists in scope for the shorthand propert... Remove this comment to see the full error message
+                  {e.type}
+                </Text>
+              </Col>
+              // @ts-expect-error TS(2304): Cannot find name 'style'.
+              <Col style={styles.buttons}>
+                <TouchableOpacity
+                  // @ts-expect-error TS(2304): Cannot find name 'style'.
+                  style={{
+                    // @ts-expect-error TS(2304): Cannot find name 'styles'.
+                    ...styles.button,
+                    // @ts-expect-error TS(2304): Cannot find name 'backgroundColor'.
+                    backgroundColor: index % 2 ? "white" : "#DAA520",
+                  }}
+                  // @ts-expect-error TS(2304): Cannot find name 'onPress'.
+                  onPress={() => addItemToCart(e.name, e.cost, e.weight)}
+                >
                   <Text
+                    // @ts-expect-error TS(2304): Cannot find name 'style'.
                     style={{
-                      ...styles.textStyle,
-                      color: index % 2 ? "white" : "#DAA520",
+                      // @ts-expect-error TS(2304): Cannot find name 'styles'.
+                      ...styles.buttonText,
+                      // @ts-expect-error TS(2304): Cannot find name 'color'.
+                      color: index % 2 ? "#DAA520" : "white",
                     }}
+                  // @ts-expect-error TS(2365): Operator '<' cannot be applied to types 'boolean' ... Remove this comment to see the full error message
                   >
-                    {e.name}
+                    +
                   </Text>
-                </Col>
-                <Col style={{paddingRight: '1%', paddingLeft: '1%'}}>
-                  <Text
-                    style={{
-                      ...styles.textStyle,
-                      color: index % 2 ? "white" : "#DAA520",
-                    }}
-                  >
-                    {e.cost}
-                  </Text>
-                </Col>
-                <Col style={{paddingright: '1%', paddingleft: '1%'}}>
-                  <Text
-                    style={{
-                      ...styles.textStyle,
-                      color: index % 2 ? "white" : "#DAA520",
-                    }}
-                  >
-                    {e.dmgS}
-                  </Text>
-                </Col>
-                <Col style={{paddingright: '1%', paddingleft: '1%'}}>
-                  <Text
-                    style={{
-                      ...styles.textStyle,
-                      color: index % 2 ? "white" : "#DAA520",
-                    }}
-                  >
-                    {e.dmgM}
-                  </Text>
-                </Col>
-                <Col style={{paddingright: '1%', paddingleft: '1%'}}>
-                  <Text
-                    style={{
-                      ...styles.textStyle,
-                      color: index % 2 ? "white" : "#DAA520",
-                    }}
-                  >
-                    {e.critical}
-                  </Text>
-                </Col>
-                <Col style={{paddingright: '1%', paddingleft: '1%'}}>
-                  <Text
-                    style={{
-                      ...styles.textStyle,
-                      color: index % 2 ? "white" : "#DAA520",
-                    }}
-                  >
-                    {e.rangeIncrement}
-                  </Text>
-                </Col>
-                <Col style={{paddingright: '1%', paddingleft: '1%'}}>
-                  <Text
-                    style={{
-                      ...styles.textStyle,
-                      color: index % 2 ? "white" : "#DAA520",
-                    }}
-                  >
-                    {e.weight}
-                  </Text>
-                </Col>
-                <Col>
-                  <Text
-                    style={{
-                      ...styles.textStyle,
-                      color: index % 2 ? "white" : "#DAA520",
-                    }}
-                  >
-                    {e.type}
-                  </Text>
-                </Col>
-                <Col style={styles.buttons}>
+                </TouchableOpacity>
+                // @ts-expect-error TS(2304): Cannot find name 'cart'.
+                {cart.find((item: any) => item.name === e.name) && (
                   <TouchableOpacity
+                    // @ts-expect-error TS(2304): Cannot find name 'style'.
                     style={{
+                      // @ts-expect-error TS(2304): Cannot find name 'styles'.
                       ...styles.button,
+                      // @ts-expect-error TS(2304): Cannot find name 'backgroundColor'.
                       backgroundColor: index % 2 ? "white" : "#DAA520",
                     }}
-                    onPress={() => addItemToCart(e.name, e.cost, e.weight)}
+                    // @ts-expect-error TS(2304): Cannot find name 'onPress'.
+                    onPress={() => removeItemFromCart(e.name)}
                   >
                     <Text
+                      // @ts-expect-error TS(2304): Cannot find name 'style'.
                       style={{
+                        // @ts-expect-error TS(2304): Cannot find name 'styles'.
                         ...styles.buttonText,
+                        // @ts-expect-error TS(2304): Cannot find name 'color'.
                         color: index % 2 ? "#DAA520" : "white",
                       }}
+                    // @ts-expect-error TS(2365): Operator '<' cannot be applied to types 'boolean' ... Remove this comment to see the full error message
                     >
-                      +
+                      -
                     </Text>
                   </TouchableOpacity>
-                  {cart.find((item) => item.name === e.name) && (
-                    <TouchableOpacity
-                      style={{
-                        ...styles.button,
-                        backgroundColor: index % 2 ? "white" : "#DAA520",
-                      }}
-                      onPress={() => removeItemFromCart(e.name)}
-                    >
-                      <Text
-                        style={{
-                          ...styles.buttonText,
-                          color: index % 2 ? "#DAA520" : "white",
-                        }}
-                      >
-                        -
-                      </Text>
-                    </TouchableOpacity>
-                  )}
-                </Col>
-              </Row>
-              <View
-                style={{
-                  borderBottomColor: "white",
-                  borderBottomWidth: StyleSheet.hairlineWidth,
-                }}
-              />
-            </Grid>
-          );
+                )}
+              // @ts-expect-error TS(2365): Operator '<' cannot be applied to types 'boolean' ... Remove this comment to see the full error message
+              </Col>
+            </Row>
+            <View
+              // @ts-expect-error TS(2304): Cannot find name 'style'.
+              style={{
+                // @ts-expect-error TS(2695): Left side of comma operator is unused and has no s... Remove this comment to see the full error message
+                borderBottomColor: "white",
+                // @ts-expect-error TS(2304): Cannot find name 'borderBottomWidth'.
+                borderBottomWidth: StyleSheet.hairlineWidth,
+              }}
+            />
+          </Grid>
+        );
 }
