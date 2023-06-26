@@ -5,7 +5,6 @@ import { store } from "./src/store/store";
 import { PaperProvider } from "react-native-paper";
 import { Banner } from "./src/components/Banner/Banner";
 import { Index } from "./src/screens/Index/Index";
-import { CustomModal } from "./src/components/Modal/Modal";
 
 export default function App() {
   const [loaded, error] = useFonts({

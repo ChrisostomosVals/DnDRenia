@@ -4,7 +4,8 @@ const initialState: ModalState = {
     modal: {
         title: '',
         subTitle: null,
-        visible: false
+        visible: false,
+        animationType: 'fade'
     },
     loading: false,
     initialised: false,

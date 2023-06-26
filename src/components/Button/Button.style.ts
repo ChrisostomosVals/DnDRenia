@@ -34,7 +34,7 @@ export const buttonStyles: ButtonStyles = {
             borderRadius: 5,
             alignItems: "center",
             padding: "2%",
-            width: '30%'
+            width: '30%',
         },
         text:{
             fontFamily: theme.fontFamily.blackCastle,

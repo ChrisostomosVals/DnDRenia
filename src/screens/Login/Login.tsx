@@ -7,7 +7,6 @@ import { useDispatch } from "react-redux";
 import bannerActions from "../../store/banner/actions";
 import { ip } from "../../utils/constants";
 import ConnectApi from "../../dist/api/ConnectApi";
-import LoginErrorModel from "../../dist/models/LoginErrorModel";
 import accountActions from "../../store/account/actions";
 import { Tokens } from "../../store/account/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -23,10 +22,10 @@ export const Login: FC = () => {
       password: undefined,
     },
   });
+  useEffect(()=>{},[]);
   const onSubmit: SubmitHandler<FormData> = async (data): Promise<void> => {
     let result = await ConnectApi.LoginAsync(data.email!, data.password!, ip);
     if (result.isError) {
-      console.log(result.error);
       dispatch(
         bannerActions.changeText({
           title: "Error",
@@ -34,23 +33,22 @@ export const Login: FC = () => {
         })
       );
       dispatch(bannerActions.toggle(true));
-    }
-    else{
+    } else {
       const storeTokens: Tokens = {
-          accessToken: result.data?.access_token!,
-          expiresIn: result.data?.expires_in!,
-          refreshToken: result.data?.refresh_token!,
-          scope: result.data?.scope!
-      }
+        accessToken: result.data?.access_token!,
+        expiresIn: result.data?.expires_in!,
+        refreshToken: result.data?.refresh_token!,
+        scope: result.data?.scope!,
+      };
       dispatch(accountActions.storeTokens(storeTokens));
       dispatch(
         bannerActions.changeText({
           title: "Success",
-          paragraph: 'Welcome',
+          paragraph: "Welcome",
         })
       );
       dispatch(bannerActions.toggle(true));
-      await AsyncStorage.setItem('accessToken', storeTokens.accessToken!);
+      await AsyncStorage.setItem("accessToken", storeTokens.accessToken!);
     }
   };
   const dispatch = useDispatch();
@@ -86,7 +84,7 @@ export const Login: FC = () => {
       <Controller
         control={control}
         rules={{
-          maxLength: 100,
+          required: true,
         }}
         render={({ field: { onChange, onBlur, value } }) => (
           <TextInput
@@ -102,7 +100,14 @@ export const Login: FC = () => {
         name="password"
       />
       <View style={loginStyles.button}>
-        <Button.Secondary title="Submit" onPress={handleSubmit(onSubmit)} />
+        <Button.Secondary
+          extentedStyles={{
+            opacity: !!(errors.email || errors.password) ? 0.5 : 1,
+          }}
+          disabled={!!(errors.email || errors.password)}
+          title="Log In"
+          onPress={handleSubmit(onSubmit)}
+        />
       </View>
     </View>
   );

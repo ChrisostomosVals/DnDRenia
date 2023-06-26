@@ -13,8 +13,8 @@ export const indexStyles: IndexStyles = {
         color: theme.color.primary.lightGray!,
         container: {
             position: "absolute", 
-            right: 20, 
-            top: 40, 
+            right: '3%', 
+            top: '7.5%', 
             zIndex: 100
         }
     }

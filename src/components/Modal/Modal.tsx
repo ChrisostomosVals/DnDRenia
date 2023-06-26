@@ -3,9 +3,10 @@ import { modalStyles } from "./Modal.style";
 import { Text, Modal, View } from "react-native";
 import { RootState } from "../../store/store";
 import { ModalProps } from "./ModalProps";
-export const CustomModal = ({
+import { FC } from "react";
+export const CustomModal: FC<ModalProps> = ({
   footer
-}: ModalProps) => {
+}) => {
   const modal = useSelector((state: RootState) => state.modal.modal)
   return (
     <Modal

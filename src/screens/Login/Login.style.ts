@@ -34,7 +34,7 @@ export const loginStyles: LoginStyles = {
     },
     button:{
         alignItems: 'center',
-        margin: 20
+        margin: 20,
     },
     title:{
         text:{

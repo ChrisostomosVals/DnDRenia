@@ -19,55 +19,58 @@ import CharacterApi from "../../dist/api/CharacterApi";
 import CharacterModel from "../../dist/models/CharacterModel";
 import { MainStatType } from "../../store/mainStats/types";
 import mainStatActions from "../../store/mainStats/actions";
+import { Dimensions } from "react-native";
 
 export const Index: FC = () => {
-  const tokens: Tokens = useSelector(
+  const tokens: Tokens | null = useSelector(
     (state: RootState) => state.account.tokens
   );
+  const character: CharacterModel | null = useSelector(
+    (state: RootState) => state.account.character
+  );
+  const windowHeight = Dimensions.get('window').height;
   const dispatch = useDispatch();
   useEffect(() => {
     AsyncStorage.getItem("accessToken").then((response) => {
       if (response) {
         dispatch(accountActions.storeAccessToken(response));
+        UserApi.GetProfileAsync(tokens?.accessToken!, ip).then((response) => {
+          if (!response.isError) {
+            const storeProfile: Profile = {
+              id: response.data?.id!,
+              characterId: response.data?.characterId!,
+              email: response.data?.email!,
+              name: response.data?.name!,
+              role: response.data?.role!,
+            };
+            dispatch(accountActions.storeProfile(storeProfile));
+            CharacterApi.GetByIdAsync(
+              tokens?.accessToken!,
+              ip,
+              response.data?.characterId!
+            ).then((response) => {
+              if (!response.isError) {
+                dispatch(accountActions.setCharacter(response.data!));
+              }
+            });
+          }
+        });
+        
+        const characterMainStats = character?.stats?.filter((stat) =>
+          mainStatsNames.includes(stat.name)
+        );
+        const storeMainStats: MainStatType[] =
+          characterMainStats?.map((stat) => {
+            const mainStat: MainStatType = {
+              name: stat.name,
+              value: stat.value,
+            };
+            return mainStat;
+          }) ?? [];
+        dispatch(mainStatActions.setStats(storeMainStats));
       }
-      UserApi.GetProfileAsync(tokens.accessToken!, ip).then((response) => {
-        if (!response.isError) {
-          const storeProfile: Profile = {
-            id: response.data?.id!,
-            characterId: response.data?.characterId!,
-            email: response.data?.email!,
-            name: response.data?.name!,
-            role: response.data?.role!,
-          };
-          dispatch(accountActions.storeProfile(storeProfile));
-          CharacterApi.GetByIdAsync(
-            tokens.accessToken!,
-            ip,
-            response.data?.characterId!
-          ).then((response) => {
-            if (!response.isError) {
-              dispatch(accountActions.setCharacter(response.data!));
-            }
-          });
-        }
-      });
-      const character: CharacterModel = useSelector(
-        (state: RootState) => state.account.character
-      );
-      const characterMainStats = character.stats?.filter((stat) =>
-        mainStatsNames.includes(stat.name)
-      );
-      const storeMainStats: MainStatType[] =
-        characterMainStats?.map((stat) => {
-          const mainStat: MainStatType = {
-            name: stat.name,
-            value: stat.value,
-          };
-          return mainStat;
-        }) ?? [];
-      dispatch(mainStatActions.setStats(storeMainStats));
     });
-  }, [tokens.accessToken]);
+  }, [tokens?.accessToken]);
   const requestLogout = (): void => {
     dispatch(
       modalActions.setText({
@@ -83,10 +86,12 @@ export const Index: FC = () => {
       closeModal();
     });
   };
-  const closeModal = (): void => dispatch(modalActions.setVisibility(false));
+  const closeModal = (): void => {
+    dispatch(modalActions.setVisibility(false));
+  };
   return (
     <NavigationContainer theme={appTheme}>
-      {!tokens.accessToken ? (
+      {!tokens?.accessToken ? (
         <Login />
       ) : (
         <Fragment>

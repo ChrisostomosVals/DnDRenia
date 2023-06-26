@@ -8,7 +8,6 @@ import { mainStatsStyles } from "./MainStats.style";
 
 export const MainStats: FC = () =>{
   const mainStats: MainStatType[] = useSelector((state: RootState) => state.mainStats.mainStats);
-  
   const abilityMod = useMemo(() => {
     return (stat: MainStatType): string => {
       return Math.floor((Number(stat.value) - 10) / 2).toString();

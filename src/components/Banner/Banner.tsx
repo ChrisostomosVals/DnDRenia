@@ -7,17 +7,29 @@ import { FC } from "react";
 import bannerActions from "../../store/banner/actions";
 
 export const Banner: FC = () => {
-  const banner: BannerType = useSelector((state: RootState) => state.banner.banner);
+  const banner: BannerType = useSelector(
+    (state: RootState) => state.banner.banner
+  );
   const dispatch = useDispatch();
-  const onDismiss = (): void => dispatch(bannerActions.toggle(false))
-    return (
+  const onDismiss = (): void => {
+    dispatch(bannerActions.toggle(false));
+  };
+  return (
     <Portal>
-      <Dialog onDismiss={onDismiss} visible={banner.visible} style={bannerStyles.primary.dialog}>
-        <Dialog.Title style={bannerStyles.primary.text}>{banner.title}</Dialog.Title>
+      <Dialog
+        onDismiss={onDismiss}
+        visible={banner.visible}
+        style={bannerStyles.primary.dialog}
+      >
+        <Dialog.Title style={bannerStyles.primary.text}>
+          {banner.title}
+        </Dialog.Title>
         <Dialog.Content>
-          <Paragraph style={bannerStyles.primary.text}>{banner.paragraph}</Paragraph>
+          <Paragraph style={bannerStyles.primary.text}>
+            {banner.paragraph}
+          </Paragraph>
         </Dialog.Content>
       </Dialog>
     </Portal>
-    )
-}
+  );
+};
