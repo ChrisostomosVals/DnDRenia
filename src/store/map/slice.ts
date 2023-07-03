@@ -31,6 +31,9 @@ export const mapSlice = createSlice(({
         setLocations: (state, { payload }: PayloadAction<LocationModel[]>)=>{
             state.locations = payload;
         },
+        removeLocation: (state, { payload }: PayloadAction<string>)=>{
+            state.locations = state.locations.filter(location => location.id !== payload);
+        },
         addEvent: (state, { payload }: PayloadAction<{id: string, event: string}>) =>{
             const findLocation = state.locations.find(item => item.id === payload.id);
             if(findLocation)
@@ -43,6 +46,16 @@ export const mapSlice = createSlice(({
         },
         setWorldObjects: (state, { payload }: PayloadAction<WorldObjectModel[]>)=>{
             state.worldObjects = payload;
+        },
+        updateObject:(state, { payload }: PayloadAction<WorldObjectModel>)=>{
+            state.worldObjects = state.worldObjects.map(item => {
+                if(item.id === payload.id)
+                    return payload;
+                return item;
+            });
+        },
+        removeObject: (state, { payload }: PayloadAction<string>)=>{
+            state.worldObjects = state.worldObjects.filter(worldObject => worldObject.id !== payload);
         },
     }
 }))

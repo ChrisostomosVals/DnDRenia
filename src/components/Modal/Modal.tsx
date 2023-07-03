@@ -3,7 +3,7 @@ import { modalStyles } from "./Modal.style";
 import { Text, Modal, View, TextInput, Dimensions } from "react-native";
 import { RootState } from "../../store/store";
 import { LogoutModalProps, ModalProps } from "./ModalProps";
-import { FC, Fragment, useEffect, useMemo, useState } from "react";
+import { FC, Fragment, useMemo, useState } from "react";
 import { Button } from "../Button/Button";
 import modalActions from "../../store/modal/actions";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
@@ -335,7 +335,7 @@ const WorldObjectModal: FC = () => {
         control._reset();
       }}
     >
-      <View style={modalStyles.worldObjectModal.container(height / 2)}>
+      <View style={modalStyles.genericModal.container(height / 2)}>
         <View style={modalStyles.title.container}>
           <Text style={modalStyles.title.text}>{modal.title}</Text>
         </View>
@@ -365,11 +365,11 @@ const WorldObjectModal: FC = () => {
           control={control}
           rules={{ required: true }}
           render={({ field }) => (
-            <View style={modalStyles.worldObjectModal.picker.container}>
+            <View style={modalStyles.genericModal.picker.container}>
               <DropDownPicker
-                style={modalStyles.worldObjectModal.picker.main}
+                style={modalStyles.genericModal.picker.main}
                 value={field.value}
-                textStyle={modalStyles.worldObjectModal.text}
+                textStyle={modalStyles.genericModal.text}
                 placeholder="Type"
                 items={types}
                 scrollViewProps={{
@@ -378,13 +378,13 @@ const WorldObjectModal: FC = () => {
                 listMode="SCROLLVIEW"
                 showTickIcon={false}
                 listItemContainerStyle={
-                  modalStyles.worldObjectModal.picker.item
+                  modalStyles.genericModal.picker.item
                 }
                 dropDownContainerStyle={
-                  modalStyles.worldObjectModal.picker.dropDownContainerStyle
+                  modalStyles.genericModal.picker.dropDownContainerStyle
                 }
                 selectedItemContainerStyle={
-                  modalStyles.worldObjectModal.picker.selectedItem
+                  modalStyles.genericModal.picker.selectedItem
                 }
                 multiple={false}
                 setValue={() => {}}
@@ -439,18 +439,37 @@ export const CustomModal = {
 };
 
 export const GenericModal: FC<ModalProps> = ({
+  title,
   content,
   visible,
   onDismiss,
+  submitButton,
+  cancelButton,
 }) => {
+  const {height} = Dimensions.get('window');
   return (
     <Modal
       visible={visible}
       animationType="fade"
-      transparent
+      transparent={true}
       onDismiss={onDismiss}
     >
+      <View style={modalStyles.genericModal.container(height / 2)}>
+        <View style={modalStyles.title.container}>
+          <Text style={modalStyles.title.text}>{title}</Text>
+        </View>
       {content}
+      <View style={modalStyles.footer.container}>
+        <Button.Secondary
+          title={cancelButton.title}
+          onPress={cancelButton.onPress}
+        />
+        <Button.Primary
+          title={submitButton.title}
+          onPress={submitButton.onPress}
+        />
+      </View>
+      </View>
     </Modal>
   );
 };

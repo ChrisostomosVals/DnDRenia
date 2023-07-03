@@ -1,13 +1,14 @@
 import { StyleProp, TextStyle, ViewStyle } from "react-native"
 import { theme } from "../../theme/theme";
 
-type locationStyles = {
+type LocationStyles = {
     container: StyleProp<ViewStyle>;
     text: StyleProp<TextStyle>;
     textEvents: StyleProp<TextStyle>;
+    icons: StyleProp<ViewStyle>;
 }
 
-export const locationStyles: locationStyles ={
+export const locationStyles: LocationStyles ={
     container: {
         width: '80%',
         backgroundColor: theme.color.primary.darkBlueGray,
@@ -17,6 +18,10 @@ export const locationStyles: locationStyles ={
         margin: 10,
         alignSelf: 'center',
         borderColor: theme.color.primary.lightGray,
+    },
+    icons:{
+        flexDirection: 'row',
+        justifyContent: 'space-between'
     },
     text:{
         fontFamily: theme.fontFamily.blackCastle,

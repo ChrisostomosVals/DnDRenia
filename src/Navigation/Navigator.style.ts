@@ -16,6 +16,7 @@ type NavigatorStyles = {
     mapHeader: StyleProp<ViewStyle>;
     chapterHeader: StyleProp<ViewStyle>;
     switch: StyleProp<ViewStyle>;
+    worldHeader: StyleProp<ViewStyle>;
 }
 
 export const navigatorStyles: NavigatorStyles = {
@@ -53,5 +54,11 @@ export const navigatorStyles: NavigatorStyles = {
     },
     switch:{
         transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }],
+    },
+    worldHeader:{
+        flexDirection: 'row',
+        right: '220%',
+        alignItems: 'center',
+        gap: 10
     }
 }

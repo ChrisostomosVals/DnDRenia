@@ -24,7 +24,7 @@ const initialState: AccountState = {
         type: '',
         visible: false
     },
-    loading: false,
+    loading: true,
     initialised: false,
 };
 
@@ -37,6 +37,7 @@ export const accountSlice = createSlice({
             state.tokens = payload.tokens;
             state.character = payload.character;
             state.initialised = true;
+            state.loading = false;
         },
         storeTokens: (state, { payload }: PayloadAction<Tokens>) => {
             state.tokens = payload;
@@ -60,6 +61,7 @@ export const accountSlice = createSlice({
         },
         setCharacter: (state, { payload }: PayloadAction<CharacterModel>) =>{
             state.character = payload;
+            state.loading = false;
         },
     },
 });

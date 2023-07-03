@@ -14,32 +14,37 @@ import { CustomModal } from "../../components/Modal/Modal";
 import { Profile, Tokens } from "../../store/account/types";
 import UserApi from "../../dist/api/UserApi";
 import CharacterApi from "../../dist/api/CharacterApi";
-import { Dimensions } from "react-native";
+import { ActivityIndicator, Dimensions } from "react-native";
 import settingsActions from "../../store/settings/actions";
 import ChapterApi from "../../dist/api/ChapterApi";
 import chaptersActions from "../../store/chapters/actions";
 import LocationApi from "../../dist/api/LocationApi";
 import mapActions from "../../store/map/actions";
 import WorldObjectApi from "../../dist/api/WorldObjectApi";
+import worldActions from "../../store/world/actions";
+import { theme } from "../../theme/theme";
+import charactersActions from "../../store/characters/actions";
+import RaceApi from "../../dist/api/RaceApi";
+import ClassApi from "../../dist/api/ClassApi";
 
 export const Index: FC = () => {
   const tokens: Tokens | null = useSelector(
     (state: RootState) => state.account.tokens
   );
-  const url: string = useSelector((state: RootState) => state.settings.url); 
-  
+  const url: string = useSelector((state: RootState) => state.settings.url);
+  const account = useSelector((state: RootState) => state.account);
   const { height } = Dimensions.get("window");
   const dispatch = useDispatch();
   useEffect(() => {
     fetchData();
   }, [tokens, url, dispatch]);
   const fetchData = async () => {
-    const storedAccessToken = await AsyncStorage.getItem('accessToken');
+    const storedAccessToken = await AsyncStorage.getItem("accessToken");
     if (storedAccessToken) {
-      if(url === ''){
-        const storedUrl = await AsyncStorage.getItem('url');
-        if(!storedUrl) return;
-        dispatch(settingsActions.setUrl(storedUrl))
+      if (url === "") {
+        const storedUrl = await AsyncStorage.getItem("url");
+        if (!storedUrl) return;
+        dispatch(settingsActions.setUrl(storedUrl));
       }
       dispatch(accountActions.storeAccessToken(storedAccessToken));
 
@@ -54,26 +59,57 @@ export const Index: FC = () => {
         };
         dispatch(accountActions.storeProfile(storeProfile));
 
-        const characterResponse = await CharacterApi.GetByIdAsync(storedAccessToken, url, response.data?.characterId!);
+        const characterResponse = await CharacterApi.GetByIdAsync(
+          storedAccessToken,
+          url,
+          response.data?.characterId!
+        );
         if (!characterResponse.isError) {
           dispatch(accountActions.setCharacter(characterResponse.data!));
         }
         const chapters = await ChapterApi.GetAsync(storedAccessToken, url);
-        if(!chapters.isError){
+        if (!chapters.isError) {
           dispatch(chaptersActions.setChapters(chapters.data!));
         }
         const locations = await LocationApi.GetAsync(storedAccessToken, url);
-        const worldObjects = await WorldObjectApi.GetAsync(storedAccessToken, url);
-        if(!locations.isError && !worldObjects.isError){
-          dispatch(mapActions.initializeMap({locations: locations.data!, worldObjects: worldObjects.data!}))
+        const worldObjects = await WorldObjectApi.GetAsync(
+          storedAccessToken,
+          url
+        );
+        if (!locations.isError && !worldObjects.isError) {
+          dispatch(
+            mapActions.initializeMap({
+              locations: locations.data!,
+              worldObjects: worldObjects.data!,
+            })
+          );
+        }
+        dispatch(worldActions.initializeState());
+        const characters = await CharacterApi.GetAsync(
+          storedAccessToken,
+          url,
+          null
+        );
+        const classes = await ClassApi.GetAsync(storedAccessToken, url);
+        const races = await RaceApi.GetAsync(storedAccessToken, url);
+        if (!characters.isError && !classes.isError && !races.isError) {
+          dispatch(
+            charactersActions.initializeStates({
+              characters:
+                characters.data?.filter(
+                  (char) => char.id !== characterResponse.data?.id
+                ) ?? [],
+              classes: classes.data ?? [],
+              races: races.data ?? [],
+            })
+          );
         }
       }
     } else {
       setTimeout(fetchData, 1000);
     }
   };
-  
-  
+
   const requestLogout = (): void => {
     dispatch(
       modalActions.setLogoutText({
@@ -92,10 +128,13 @@ export const Index: FC = () => {
   const closeModal = (): void => {
     dispatch(modalActions.setLogoutVisibility(false));
   };
+
   return (
     <NavigationContainer theme={appTheme}>
       {!tokens?.accessToken ? (
         <LoginNavigator />
+      ) : account.loading ? (
+        <ActivityIndicator style={indexStyles.activityIndicator} size={100} />
       ) : (
         <Fragment>
           <MaterialCommunityIcons

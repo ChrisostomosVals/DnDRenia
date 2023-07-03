@@ -5,6 +5,8 @@ import { modalSlice } from './modal/slice';
 import { settingsSlice } from './settings/slice';
 import { chaptersSlice } from './chapters/slice';
 import { mapSlice } from './map/slice';
+import { worldSlice } from './world/slice';
+import { charactersSlice } from './characters/slice';
 
 export const store = configureStore({
   reducer: {
@@ -13,7 +15,9 @@ export const store = configureStore({
     modal: modalSlice.reducer,
     settings: settingsSlice.reducer,
     chapters: chaptersSlice.reducer,
-    map: mapSlice.reducer
+    map: mapSlice.reducer,
+    world: worldSlice.reducer,
+    characters: charactersSlice.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     immutableCheck: false,

@@ -22,13 +22,14 @@ export default class ClassApi{
             }
             else if(response.status == 400 || response.status == 404){
                 const errorMsg: ErrorResponseModel = await response.json();
-                return new ApiResponseModel<ClassModel[]>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
+                return new ApiResponseModel<ClassModel[]>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error ?? 'Something went wrong', errorMsg.message ?? 'Something went wrong'));
             }
             else if (response.status == 401){
                 const error = response.statusText;
                 return new ApiResponseModel<ClassModel[]>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        }catch (error: any){
             return new ApiResponseModel<ClassModel[]>(null, ErrorResponseModel.NewError("ClassApi.GetAsync().Exception", error));;
         }
     }
@@ -45,13 +46,14 @@ export default class ClassApi{
             }
             else if(response.status == 400 || response.status == 404){
                 const errorMsg: ErrorResponseModel = await response.json();
-                return new ApiResponseModel<ClassModel>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
+                return new ApiResponseModel<ClassModel>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error ?? 'Something went wrong', errorMsg.message ?? 'Something went wrong'));
             }
             else if (response.status == 401){
                 const error = response.statusText;
                 return new ApiResponseModel<ClassModel>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        }catch (error: any){
             return new ApiResponseModel<ClassModel>(null, ErrorResponseModel.NewError("ClassApi.GetByIdAsync().Exception", error));;
         }
     }
@@ -68,13 +70,14 @@ export default class ClassApi{
             }
             else if(response.status == 400 || response.status == 404){
                 const errorMsg: ErrorResponseModel = await response.json();
-                return new ApiResponseModel<ClassModel[]>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
+                return new ApiResponseModel<ClassModel[]>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error ?? 'Something went wrong', errorMsg.message ?? 'Something went wrong'));
             }
             else if (response.status == 401){
                 const error = response.statusText;
                 return new ApiResponseModel<ClassModel[]>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        }catch (error: any){
             return new ApiResponseModel<ClassModel[]>(null, ErrorResponseModel.NewError("ClassApi.GetByCategoryIdAsync().Exception", error));;
         }
     }

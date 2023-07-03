@@ -24,13 +24,14 @@ export default class WorldObjectApi{
             }
             else if(response.status == 400 || response.status == 404){
                 const errorMsg: ErrorResponseModel = await response.json();
-                return new ApiResponseModel<WorldObjectModel[]>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
+                return new ApiResponseModel<WorldObjectModel[]>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error ?? 'Something went wrong', errorMsg.message ?? 'Something went wrong'));
             }
             else if (response.status == 401){
                 const error = response.statusText;
                 return new ApiResponseModel<WorldObjectModel[]>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any) {
             return new ApiResponseModel<WorldObjectModel[]>(null, ErrorResponseModel.NewError("WorldObjectApi.GetAsync().Exception", error));;
         }
     }
@@ -47,13 +48,14 @@ export default class WorldObjectApi{
             }
             else if(response.status == 400 || response.status == 404){
                 const errorMsg: ErrorResponseModel = await response.json();
-                return new ApiResponseModel<WorldObjectModel>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
+                return new ApiResponseModel<WorldObjectModel>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error ?? 'Something went wrong', errorMsg.message ?? 'Something went wrong'));
             }
             else if (response.status == 401){
                 const error = response.statusText;
                 return new ApiResponseModel<WorldObjectModel>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any) {
             return new ApiResponseModel<WorldObjectModel>(null, ErrorResponseModel.NewError("WorldObjectApi.GetByIdAsync().Exception", error));;
         }
     }
@@ -71,13 +73,14 @@ export default class WorldObjectApi{
             }
             else if(response.status == 400 || response.status == 404){
                 const errorMsg: ErrorResponseModel = await response.json();
-                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error ?? 'Something went wrong', errorMsg.message ?? 'Something went wrong'));;
             }
             else if (response.status == 401){
                 const error = response.statusText;
                 return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any) {
             return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("WorldObjectApi.CreateAsync().Exception", error));;
         }
     }
@@ -94,13 +97,14 @@ export default class WorldObjectApi{
             }
             else if(response.status == 400 || response.status == 404){
                 const errorMsg: ErrorResponseModel = await response.json();
-                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error ?? 'Something went wrong', errorMsg.message ?? 'Something went wrong'));
             }
             else if (response.status == 401){
                 const error = response.statusText;
                 return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any) {
             return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("WorldObjectApi.UpdateAsync().Exception", error));;
         }
     }
@@ -117,13 +121,14 @@ export default class WorldObjectApi{
             }
             else if(response.status == 400 || response.status == 404){
                 const errorMsg: ErrorResponseModel = await response.json();
-                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error ?? 'Something went wrong', errorMsg.message ?? 'Something went wrong'));
             }
             else if (response.status == 401){
                 const error = response.statusText;
                 return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any) {
             return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("WorldObjectApi.DeleteAsync().Exception", error));;
         }
     }

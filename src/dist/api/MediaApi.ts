@@ -31,9 +31,10 @@ export class MediaApi {
             }
             else if (response.status == 400 || response.status == 404) {
                 const errorMsg: ErrorResponseModel = await response.json();
-                return new ApiResponseModel<string[]>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
+                return new ApiResponseModel<string[]>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error ?? 'Something went wrong', errorMsg.message ?? 'Something went wrong'));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any){
             return new ApiResponseModel<string[]>(null, ErrorResponseModel.NewError("MediaApi.UploadAsync().Exception", error));;
         }
     }
@@ -50,14 +51,15 @@ export class MediaApi {
             }
             else if (response.status == 400 || response.status == 404) {
                 const errorMsg: ErrorResponseModel = await response.json();
-                return new ApiResponseModel<any>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
+                return new ApiResponseModel<any>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error ?? 'Something went wrong', errorMsg.message ?? 'Something went wrong'));
             }
             else if (response.status == 401) {
                 const error = response.statusText;
                 return new ApiResponseModel<any>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
 
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any){
             return new ApiResponseModel<any>(null, ErrorResponseModel.NewError("MediaApi.DownloadAsync().Exception", error));;
         }
     }
@@ -74,14 +76,15 @@ export class MediaApi {
             }
             else if (response.status == 400 || response.status == 404) {
                 const errorMsg: ErrorResponseModel = await response.json();
-                return new ApiResponseModel<any>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
+                return new ApiResponseModel<any>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error ?? 'Something went wrong', errorMsg.message ?? 'Something went wrong'));
             }
             else if (response.status == 401) {
                 const error = response.statusText;
                 return new ApiResponseModel<any>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
 
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any){
             return new ApiResponseModel<any>(null, ErrorResponseModel.NewError("MediaApi.DeleteAsync().Exception", error));;
         }
     }

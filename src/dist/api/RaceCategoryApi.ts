@@ -22,13 +22,14 @@ export default class RaceCategoryApi{
             }
             else if(response.status == 400 || response.status == 404){
                 const errorMsg: ErrorResponseModel = await response.json();
-                return new ApiResponseModel<RaceCategoryModel[]>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
+                return new ApiResponseModel<RaceCategoryModel[]>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error ?? 'Something went wrong', errorMsg.message ?? 'Something went wrong'));
             }
             else if (response.status == 401){
                 const error = response.statusText;
                 return new ApiResponseModel<RaceCategoryModel[]>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any) {
             return new ApiResponseModel<RaceCategoryModel[]>(null, ErrorResponseModel.NewError("RaceCategoryApi.GetAsync().Exception", error));;
         }
     }
@@ -45,13 +46,14 @@ export default class RaceCategoryApi{
             }
             else if(response.status == 400 || response.status == 404){
                 const errorMsg: ErrorResponseModel = await response.json();
-                return new ApiResponseModel<RaceCategoryModel>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
+                return new ApiResponseModel<RaceCategoryModel>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error ?? 'Something went wrong', errorMsg.message ?? 'Something went wrong'));
             }
             else if (response.status == 401){
                 const error = response.statusText;
                 return new ApiResponseModel<RaceCategoryModel>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any) {
             return new ApiResponseModel<RaceCategoryModel>(null, ErrorResponseModel.NewError("RaceCategoryApi.GetByIdAsync().Exception", error));;
         }
     }

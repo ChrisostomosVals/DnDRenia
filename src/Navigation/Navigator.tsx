@@ -6,7 +6,7 @@ import { Stats } from "../screens/Stats/Stats";
 import { Skills } from "../screens/Skills/Skills";
 import { navigatorStyles } from "./Navigator.style";
 import { theme } from "../theme/theme";
-import { FC } from "react";
+import { FC, Fragment } from "react";
 import CharacterModel from "../dist/models/CharacterModel";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
@@ -20,9 +20,11 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import { Chapters } from "../screens/Chapters/Chapters";
 import { Map } from "../screens/Map/Map";
 import mapActions from "../store/map/actions";
-import { Dimensions, Switch, View } from "react-native";
+import { Switch, View } from "react-native";
 import modalActions from "../store/modal/actions";
 import { World } from "../screens/World/World";
+import { ViewType } from "../store/world/types";
+import worldActions from "../store/world/actions";
 
 const Drawer = createDrawerNavigator();
 export const Navigator: FC = () => {
@@ -30,6 +32,7 @@ export const Navigator: FC = () => {
     (state: RootState) => state.account.character
   );
   const type = useSelector((state: RootState) => state.map.type);
+  const worldView = useSelector((state: RootState) => state.world.view)
   const dispatch = useDispatch();
 
   const toggleSwitch = (): void => {
@@ -37,6 +40,9 @@ export const Navigator: FC = () => {
   };
   const handleChapter = (): void => {
     dispatch(modalActions.setChapterVisibility(true));
+  }
+  const handleWorldView = (view: ViewType): void =>{
+    dispatch(worldActions.changeView(view))
   }
   return (
     <Drawer.Navigator
@@ -277,7 +283,42 @@ export const Navigator: FC = () => {
               }
             />
           ),
+          headerRight: () => (
+            <View style={navigatorStyles.worldHeader}>
+              <FontAwesome5
+                name="location-arrow"
+                color={
+                  worldView === 'Locations'
+                    ? theme.color.primary.purple
+                    : theme.color.primary.lightGray
+                }
+                onPress={() => handleWorldView('Locations')}
+                size={30}
+              />
+              <MaterialCommunityIcons
+                name="town-hall"
+                color={
+                  worldView === 'World-Objects'
+                    ? theme.color.primary.purple
+                    : theme.color.primary.lightGray
+                }
+                onPress={() => handleWorldView('World-Objects')}
+                size={30}
+              />
+              <FontAwesome5
+                name="users"
+                color={
+                  worldView === 'Characters'
+                    ? theme.color.primary.purple
+                    : theme.color.primary.lightGray
+                }
+                onPress={() => handleWorldView('Characters')}
+                size={30}
+              />
+            </View>
+          )
         }}
+        
       />
       <Drawer.Screen
         name="Settings"

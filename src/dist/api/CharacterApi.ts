@@ -37,7 +37,8 @@ export default class CharacterApi{
                 const error = response.statusText;
                 return new ApiResponseModel<CharacterModel[]>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any){
             return new ApiResponseModel<CharacterModel[]>(null, ErrorResponseModel.NewError("CharacterApi.GetAsync().Exception", error));;
         }
     }
@@ -61,7 +62,8 @@ export default class CharacterApi{
                 const error = response.statusText;
                 return new ApiResponseModel<CharacterModel>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any){
             return new ApiResponseModel<CharacterModel>(null, ErrorResponseModel.NewError("CharacterApi.GetByIdAsync().Exception", error));;
         }
     }
@@ -85,7 +87,8 @@ export default class CharacterApi{
                 const error = response.statusText;
                 return new ApiResponseModel<GearModel[]>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any){
             return new ApiResponseModel<GearModel[]>(null, ErrorResponseModel.NewError("CharacterApi.GetGearAsync().Exception", error));;
         }
     }
@@ -109,7 +112,8 @@ export default class CharacterApi{
                 const error = response.statusText;
                 return new ApiResponseModel<GearModel>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any){
             return new ApiResponseModel<GearModel>(null, ErrorResponseModel.NewError("CharacterApi.GetGearItemAsync().Exception", error));;
         }
     }
@@ -133,7 +137,8 @@ export default class CharacterApi{
                 const error = response.statusText;
                 return new ApiResponseModel<GearModel>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any){
             return new ApiResponseModel<GearModel>(null, ErrorResponseModel.NewError("CharacterApi.GetMoneyAsync().Exception", error));;
         }
     }
@@ -157,7 +162,8 @@ export default class CharacterApi{
                 const error = response.statusText;
                 return new ApiResponseModel<ArsenalModel[]>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any){
             return new ApiResponseModel<ArsenalModel[]>(null, ErrorResponseModel.NewError("CharacterApi.GetArsenalAsync().Exception", error));;
         }
     }
@@ -181,7 +187,8 @@ export default class CharacterApi{
                 const error = response.statusText;
                 return new ApiResponseModel<PropertyModel[]>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any){
             return new ApiResponseModel<PropertyModel[]>(null, ErrorResponseModel.NewError("CharacterApi.GetPropertiesAsync().Exception", error));;
         }
     }
@@ -205,7 +212,8 @@ export default class CharacterApi{
                 const error = response.statusText;
                 return new ApiResponseModel<SkillModel[]>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any){
             return new ApiResponseModel<SkillModel[]>(null, ErrorResponseModel.NewError("CharacterApi.GetSkillsAsync().Exception", error));;
         }
     }
@@ -229,7 +237,8 @@ export default class CharacterApi{
                 const error = response.statusText;
                 return new ApiResponseModel<string[]>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any){
             return new ApiResponseModel<string[]>(null, ErrorResponseModel.NewError("CharacterApi.GetFeatsAsync().Exception", error));;
         }
     }
@@ -253,7 +262,8 @@ export default class CharacterApi{
                 const error = response.statusText;
                 return new ApiResponseModel<string[]>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any){
             return new ApiResponseModel<string[]>(null, ErrorResponseModel.NewError("CharacterApi.GetSpecialAbilitiesAsync().Exception", error));;
         }
     }
@@ -277,7 +287,8 @@ export default class CharacterApi{
                 const error = response.statusText;
                 return new ApiResponseModel<StatModel[]>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any){
             return new ApiResponseModel<StatModel[]>(null, ErrorResponseModel.NewError("CharacterApi.GetStatsAsync().Exception", error));;
         }
     }
@@ -301,7 +312,8 @@ export default class CharacterApi{
                 const error = response.statusText;
                 return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any){
             return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("CharacterApi.CreateAsync().Exception", error));;
         }
     }
@@ -325,7 +337,8 @@ export default class CharacterApi{
                 const error = response.statusText;
                 return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any){
             return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("CharacterApi.UpdateAsync().Exception", error));;
         }
     }
@@ -349,7 +362,8 @@ export default class CharacterApi{
                 const error = response.statusText;
                 return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any){
             return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("CharacterApi.UpdateGearAsync().Exception", error));;
         }
     }
@@ -373,7 +387,8 @@ export default class CharacterApi{
                 const error = response.statusText;
                 return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any){
             return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("CharacterApi.AddMoneyAsync().Exception", error));;
         }
     }
@@ -397,7 +412,8 @@ export default class CharacterApi{
                 const error = response.statusText;
                 return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any){
             return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("CharacterApi.RemoveMoneyAsync().Exception", error));;
         }
     }
@@ -421,7 +437,8 @@ export default class CharacterApi{
                 const error = response.statusText;
                 return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any){
             return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("CharacterApi.TransferGearAsync().Exception", error));;
         }
     }
@@ -438,13 +455,14 @@ export default class CharacterApi{
             }
             else if(response.status == 400 || response.status == 404){
                 const errorMsg: ErrorResponseModel = await response.json();
-                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error ?? 'Something went wrong', errorMsg.message ?? 'Something went wrong'));;
             }
             else if (response.status == 401){
                 const error = response.statusText;
                 return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any){
             return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("CharacterApi.EquipItemAsync().Exception", error));;
         }
     }
@@ -461,13 +479,14 @@ export default class CharacterApi{
             }
             else if(response.status == 400 || response.status == 404){
                 const errorMsg: ErrorResponseModel = await response.json();
-                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error ?? 'Something went wrong', errorMsg.message ?? 'Something went wrong'));;
             }
             else if (response.status == 401){
                 const error = response.statusText;
                 return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any){
             return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("CharacterApi.UnEquipItemAsync().Exception", error));;
         }
     }
@@ -484,13 +503,14 @@ export default class CharacterApi{
             }
             else if(response.status == 400 || response.status == 404){
                 const errorMsg: ErrorResponseModel = await response.json();
-                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error ?? 'Something went wrong', errorMsg.message ?? 'Something went wrong'));;
             }
             else if (response.status == 401){
                 const error = response.statusText;
                 return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any){
             return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("CharacterApi.UpdateSkillsAsync().Exception", error));;
         }
     }
@@ -507,13 +527,14 @@ export default class CharacterApi{
             }
             else if(response.status == 400 || response.status == 404){
                 const errorMsg: ErrorResponseModel = await response.json();
-                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error ?? 'Something went wrong', errorMsg.message ?? 'Something went wrong'));;
             }
             else if (response.status == 401){
                 const error = response.statusText;
                 return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any){
             return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("CharacterApi.UpdateFeatsAsync().Exception", error));;
         }
     }
@@ -530,13 +551,14 @@ export default class CharacterApi{
             }
             else if(response.status == 400 || response.status == 404){
                 const errorMsg: ErrorResponseModel = await response.json();
-                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error ?? 'Something went wrong', errorMsg.message ?? 'Something went wrong'));;
             }
             else if (response.status == 401){
                 const error = response.statusText;
                 return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any){
             return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("CharacterApi.UpdateSpecialAbilitiesAsync().Exception", error));;
         }
     }
@@ -553,13 +575,14 @@ export default class CharacterApi{
             }
             else if(response.status == 400 || response.status == 404){
                 const errorMsg: ErrorResponseModel = await response.json();
-                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error ?? 'Something went wrong', errorMsg.message ?? 'Something went wrong'));;
             }
             else if (response.status == 401){
                 const error = response.statusText;
                 return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any){
             return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("CharacterApi.UpdateStatsAsync().Exception", error));;
         }
     }
@@ -576,13 +599,14 @@ export default class CharacterApi{
             }
             else if(response.status == 400 || response.status == 404){
                 const errorMsg: ErrorResponseModel = await response.json();
-                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error ?? 'Something went wrong', errorMsg.message ?? 'Something went wrong'));;
             }
             else if (response.status == 401){
                 const error = response.statusText;
                 return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any){
             return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("CharacterApi.UpdatePropertiesAsync().Exception", error));;
         }
     }
@@ -599,13 +623,14 @@ export default class CharacterApi{
             }
             else if(response.status == 400 || response.status == 404){
                 const errorMsg: ErrorResponseModel = await response.json();
-                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error ?? 'Something went wrong', errorMsg.message ?? 'Something went wrong'));;
             }
             else if (response.status == 401){
                 const error = response.statusText;
                 return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any){
             return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("CharacterApi.ChangeVisibilityAsync().Exception", error));;
         }
     }
@@ -622,13 +647,14 @@ export default class CharacterApi{
             }
             else if(response.status == 400 || response.status == 404){
                 const errorMsg: ErrorResponseModel = await response.json();
-                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
+                return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error ?? 'Something went wrong', errorMsg.message ?? 'Something went wrong'));;
             }
             else if (response.status == 401){
                 const error = response.statusText;
                 return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any){
             return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("CharacterApi.DeleteAsync().Exception", error));;
         }
     }

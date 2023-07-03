@@ -25,7 +25,7 @@ export type ModalStyle = {
     logoutModal:{
         container(height: number): StyleProp<ViewStyle>;
     },
-    worldObjectModal:{
+    genericModal:{
         container(height: number): StyleProp<ViewStyle>;
         picker: {
             container: StyleProp<ViewStyle>;
@@ -110,10 +110,12 @@ export const modalStyles: ModalStyle = {
             borderRadius: 15,
             marginTop: 'auto',
             marginBottom: 'auto',
-            width: '90%'
+            width: '90%',
+            borderColor: theme.color.primary.lightGray,
+            borderWidth: 7
         })
     },
-    worldObjectModal:{
+    genericModal:{
         container:(height: number)=>({
             height: height, 
             justifyContent: 'center',
@@ -122,7 +124,9 @@ export const modalStyles: ModalStyle = {
             borderRadius: 15,
             marginTop: 'auto',
             marginBottom: 'auto',
-            width: '90%'
+            width: '90%',
+            borderColor: theme.color.primary.lightGray,
+            borderWidth: 7
         }),
         picker:{
             container:{
