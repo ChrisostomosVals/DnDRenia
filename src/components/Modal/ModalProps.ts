@@ -1,6 +1,11 @@
 import { ReactNode } from "react";
-import { ModalBaseProps } from "react-native";
+import { ModalBaseProps, StyleProp, ViewStyle } from "react-native";
+
+export type LogoutModalProps = {
+    footer: ReactNode;
+} & ModalBaseProps
 
 export type ModalProps = {
-    footer: ReactNode;
+    content: ReactNode;
+    onDismiss?(): void;
 } & ModalBaseProps

@@ -3,13 +3,13 @@ import { View, TextInput, Text } from "react-native";
 import { loginStyles } from "./Login.style";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { Button } from "../../components/Button/Button";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import bannerActions from "../../store/banner/actions";
-import { ip } from "../../utils/constants";
 import ConnectApi from "../../dist/api/ConnectApi";
 import accountActions from "../../store/account/actions";
 import { Tokens } from "../../store/account/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { RootState } from "../../store/store";
 
 export const Login: FC = () => {
   const {
@@ -22,9 +22,12 @@ export const Login: FC = () => {
       password: undefined,
     },
   });
-  useEffect(()=>{},[]);
+  const url: string = useSelector((state: RootState) => state.settings.url); 
+  const dispatch = useDispatch();
+  useEffect(() => {
+  }, [url]);
   const onSubmit: SubmitHandler<FormData> = async (data): Promise<void> => {
-    let result = await ConnectApi.LoginAsync(data.email!, data.password!, ip);
+    let result = await ConnectApi.LoginAsync(data.email!, data.password!, url);
     if (result.isError) {
       dispatch(
         bannerActions.changeText({
@@ -51,15 +54,9 @@ export const Login: FC = () => {
       await AsyncStorage.setItem("accessToken", storeTokens.accessToken!);
     }
   };
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(
-      bannerActions.changeText({
-        title: "Error",
-        paragraph: "Email and Password are required",
-      })
-    );
-  }, []);
+  
+
+  
   return (
     <View style={loginStyles.container}>
       <Text style={loginStyles.title.text}>Pathfinder Renia</Text>
@@ -92,6 +89,7 @@ export const Login: FC = () => {
             textContentType="password"
             onBlur={onBlur}
             onChangeText={onChange}
+            secureTextEntry={true}
             style={loginStyles.textInput.text}
             placeholderTextColor={loginStyles.textInput.placeholderColor}
             value={value}

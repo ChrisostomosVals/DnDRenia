@@ -1,17 +1,28 @@
-import { SkillProps } from "../../blocks/Skill/SkillProps";
 import { Skill } from "../../blocks/Skill/Skill";
 import { FC, Fragment, useMemo } from "react";
-import { ScrollView, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import { skillsStyles } from "./Skills.style";
 import { RootState } from "../../store/store";
 import { useSelector } from "react-redux";
+import SkillModel from "../../dist/models/SkillModel";
 
 export const Skills: FC = () =>{
-  const skills: SkillProps[] = useSelector((state: RootState) => state.skills.skills);
+  const skills: SkillModel[] = useSelector((state: RootState) => state.account.character?.skills || []);
 
     return(
         <ScrollView style={skillsStyles.container}>
-            {skills.map((skill,index) =>( 
+            <View style={skillsStyles.header.row}>
+                <View style={skillsStyles.header.leftContainer}>
+                    <View/><View/>
+                    </View>
+                <View style={skillsStyles.header.rightContainer}>
+                    <Text style={skillsStyles.text}>Total{'\n'}Bonus</Text>
+                    <Text style={skillsStyles.text}>Ability{'\n'}Mod</Text>
+                    <Text style={skillsStyles.text}>Ranks</Text>
+                    <Text style={skillsStyles.text}>Misc.{'\n'}Mod</Text>
+                </View>
+            </View>
+            {!!skills.length && skills.map((skill,index) =>( 
             <Fragment key={index + skill.name}>
                 <Skill  {...skill}/>
                 <View

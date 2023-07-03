@@ -1769,7 +1769,6 @@ export const exoticWeapons = {
 
 
 export const ip = 'https://ec34-2a02-214a-8417-9700-9000-1ccb-88a4-ed3b.ngrok-free.app/gateway'
-
 export const skillsInit = [
   { abilityMod: 0, miscMod: 0, name: "ACROBATICS", ranks: 0, trained: false },
   { abilityMod: 0, miscMod: 0, name: "APPRAISE", ranks: 0, trained: false },

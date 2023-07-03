@@ -1,16 +1,15 @@
 import { FC } from "react";
-import { SkillProps } from "./SkillProps";
 import { Text, View } from "react-native";
 import { skillStyles } from "./Skill.style";
 import Checkbox from "expo-checkbox";
+import SkillModel from "../../dist/models/SkillModel";
 
-export const Skill: FC<SkillProps> = ({
+export const Skill: FC<SkillModel> = ({
   name,
   abilityMod,
   trained,
   ranks,
-  miscMod,
-  totalBonus,
+  miscMod
 }) => (
   <View style={skillStyles.row}>
     <View style={skillStyles.leftContainer}>
@@ -27,7 +26,7 @@ export const Skill: FC<SkillProps> = ({
     </View>
     <View style={skillStyles.rightContainer}>
       <View style={skillStyles.number("purple")}>
-        <Text style={skillStyles.text}>{totalBonus}</Text>
+        <Text style={skillStyles.text}>{abilityMod + ranks + miscMod}</Text>
       </View>
       <View style={skillStyles.number("darkBlueGray")}>
         <Text style={skillStyles.text}>{abilityMod}</Text>

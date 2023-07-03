@@ -1,5 +1,6 @@
 export const fontFamily = {
-    blackCastle: 'BlackCastle'
+    blackCastle: 'BlackCastle',
+    luminari: 'Luminari'
 };
 
 export const fontSize = {

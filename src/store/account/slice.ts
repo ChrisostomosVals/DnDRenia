@@ -40,12 +40,15 @@ export const accountSlice = createSlice({
         },
         storeTokens: (state, { payload }: PayloadAction<Tokens>) => {
             state.tokens = payload;
+            state.initialised = true;
         },
         storeProfile: (state, { payload }: PayloadAction<Profile>) => {
             state.profile = payload;
+            state.initialised = true;
         },
         storeAccessToken: (state, { payload }: PayloadAction<string>) => {
             state.tokens!.accessToken = payload;
+            state.initialised = true;
         },
         removeTokens: (state) => {
             state.tokens = {
@@ -57,6 +60,6 @@ export const accountSlice = createSlice({
         },
         setCharacter: (state, { payload }: PayloadAction<CharacterModel>) =>{
             state.character = payload;
-        }
+        },
     },
 });

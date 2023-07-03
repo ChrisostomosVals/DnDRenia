@@ -1,12 +1,11 @@
 import { FC, Fragment, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { appTheme } from "../../theme/themeProvider";
-import { NavBar } from "../../blocks/Navigation/NavBar";
+import { LoginNavigator, Navigator } from "../../Navigation/Navigator";
 import { RootState } from "../../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import accountActions from "../../store/account/actions";
-import { Login } from "../Login/Login";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { indexStyles } from "./Index.style";
 import modalActions from "../../store/modal/actions";
@@ -14,71 +13,75 @@ import { Button } from "../../components/Button/Button";
 import { CustomModal } from "../../components/Modal/Modal";
 import { Profile, Tokens } from "../../store/account/types";
 import UserApi from "../../dist/api/UserApi";
-import { ip } from "../../utils/constants";
 import CharacterApi from "../../dist/api/CharacterApi";
-import CharacterModel from "../../dist/models/CharacterModel";
-import { MainStatType } from "../../store/mainStats/types";
-import mainStatActions from "../../store/mainStats/actions";
 import { Dimensions } from "react-native";
+import settingsActions from "../../store/settings/actions";
+import ChapterApi from "../../dist/api/ChapterApi";
+import chaptersActions from "../../store/chapters/actions";
+import LocationApi from "../../dist/api/LocationApi";
+import mapActions from "../../store/map/actions";
+import WorldObjectApi from "../../dist/api/WorldObjectApi";
 
 export const Index: FC = () => {
   const tokens: Tokens | null = useSelector(
     (state: RootState) => state.account.tokens
   );
-  const character: CharacterModel | null = useSelector(
-    (state: RootState) => state.account.character
-  );
-  const windowHeight = Dimensions.get('window').height;
+  const url: string = useSelector((state: RootState) => state.settings.url); 
+  
+  const { height } = Dimensions.get("window");
   const dispatch = useDispatch();
   useEffect(() => {
-    AsyncStorage.getItem("accessToken").then((response) => {
-      if (response) {
-        dispatch(accountActions.storeAccessToken(response));
-        UserApi.GetProfileAsync(tokens?.accessToken!, ip).then((response) => {
-          if (!response.isError) {
-            const storeProfile: Profile = {
-              id: response.data?.id!,
-              characterId: response.data?.characterId!,
-              email: response.data?.email!,
-              name: response.data?.name!,
-              role: response.data?.role!,
-            };
-            dispatch(accountActions.storeProfile(storeProfile));
-            CharacterApi.GetByIdAsync(
-              tokens?.accessToken!,
-              ip,
-              response.data?.characterId!
-            ).then((response) => {
-              if (!response.isError) {
-                dispatch(accountActions.setCharacter(response.data!));
-              }
-            });
-          }
-        });
-        
-        const characterMainStats = character?.stats?.filter((stat) =>
-          mainStatsNames.includes(stat.name)
-        );
-        const storeMainStats: MainStatType[] =
-          characterMainStats?.map((stat) => {
-            const mainStat: MainStatType = {
-              name: stat.name,
-              value: stat.value,
-            };
-            return mainStat;
-          }) ?? [];
-        dispatch(mainStatActions.setStats(storeMainStats));
+    fetchData();
+  }, [tokens, url, dispatch]);
+  const fetchData = async () => {
+    const storedAccessToken = await AsyncStorage.getItem('accessToken');
+    if (storedAccessToken) {
+      if(url === ''){
+        const storedUrl = await AsyncStorage.getItem('url');
+        if(!storedUrl) return;
+        dispatch(settingsActions.setUrl(storedUrl))
       }
-    });
-  }, [tokens?.accessToken]);
+      dispatch(accountActions.storeAccessToken(storedAccessToken));
+
+      const response = await UserApi.GetProfileAsync(storedAccessToken, url);
+      if (!response.isError) {
+        const storeProfile: Profile = {
+          id: response.data?.id!,
+          characterId: response.data?.characterId!,
+          email: response.data?.email!,
+          name: response.data?.name!,
+          role: response.data?.role!,
+        };
+        dispatch(accountActions.storeProfile(storeProfile));
+
+        const characterResponse = await CharacterApi.GetByIdAsync(storedAccessToken, url, response.data?.characterId!);
+        if (!characterResponse.isError) {
+          dispatch(accountActions.setCharacter(characterResponse.data!));
+        }
+        const chapters = await ChapterApi.GetAsync(storedAccessToken, url);
+        if(!chapters.isError){
+          dispatch(chaptersActions.setChapters(chapters.data!));
+        }
+        const locations = await LocationApi.GetAsync(storedAccessToken, url);
+        const worldObjects = await WorldObjectApi.GetAsync(storedAccessToken, url);
+        if(!locations.isError && !worldObjects.isError){
+          dispatch(mapActions.initializeMap({locations: locations.data!, worldObjects: worldObjects.data!}))
+        }
+      }
+    } else {
+      setTimeout(fetchData, 1000);
+    }
+  };
+  
+  
   const requestLogout = (): void => {
     dispatch(
-      modalActions.setText({
+      modalActions.setLogoutText({
         title: "Are you sure you want to logout?",
         subTitle: null,
       })
     );
-    dispatch(modalActions.setVisibility(true));
+    dispatch(modalActions.setLogoutVisibility(true));
   };
   const logout = (): void => {
     AsyncStorage.removeItem("accessToken").then((response) => {
@@ -87,23 +90,23 @@ export const Index: FC = () => {
     });
   };
   const closeModal = (): void => {
-    dispatch(modalActions.setVisibility(false));
+    dispatch(modalActions.setLogoutVisibility(false));
   };
   return (
     <NavigationContainer theme={appTheme}>
       {!tokens?.accessToken ? (
-        <Login />
+        <LoginNavigator />
       ) : (
         <Fragment>
           <MaterialCommunityIcons
             name="logout"
             size={30}
-            style={indexStyles.icon.container}
+            style={indexStyles.icon.bottom(height - 45)}
             color={indexStyles.icon.color}
             onPress={requestLogout}
           />
-          <NavBar />
-          <CustomModal
+          <Navigator />
+          <CustomModal.LogoutModal
             footer={
               <Fragment>
                 <Button.Secondary title="Cancel" onPress={closeModal} />
@@ -116,12 +119,3 @@ export const Index: FC = () => {
     </NavigationContainer>
   );
 };
-
-const mainStatsNames: string[] = [
-  "Strength",
-  "Dexterity",
-  "Constitution",
-  "Intelligence",
-  "Wisdom",
-  "Charisma",
-];

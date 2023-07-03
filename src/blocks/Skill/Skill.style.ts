@@ -25,12 +25,12 @@ export const skillStyles: SkillStyles = {
     leftContainer: {
         flexDirection: 'row',
         justifyContent: 'flex-start',
-        gap: 10
+        gap: 10,
     },
     rightContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        flex: 1
+        flex: 1,
     },
     checkbox: {
         container: { 

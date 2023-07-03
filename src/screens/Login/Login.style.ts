@@ -30,6 +30,7 @@ export const loginStyles: LoginStyles = {
             borderColor: theme.color.primary.lightGray,
             backgroundColor: theme.color.primary.darkPurple
         },
+       
         placeholderColor: theme.color.primary.white
     },
     button:{

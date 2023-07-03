@@ -14,7 +14,7 @@ export const bannerSlice = createSlice({
   name: 'banner',
   initialState,
   reducers: {
-    initializeMainStats: (state, { payload }: PayloadAction<BannerType>) => {
+    initializeBanner: (state, { payload }: PayloadAction<BannerType>) => {
       state.banner = payload;
       state.initialised = true;
     },

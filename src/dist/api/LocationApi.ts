@@ -24,14 +24,14 @@ export default class LocationApi {
             }
             else if (response.status == 400 || response.status == 404) {
                 const errorMsg: ErrorResponseModel = await response.json();
-                return new ApiResponseModel<LocationModel[]>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
+                return new ApiResponseModel<LocationModel[]>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error ?? 'Something went wrong', errorMsg.message ?? 'Something went wrong'));
             }
             else if (response.status == 401) {
                 const error = response.statusText;
                 return new ApiResponseModel<LocationModel[]>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any) {
             return new ApiResponseModel<LocationModel[]>(null, ErrorResponseModel.NewError("LocationApi.GetAsync().Exception", error));;
         }
     }
@@ -48,13 +48,14 @@ export default class LocationApi {
             }
             else if (response.status == 400 || response.status == 404) {
                const errorMsg: ErrorResponseModel = await response.json();
-                return new ApiResponseModel<LocationModel>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error, errorMsg.message));
+                return new ApiResponseModel<LocationModel>(null, ErrorResponseModel.NewErrorMsg(errorMsg.error ?? 'Something went wrong', errorMsg.message ?? 'Something went wrong'));
             }
             else if (response.status == 401) {
                 const error = response.statusText;
                 return new ApiResponseModel<LocationModel>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        }catch (error) {
+            throw new Error('Something went wrong');
+        }catch (error: any) {
             return new ApiResponseModel<LocationModel>(null, ErrorResponseModel.NewError("LocationApi.GetAsync().Exception", error));;
         }
     }
@@ -78,7 +79,8 @@ export default class LocationApi {
                 const error = response.statusText;
                 return new ApiResponseModel<LocationModel>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any) {
             return new ApiResponseModel<LocationModel>(null, ErrorResponseModel.NewError("LocationApi.GetByIdAsync().Exception", error));;
         }
     }
@@ -102,7 +104,8 @@ export default class LocationApi {
                 const error = response.statusText;
                 return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any) {
             return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("LocationApi.CreateAsync().Exception", error));;
         }
     }
@@ -126,8 +129,9 @@ export default class LocationApi {
                 const error = response.statusText;
                 return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
-            return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("LocationApi.UpdateAsync().Exception", error));;
+            throw new Error('Something went wrong');
+        } catch (error: any) {
+            return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("LocationApi.UpdateAsync().Exception", error));
         }
     }
     public static async DeleteAsync(token: string, url: string, id: string): Promise<ApiResponseModel<void>> {
@@ -150,7 +154,8 @@ export default class LocationApi {
                 const error = response.statusText;
                 return new ApiResponseModel<void>(null, ErrorResponseModel.NewErrorMsg(error, "Unauthorized access"));
             }
-        } catch (error) {
+            throw new Error('Something went wrong');
+        } catch (error: any) {
             return new ApiResponseModel<void>(null, ErrorResponseModel.NewError("LocationApi.DeleteAsync().Exception", error));;
         }
     }

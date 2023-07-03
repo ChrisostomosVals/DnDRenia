@@ -9,6 +9,7 @@ export type ColorType = {
 export const color: ColorType = {
     primary: {
         black: '#1A1A1A',
+        error: '#ff3333',
         darkBlue: '#10161B',
         lightGray: '#D2D3D3',
         white: '#FFFFFF',
