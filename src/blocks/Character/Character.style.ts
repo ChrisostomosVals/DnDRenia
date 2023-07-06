@@ -1,4 +1,4 @@
-import { StyleProp, TextStyle, ViewStyle } from "react-native"
+import { ImageStyle, StyleProp, TextStyle, ViewStyle } from "react-native"
 import { theme } from "../../theme/theme";
 
 type CharacterStyles = {
@@ -6,6 +6,7 @@ type CharacterStyles = {
     text(size: number, color: string): StyleProp<TextStyle>;
     textContainer: StyleProp<ViewStyle>;
     statsContainer: StyleProp<ViewStyle>;
+    image(width: number, height: number): StyleProp<ImageStyle>;
 }
 
 export const characterStyles: CharacterStyles = {
@@ -35,5 +36,12 @@ export const characterStyles: CharacterStyles = {
         alignSelf: 'center',
         margin:5,
         width: '80%'
-    }
+    },
+    image: (width: number, height:number)=>({ 
+        width: width, 
+        height: height,
+        alignSelf: 'center',
+        borderRadius: 7,
+        margin: 5
+    })
 }

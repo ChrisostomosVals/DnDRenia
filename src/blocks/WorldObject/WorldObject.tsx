@@ -1,12 +1,12 @@
-import { FC, Fragment, useState } from "react";
+import { FC, Fragment, useEffect, useState } from "react";
 import WorldObjectModel from "../../dist/models/WorldObjectModel";
 import { worldObjectStyles } from "./WorldObject.style";
-import { Text, TouchableOpacity, View } from "react-native";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import { theme } from "../../theme/theme";
-import WorldObjectPropModel from "../../dist/models/WorldObjectPropModel";
-import { LineBreak } from "../../components/LineBreak/LineBreak";
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
+import { ImageInfoModel } from "../../dist/models/ImageInfoModel";
 
 export const WorldObject: FC<WorldObjectModel> = ({
   id,
@@ -15,9 +15,13 @@ export const WorldObject: FC<WorldObjectModel> = ({
   type,
   properties,
 }) => {
+  const images = useSelector(
+    (state: RootState) => state.images.images.find((im) => im.id === id)?.images
+  );
   const [show, setShow] = useState<boolean>(false);
-  const propertiesMapped: WorldObjectPropModel[] = properties?.filter(property => 
-    (property.name !=='latitude' && property.name !=='longitude')) ?? [];
+  
+  useEffect(() => {
+  }, [id]);
   return (
     <View style={worldObjectStyles.textContainer}>
       <Text
@@ -51,33 +55,17 @@ export const WorldObject: FC<WorldObjectModel> = ({
             theme.fontSize.small
           )}
         >
-          Properties <SimpleLineIcons name={show ? "arrow-up" : "arrow-down"} />
+          Images <SimpleLineIcons name={show ? "arrow-up" : "arrow-down"} />
         </Text>
       </TouchableOpacity>
-      {!!propertiesMapped?.length &&
+      {!!images?.length &&
         show &&
-        propertiesMapped.map((prop: WorldObjectPropModel, index: number) => (
-          <Fragment key={index + prop.name + prop.value}>
-            <View style={worldObjectStyles.propertiesContainer}>
-              <Text
-                style={worldObjectStyles.text(
-                  theme.color.primary.white ?? "white",
-                  theme.fontSize.small
-                )}
-              >
-                {prop.name}
-              </Text>
-              <Text
-                style={worldObjectStyles.text(
-                  theme.color.primary.white ?? "white",
-                  theme.fontSize.small
-                )}
-              >
-                {prop.value}
-              </Text>
-            </View>
-            <LineBreak color={theme.color.primary.lightGray ?? "white"} />
-          </Fragment>
+        images.map((image: ImageInfoModel, index: number) => (
+          <Image
+            key={image.url + id}
+            source={{ uri: image.url }}
+            style={worldObjectStyles.image(image.width / 3, image.height / 3)}
+          />
         ))}
     </View>
   );

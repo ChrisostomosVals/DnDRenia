@@ -1,18 +1,20 @@
-import { ActivityIndicator, ScrollView, Text, View } from "react-native";
+import { ActivityIndicator, RefreshControl, ScrollView, Text, View } from "react-native";
 import { MainStat } from "../../blocks/MainStat/MainStat";
-import { FC, Fragment, useEffect, useMemo } from "react";
+import { FC, Fragment, useCallback, useEffect, useMemo } from "react";
 import { RootState } from "../../store/store";
 import { statsStyles } from "./Stats.style";
 import StatModel from "../../dist/models/StatModel";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CharacterModel from "../../dist/models/CharacterModel";
 import { GeneralStat } from "../../blocks/GeneralStat/GeneralStat";
+import appActions from "../../store/app/actions";
 
 export const Stats: FC = () => {
   const account = useSelector((state: RootState) => state.account);
   const character: CharacterModel | null = useSelector(
     (state: RootState) => state.account.character
   );
+  const refreshing = useSelector((state: RootState) => state.app.refreshing);
   const mainStats: StatModel[] =
     character?.stats?.filter((stat) => mainStatsNames.includes(stat.name)) ??
     [];
@@ -26,10 +28,21 @@ export const Stats: FC = () => {
     };
   }, [mainStats]);
   useEffect(() =>{}, [character]);
+  const dispatch = useDispatch();
+  const onRefresh = useCallback(() => {
+    dispatch(appActions.toggle(true));
+    setTimeout(() => {
+      dispatch(appActions.toggle(false));
+    }, 2000);
+  }, []);
   if (!account.initialised)
     return <ActivityIndicator size={50} style={statsStyles.mainStats}/>;
   return (
-    <ScrollView>
+    <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        >
           <Fragment>
             <Text style={statsStyles.text}>Main Stats</Text>
             <View style={statsStyles.mainStats}>

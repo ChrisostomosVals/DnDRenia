@@ -75,7 +75,7 @@ export const World: FC = () => {
           <ScrollView>
             {!!locations.length &&
               locations.map((location: LocationModel, index: number) => (
-                <View style={worldStyles.locations.container}>
+                <View key={location.id} style={worldStyles.locations.container}>
                   <View style={worldStyles.locations.icons}>
                     <MaterialCommunityIcons
                       name="note-plus"
@@ -100,7 +100,6 @@ export const World: FC = () => {
                   </View>
                   <Location
                     onLongPress={handleLongPressEvent}
-                    key={location.id}
                     {...location}
                   />
                 </View>
@@ -129,7 +128,7 @@ export const World: FC = () => {
             {!!worldObjects.length &&
               worldObjects.map(
                 (worldObject: WorldObjectModel, index: number) => (
-                  <View style={worldStyles.worldObjects.container}>
+                  <View key={worldObject.id} style={worldStyles.worldObjects.container}>
                     <View style={worldStyles.worldObjects.icons}>
                       <MaterialCommunityIcons
                         name="home-edit"

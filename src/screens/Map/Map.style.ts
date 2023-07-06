@@ -1,5 +1,6 @@
-import { StyleProp, ViewStyle } from "react-native";
+import { ImageStyle, StyleProp, TextStyle, ViewStyle } from "react-native";
 import { EdgePadding, MapStyleElement } from "react-native-maps"
+import { theme } from "../../theme/theme";
 
 type MapStyles = {
     map: {
@@ -8,6 +9,12 @@ type MapStyles = {
         style: StyleProp<ViewStyle>;
     },
     switchContainer(num: number): StyleProp<ViewStyle>;
+    image(width: number, height: number): StyleProp<ImageStyle>;
+    bottomSheet: {
+        bottomSheetItems: StyleProp<ViewStyle>;
+        bottomSheetContainer: StyleProp<ViewStyle>;
+        title: StyleProp<TextStyle>;
+    }
 }
 
 export const mapStyles: MapStyles = {
@@ -67,14 +74,35 @@ export const mapStyles: MapStyles = {
             left: 0
         },
         style: {
-            flex: 1, 
+            flex: 1,
             zIndex: -1,
         }
     },
-    switchContainer:(num: number) => ({
-        position: "absolute", 
-            right: '40%', 
-            bottom: num, 
-            zIndex: 100,
-    })
+    switchContainer: (num: number) => ({
+        position: "absolute",
+        right: '40%',
+        bottom: num,
+        zIndex: 100,
+    }),
+    image: (width: number, height: number) => ({
+        width: width,
+        height: height,
+        alignSelf: 'center',
+        borderRadius: 7
+    }),
+    bottomSheet: {
+        bottomSheetItems: {
+            alignSelf: 'center',
+            width: '95%',
+        },
+        bottomSheetContainer: {
+            gap: 10,
+        },
+        title:{
+            fontFamily: theme.fontFamily.blackCastle,
+            fontSize: theme.fontSize.large,
+            textAlign: 'center',
+            color: theme.color.primary.white
+        }
+    }
 }

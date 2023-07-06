@@ -35,6 +35,8 @@ export const indexStyles: IndexStyles = {
     },
     activityIndicator: { 
         flex: 1, 
-        backgroundColor: theme.color.primary.backgroundColor
+        backgroundColor: theme.color.primary.backgroundColor,
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 }

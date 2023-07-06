@@ -43,7 +43,7 @@ export const worldStyles: WorldStyles = {
         },
         icons:{
             flexDirection: 'row',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
         },
     }
 }

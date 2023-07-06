@@ -7,6 +7,8 @@ import { chaptersSlice } from './chapters/slice';
 import { mapSlice } from './map/slice';
 import { worldSlice } from './world/slice';
 import { charactersSlice } from './characters/slice';
+import { imagesSlice } from './images/slice';
+import { appSlice } from './app/slice';
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +20,8 @@ export const store = configureStore({
     map: mapSlice.reducer,
     world: worldSlice.reducer,
     characters: charactersSlice.reducer,
+    images: imagesSlice.reducer,
+    app: appSlice.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     immutableCheck: false,
