@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AccountState, Profile, Tokens } from './types';
 import CharacterModel from '../../dist/models/CharacterModel';
+import StatModel from '../../dist/models/StatModel';
+import SkillModel from '../../dist/models/SkillModel';
 const initialState: AccountState = {
     profile: null,
     tokens: {
@@ -64,5 +66,11 @@ export const accountSlice = createSlice({
         setCharacter: (state, { payload }: PayloadAction<CharacterModel>) =>{
             state.character = payload;
         },
+        updateStats: (state, { payload }: PayloadAction<StatModel[]>) =>{
+            state.character!.stats = payload;
+        },
+        updateSkills: (state, { payload }: PayloadAction<SkillModel[]>) =>{
+            state.character!.skills = payload;
+        }
     },
 });

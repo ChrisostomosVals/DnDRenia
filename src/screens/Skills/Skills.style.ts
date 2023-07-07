@@ -41,5 +41,5 @@ export const skillsStyles: SkillsStyle = {
         color: theme.color.primary.white,
         fontSize: theme.fontSize.tiny,
         textAlign: 'center',
-    }
+    },
 }

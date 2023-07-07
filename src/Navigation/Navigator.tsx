@@ -6,7 +6,7 @@ import { Stats } from "../screens/Stats/Stats";
 import { Skills } from "../screens/Skills/Skills";
 import { navigatorStyles } from "./Navigator.style";
 import { theme } from "../theme/theme";
-import { FC, Fragment } from "react";
+import { FC } from "react";
 import CharacterModel from "../dist/models/CharacterModel";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
@@ -25,6 +25,7 @@ import modalActions from "../store/modal/actions";
 import { World } from "../screens/World/World";
 import { ViewType } from "../store/world/types";
 import worldActions from "../store/world/actions";
+import { CharacterSheet } from "../screens/CharacterSheet/CharacterSheet";
 
 const Drawer = createDrawerNavigator();
 export const Navigator: FC = () => {
@@ -319,6 +320,29 @@ export const Navigator: FC = () => {
           )
         }}
         
+      />
+      <Drawer.Screen
+        name="CharacterSheet"
+        component={CharacterSheet}
+        options={{
+          title: `Character Sheet`,
+          headerTitle: `${character?.name}: Character Sheet`,
+          headerShown: true,
+          headerStyle: navigatorStyles.screen.headerStyle,
+          headerTintColor: navigatorStyles.screen.headerTintColor,
+          headerTitleStyle: navigatorStyles.screen.headerTitleStyle,
+          drawerIcon: ({ focused, size }) => (
+            <FontAwesome5
+              name="edit"
+              size={30}
+              color={
+                focused
+                  ? theme.color.primary.purple
+                  : theme.color.primary.lightGray
+              }
+            />
+          ),
+        }}
       />
       <Drawer.Screen
         name="Settings"
