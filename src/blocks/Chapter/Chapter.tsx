@@ -22,7 +22,7 @@ export const Chapter :FC<ChapterModel> = ({
         dispatch(modalActions.setChapterTitle('Edit Chapter'));
     }
     return (
-        <TouchableOpacity onLongPress={handleLongPress}>
+        <TouchableOpacity onLongPress={handleLongPress} activeOpacity={1}>
         <View style={chapterStyles.container}>
             <Text style={chapterStyles.text}>{name}</Text>
             <Text style={chapterStyles.text}>{day.toDateString()}</Text>

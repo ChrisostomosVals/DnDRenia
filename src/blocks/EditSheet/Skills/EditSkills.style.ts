@@ -3,7 +3,7 @@ import { theme } from "../../../theme/theme";
 
 type EditSkillsStyles = {
     container: StyleProp<ViewStyle>;
-    text(size: number): StyleProp<TextStyle>;
+    text(size: number, textAlign: 'auto' | 'left' | 'right' | 'center' | 'justify' | undefined): StyleProp<TextStyle>;
     numbers: {
         text: StyleProp<TextStyle>;
         container: StyleProp<ViewStyle>;
@@ -30,10 +30,11 @@ export const editSkillsStyles: EditSkillsStyles = {
     container: {
 
     },
-    text: (size: number) => ({
+    text: (size: number, textAlign: 'auto' | 'left' | 'right' | 'center' | 'justify' | undefined) => ({
         fontFamily: theme.fontFamily.blackCastle,
         fontSize: size,
         color: theme.color.primary.white,
+        textAlign: textAlign,
     }),
     numbers: {
         text: {

@@ -3,6 +3,7 @@ import { AccountState, Profile, Tokens } from './types';
 import CharacterModel from '../../dist/models/CharacterModel';
 import StatModel from '../../dist/models/StatModel';
 import SkillModel from '../../dist/models/SkillModel';
+import GearModel from '../../dist/models/GearModel';
 const initialState: AccountState = {
     profile: null,
     tokens: {
@@ -71,6 +72,9 @@ export const accountSlice = createSlice({
         },
         updateSkills: (state, { payload }: PayloadAction<SkillModel[]>) =>{
             state.character!.skills = payload;
+        },
+        updateGear: (state, { payload }: PayloadAction<GearModel[]>) =>{
+            state.character!.gear = payload;
         }
     },
 });

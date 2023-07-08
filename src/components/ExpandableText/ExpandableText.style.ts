@@ -9,7 +9,8 @@ type ExpandableTextStyles = {
 export const expandableTextStyles: ExpandableTextStyles = {
     greek:{
         fontFamily: theme.fontFamily.luminari,
-        color: theme.color.primary.white
+        color: theme.color.primary.white,
+        fontSize: theme.fontSize.small
     },
     english:{
         fontFamily: theme.fontFamily.blackCastle,

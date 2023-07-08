@@ -72,7 +72,6 @@ export const EditStats: FC = () => {
       <ScrollView contentContainerStyle={{ position: "relative" }}>
         {!!character && (
           <>
-            <View>
               <Text style={editStatsStyles.text(theme.fontSize.large)}>
                 Stats
               </Text>
@@ -106,7 +105,6 @@ export const EditStats: FC = () => {
                   <LineBreak color={theme.color.primary.lightGray ?? "white"} />
                 </Fragment>
               ))}
-            </View>
           </>
         )}
       </ScrollView>

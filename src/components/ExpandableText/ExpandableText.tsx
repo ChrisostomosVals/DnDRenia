@@ -9,7 +9,7 @@ export const ExpandableText:FC<{text: string, maxLines: number}> = ({ text, maxL
       setExpanded(!expanded);
     };
     return (
-      <TouchableOpacity onPress={toggleExpand}>
+      <TouchableOpacity activeOpacity={1} onPress={toggleExpand}>
         <Text
           numberOfLines={!expanded ? 5 : maxLines}
           style={expandableTextStyles.greek}

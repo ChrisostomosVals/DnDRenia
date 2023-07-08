@@ -72,7 +72,7 @@ export const Gear: FC = () => {
             </View>
           </View>
           {gear.map((item, index) => (
-            <Fragment key={item.id}>
+            <Fragment key={item.id + item.name + index}>
               <GearItem {...item} />
               <View
                     style={gearStyles.lineBreak}

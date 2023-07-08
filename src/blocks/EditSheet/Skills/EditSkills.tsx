@@ -83,23 +83,23 @@ export const EditSkills: FC = () => {
   return (
     <>
       <ScrollView>
-        <Text style={editSkillsStyles.text(theme.fontSize.large)}>Skills</Text>
+        <Text style={editSkillsStyles.text(theme.fontSize.large, 'center')}>Skills</Text>
         <View style={editSkillsStyles.header.row}>
           <View style={editSkillsStyles.header.leftContainer}>
             <View />
             <View />
           </View>
           <View style={editSkillsStyles.header.rightContainer}>
-            <Text style={editSkillsStyles.text(theme.fontSize.small)}>
+            <Text style={editSkillsStyles.text(theme.fontSize.small, undefined)}>
               Ability{"\n"}Mod
             </Text>
-            <Text style={editSkillsStyles.text(theme.fontSize.small)}>
+            <Text style={editSkillsStyles.text(theme.fontSize.small, undefined)}>
               Ranks
             </Text>
-            <Text style={editSkillsStyles.text(theme.fontSize.small)}>
+            <Text style={editSkillsStyles.text(theme.fontSize.small, undefined)}>
               Misc.{"\n"}Mod
             </Text>
-            <Text style={editSkillsStyles.text(theme.fontSize.small)}>
+            <Text style={editSkillsStyles.text(theme.fontSize.small, undefined)}>
               Trained
             </Text>
           </View>
@@ -111,7 +111,7 @@ export const EditSkills: FC = () => {
               <View style={editSkillsStyles.skills.leftContainer}>
                 <Text
                   ellipsizeMode="clip"
-                  style={editSkillsStyles.text(theme.fontSize.small)}
+                  style={editSkillsStyles.text(theme.fontSize.small, undefined)}
                 >
                   {skill.name}:
                 </Text>

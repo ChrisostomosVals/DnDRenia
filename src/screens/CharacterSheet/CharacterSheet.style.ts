@@ -6,7 +6,7 @@ type CharacterSheetStyles = {
 
 export const characterSheetStyles: CharacterSheetStyles = {
     icons:{
-        justifyContent: 'center',
+        justifyContent: 'space-around',
         flexDirection: 'row',
         margin: 10
     }
