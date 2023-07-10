@@ -46,9 +46,10 @@ export default class HttpClient{
             return response;
     }
 
-    static async deleteAsync(token: string, uri:string){
+    static async deleteAsync(token: string, uri:string, request?:any){
             const response = await fetch(uri, {
                 method: "DELETE",
+                body: JSON.stringify(request),
                 headers: {
                     "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"

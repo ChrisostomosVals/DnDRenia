@@ -6,7 +6,9 @@
     "isolatedModules": true,
     "jsx": "react-native",
     "lib": [
-      "esnext"
+      "esnext",
+      "dom",
+      "dom.iterable"
     ],
     "types": [
       "react-native",

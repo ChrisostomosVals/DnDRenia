@@ -2,6 +2,8 @@ import { FC } from "react";
 import { EditStats } from "./Stats/EditStats";
 import { EditSkills } from "./Skills/EditSkills";
 import { EditGear } from "./Gear/EditGear";
+import { EditFeats } from "./Feats/EditFeats";
+import { EditSpecialAbilities } from "./SpecialAbilities/EditSpecialAbilities";
 
 export const EditSheet: FC<{
   type: "stats" | "skills" | "gear" | "feats" | "special abilities";
@@ -15,6 +17,8 @@ export const EditSheet: FC<{
     case "gear":
       return <EditGear />;
     case "feats":
-        return <EditGear />;
+        return <EditFeats />;
+    case "special abilities":
+        return <EditSpecialAbilities />;
   }
 };

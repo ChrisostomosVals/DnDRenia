@@ -75,6 +75,12 @@ export const accountSlice = createSlice({
         },
         updateGear: (state, { payload }: PayloadAction<GearModel[]>) =>{
             state.character!.gear = payload;
-        }
+        },
+        updateFeats: (state, { payload }: PayloadAction<string[]>) =>{
+            state.character!.feats = payload;
+        },
+        updateSpecialAbilities: (state, { payload }: PayloadAction<string[]>) =>{
+            state.character!.specialAbilities = payload;
+        },
     },
 });

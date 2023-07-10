@@ -26,6 +26,7 @@ import { World } from "../screens/World/World";
 import { ViewType } from "../store/world/types";
 import worldActions from "../store/world/actions";
 import { CharacterSheet } from "../screens/CharacterSheet/CharacterSheet";
+import { Images } from "../screens/Images/Images";
 
 const Drawer = createDrawerNavigator();
 export const Navigator: FC = () => {
@@ -334,6 +335,29 @@ export const Navigator: FC = () => {
           drawerIcon: ({ focused, size }) => (
             <FontAwesome5
               name="edit"
+              size={30}
+              color={
+                focused
+                  ? theme.color.primary.purple
+                  : theme.color.primary.lightGray
+              }
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Images"
+        component={Images}
+        options={{
+          title: `Images`,
+          headerTitle: `${character?.name}: Images`,
+          headerShown: true,
+          headerStyle: navigatorStyles.screen.headerStyle,
+          headerTintColor: navigatorStyles.screen.headerTintColor,
+          headerTitleStyle: navigatorStyles.screen.headerTitleStyle,
+          drawerIcon: ({ focused, size }) => (
+            <FontAwesome5
+              name="images"
               size={30}
               color={
                 focused
