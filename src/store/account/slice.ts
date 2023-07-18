@@ -62,7 +62,8 @@ export const accountSlice = createSlice({
                 expiresIn: 0,
                 refreshToken: null,
                 scope: null
-            }
+            };
+            state.character = null;
         },
         setCharacter: (state, { payload }: PayloadAction<CharacterModel>) =>{
             state.character = payload;

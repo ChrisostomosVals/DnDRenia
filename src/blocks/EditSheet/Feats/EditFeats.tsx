@@ -96,7 +96,7 @@ export const EditFeats: FC = () => {
   return (
     <>
       <ScrollView>
-        <Text style={editFeatsStyles.text(theme.fontSize.large)}>Gear</Text>
+        <Text style={editFeatsStyles.text(theme.fontSize.large)}>Feats</Text>
         {!!character &&
           character.feats?.map((feat, index: number) => (
             <Fragment key={feat + index}>

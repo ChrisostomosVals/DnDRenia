@@ -27,12 +27,14 @@ import { ViewType } from "../store/world/types";
 import worldActions from "../store/world/actions";
 import { CharacterSheet } from "../screens/CharacterSheet/CharacterSheet";
 import { Images } from "../screens/Images/Images";
+import { ChangeCharacter } from "../screens/ChangeCharacter/ChangeCharacter";
 
 const Drawer = createDrawerNavigator();
 export const Navigator: FC = () => {
   const character: CharacterModel | null = useSelector(
     (state: RootState) => state.account.character
   );
+  const user = useSelector((state: RootState) => state.account.profile);
   const type = useSelector((state: RootState) => state.map.type);
   const worldView = useSelector((state: RootState) => state.world.view)
   const dispatch = useDispatch();
@@ -368,6 +370,32 @@ export const Navigator: FC = () => {
           ),
         }}
       />
+      {
+        user?.role ===  'GAME MASTER' &&
+        <Drawer.Screen
+        name="ChangeCharacter"
+        component={ChangeCharacter}
+        options={{
+          title: `Change Character`,
+          headerTitle: `Change Character`,
+          headerShown: true,
+          headerStyle: navigatorStyles.screen.headerStyle,
+          headerTintColor: navigatorStyles.screen.headerTintColor,
+          headerTitleStyle: navigatorStyles.screen.headerTitleStyle,
+          drawerIcon: ({ focused, size }) => (
+            <FontAwesome5
+              name="users"
+              size={30}
+              color={
+                focused
+                  ? theme.color.primary.purple
+                  : theme.color.primary.lightGray
+              }
+            />
+          ),
+        }}
+      />
+      }
       <Drawer.Screen
         name="Settings"
         component={Settings}

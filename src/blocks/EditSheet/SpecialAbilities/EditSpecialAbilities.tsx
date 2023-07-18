@@ -96,7 +96,7 @@ export const EditSpecialAbilities: FC = () => {
   return (
     <>
       <ScrollView>
-        <Text style={editSpecialAbilitiesStyles.text(theme.fontSize.large)}>Gear</Text>
+        <Text style={editSpecialAbilitiesStyles.text(theme.fontSize.large)}>Special Abilities</Text>
         {!!character &&
           character.specialAbilities?.map((specialAbility, index: number) => (
             <Fragment key={specialAbility + index}>
